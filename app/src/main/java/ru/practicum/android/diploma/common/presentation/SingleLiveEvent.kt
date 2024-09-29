@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.common.domain.presentation
+package ru.practicum.android.diploma.common.presentation
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
