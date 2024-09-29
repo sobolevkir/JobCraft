@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Practicum-Android-Diploma</string>
+    <string name="app_name">JobCraft</string>
     <string name="search_sign">Здесь будет экран поиска вакансий</string>
     <string name="filter_but_sign">К фильтрам</string>
     <string name="favorites_sign">Здесь будет экран избранных вакансий</string>
