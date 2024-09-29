@@ -7,7 +7,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="@string/space_filter_sign"/>
+        android:text="@string/place_filter_sign"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -16,7 +16,7 @@
         android:text="@string/country_but_sign"
         android:layout_gravity="center"
         android:layout_marginTop="40dp"
-        android:id="@+id/select_space_but"/>
+        android:id="@+id/select_place_but"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -31,5 +31,5 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:background="@drawable/ic_back_arrow"
-        android:id="@+id/space_quite_but"/>
+        android:id="@+id/place_quite_but"/>
 </FrameLayout>
