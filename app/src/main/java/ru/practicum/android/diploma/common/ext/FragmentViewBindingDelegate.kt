@@ -1,4 +1,4 @@
- package com.sobolevkir.playlistmaker.common.util
+package ru.practicum.android.diploma.common.util
 
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -10,8 +10,7 @@ import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
 class FragmentViewBindingDelegate<T : ViewBinding>(
-    val fragment: Fragment,
-    val viewBindingFactory: (View) -> T
+    val fragment: Fragment, val viewBindingFactory: (View) -> T
 ) : ReadOnlyProperty<Fragment, T> {
     private var binding: T? = null
 

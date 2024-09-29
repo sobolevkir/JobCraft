@@ -1,4 +1,4 @@
-package com.sobolevkir.playlistmaker.common.domain.presentation
+package ru.practicum.android.diploma.common.domain.presentation
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData

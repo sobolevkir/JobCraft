@@ -1,4 +1,4 @@
-package com.sobolevkir.playlistmaker.common.ext
+package ru.practicum.android.diploma.common.ext
 
 import android.content.Context
 import android.net.ConnectivityManager
@@ -9,9 +9,9 @@ val Context.isNetworkConnected: Boolean
         val manager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         return manager.getNetworkCapabilities(manager.activeNetwork)?.let {
             it.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
-                    it.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
-                    it.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH) ||
-                    it.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) ||
-                    it.hasTransport(NetworkCapabilities.TRANSPORT_VPN)
+                it.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) ||
+                it.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH) ||
+                it.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) ||
+                it.hasTransport(NetworkCapabilities.TRANSPORT_VPN)
         } ?: false
     }

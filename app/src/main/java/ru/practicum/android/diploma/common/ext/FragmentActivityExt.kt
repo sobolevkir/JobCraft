@@ -1,4 +1,4 @@
-package com.sobolevkir.playlistmaker.common.ext
+package ru.practicum.android.diploma.common.ext
 
 import android.content.Context
 import android.view.inputmethod.InputMethodManager

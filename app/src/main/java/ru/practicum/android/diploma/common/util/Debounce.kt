@@ -1,4 +1,4 @@
-package com.sobolevkir.playlistmaker.common.util
+package ru.practicum.android.diploma.common.util
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
