@@ -3,6 +3,7 @@
     <string name="search_sign">Здесь будет экран поиска вакансий</string>
     <string name="filter_but_sign">К фильтрам</string>
     <string name="favorites_sign">Здесь будет экран избранных вакансий</string>
+    <string name="team_sign">Здесь будет экран команды</string>
     <string name="filters_sign">Здесь будет экран фильров</string>
     <string name="space_but_sign">Выбрать место</string>
     <string name="industry_but_sign">Выбрать отрасль</string>
