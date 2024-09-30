@@ -8,10 +8,6 @@ import ru.practicum.android.diploma.search.data.dto.Response
 
 interface HHApi {
 
-    companion object {
-        private const val USER_AGENT = "JobCraft (sobolevkir@bk.ru)"
-    }
-
     @Headers(
         "Authorization: Bearer ${BuildConfig.HH_ACCESS_TOKEN}",
         "HH-User-Agent: ${BuildConfig.USER_AGENT}"
