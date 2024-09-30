@@ -12,4 +12,6 @@
     <string name="select_industry_sign">Здесь можно будет выбрать отрасль</string>
     <string name="select_region_sign">Здесь можно будет выбрать место работы</string>
     <string name="vacancy_info_sign">Здесь будет информация о конкретной вакансии</string>
+    <string name="Team">Команда</string>
+    <string name="who_worked_on_the_application">Над приложением работали</string>
 </resources>

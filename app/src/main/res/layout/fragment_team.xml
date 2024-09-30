@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="@dimen/mask_margin"
+        android:layout_marginEnd="@dimen/mask_margin"
+        android:src="@drawable/mask_light">
+    </ImageView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/header_team_margin_start"
+        android:layout_marginTop="@dimen/header_team_margin_top"
+        android:text="@string/Team"
+        android:textSize="@dimen/header_team_text_size" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/header_team_margin_start"
+        android:layout_marginTop="@dimen/big_header_team_margin_top"
+        android:text="@string/who_worked_on_the_application"
+        android:textSize="@dimen/big_header_team_text_size" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/header_team_margin_start"
+        android:layout_marginTop="220dp"
+        android:text="Первый чел\nвторой чел\nтретий чел\nя"
+        android:textSize="16sp"/>
+
+</FrameLayout>
