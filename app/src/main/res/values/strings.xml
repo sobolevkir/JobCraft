@@ -14,4 +14,5 @@
     <string name="vacancy_info_sign">Здесь будет информация о конкретной вакансии</string>
     <string name="Team">Команда</string>
     <string name="who_worked_on_the_application">Над приложением работали</string>
+    <string name="autors_list">Кирилл Соболев\nЮлия Сычёва\nАндрей Трофимов\nДанил Цыганов\nМарат Галимов</string>
 </resources>

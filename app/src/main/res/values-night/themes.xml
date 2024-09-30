@@ -1,7 +1,22 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.PracticumAndroidDiploma" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    <style name="Theme.JobCraft" parent="Base.Theme.JobCraft" >
+        <!-- Фон -->
+        <item name="android:colorBackground">@color/black</item>
+        <!-- Строка состояния -->
+        <item name="colorPrimaryDark">@color/black</item>
+        <!-- navigationBar -->
+        <item name="android:navigationBarColor">@color/black</item>
+        <!-- Цвет фона -->
+        <item name="jcBackgroundColor">@color/black</item>
+        <!-- Цвет основного текста -->
+        <item name="jcMainTextColor">@color/white</item>
+        <!-- Цвет hint текста для EditText -->
+        <item name="jcHintTextColor">@color/white</item>
+        <!-- Цвет фона для EditText -->
+        <item name="jcEditTextBackgroundColor">@color/gray</item>
+        <!-- Установка цвета текста по умолчанию -->
+        <item name="android:textColor">@color/white</item>
     </style>
+
 </resources>

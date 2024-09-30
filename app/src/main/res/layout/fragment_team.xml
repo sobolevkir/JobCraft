@@ -9,31 +9,31 @@
         android:layout_gravity="end"
         android:layout_marginTop="@dimen/mask_margin"
         android:layout_marginEnd="@dimen/mask_margin"
-        android:src="@drawable/mask_light">
-    </ImageView>
+        android:src="@drawable/mask"/>
 
     <TextView
+        style="@style/Medium_22_Style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/header_team_margin_start"
         android:layout_marginTop="@dimen/header_team_margin_top"
-        android:text="@string/Team"
-        android:textSize="@dimen/header_team_text_size" />
+        android:text="@string/Team" />
 
     <TextView
+        style="@style/Bold_32_Style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/header_team_margin_start"
         android:layout_marginTop="@dimen/big_header_team_margin_top"
-        android:text="@string/who_worked_on_the_application"
-        android:textSize="@dimen/big_header_team_text_size" />
+        android:text="@string/who_worked_on_the_application" />
 
     <TextView
+        style="@style/Medium_16_Style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/header_team_margin_start"
         android:layout_marginTop="220dp"
-        android:text="Первый чел\nвторой чел\nтретий чел\nя"
-        android:textSize="16sp"/>
+        android:lineSpacingExtra="@dimen/line_spacing"
+        android:text="@string/autors_list" />
 
 </FrameLayout>
