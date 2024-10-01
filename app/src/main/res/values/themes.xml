@@ -19,6 +19,8 @@
         <item name="jcHintTextColor">@color/gray</item>
         <!-- Цвет фона для EditText -->
         <item name="jcEditTextBackgroundColor">@color/light_gray</item>
+        <!-- Установка цвета текста по умолчанию -->
+        <item name="android:textColor">@color/black</item>
     </style>
 
 </resources>
