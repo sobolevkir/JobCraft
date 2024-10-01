@@ -1,28 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Bold_32_Style">
-        <item name="android:fontFamily">@font/ys_display_medium</item>
-        <item name="android:textFontWeight" tools:targetApi="28">700</item>
-        <item name="android:textSize">32sp</item>
+<resources >
+    <!-- Силь для CheckBox -->
+    <style name="CheckBox_Style">
+        <item name="buttonTint">@color/blue</item>
     </style>
-    <style name="Medium_22_Style">
-        <item name="android:fontFamily">@font/ys_display_medium</item>
-        <item name="android:textFontWeight" tools:targetApi="28">500</item>
-        <item name="android:textSize">22sp</item>
+
+    <!-- Силь для RadioButton -->
+    <style name="RadioButton_Style">
+        <item name="buttonTint">@color/blue</item>
     </style>
-    <style name="Medium_16_Style">
-        <item name="android:fontFamily">@font/ys_display_medium</item>
-        <item name="android:textFontWeight" tools:targetApi="28">500</item>
-        <item name="android:textSize">16sp</item>
-    </style>
-    <style name="Regular_16_Style">
-        <item name="android:fontFamily">@font/ys_display_regular</item>
-        <item name="android:textFontWeight" tools:targetApi="28">400</item>
-        <item name="android:textSize">16sp</item>
-    </style>
-    <style name="Regular_12_Style">
-        <item name="android:fontFamily">@font/ys_display_regular</item>
-        <item name="android:textFontWeight" tools:targetApi="28">400</item>
-        <item name="android:textSize">12sp</item>
+
+    <!-- Силь для EditText -->
+    <style name="EditText_Style" parent="Regular_16_Style">
+        <item name="android:textColor">?attr/jcMainTextColor</item>
+        <item name="android:textColorHint">?attr/jcHintTextColor</item>
+        <item name="android:textCursorDrawable">@drawable/blue_cursor</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:inputType">textCapSentences</item>
     </style>
 </resources>
