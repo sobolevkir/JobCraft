@@ -1,9 +1,24 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.PracticumAndroidDiploma" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <style name="Base.Theme.JobCraft" parent="Theme.Material3.DayNight.NoActionBar"/>
+
+    <style name="Theme.JobCraft" parent="Base.Theme.JobCraft" >
+        <!-- Фон -->
+        <item name="android:colorBackground">@color/white</item>
+        <!-- Строка состояния --> -->
+        <item name="colorPrimaryDark">@color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <!-- navigationBar -->
+        <item name="android:navigationBarColor">@color/white</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
+        <!-- Цвет фона -->
+        <item name="jcBackgroundColor">@color/white</item>
+        <!-- Цвет основного текста -->
+        <item name="jcMainTextColor">@color/black</item>
+        <!-- Цвет hint текста для EditText -->
+        <item name="jcHintTextColor">@color/gray</item>
+        <!-- Цвет фона для EditText -->
+        <item name="jcEditTextBackgroundColor">@color/light_gray</item>
     </style>
 
-    <style name="Theme.PracticumAndroidDiploma" parent="Base.Theme.PracticumAndroidDiploma" />
 </resources>
