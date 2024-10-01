@@ -28,7 +28,6 @@
     </style>
     <style name="Header" parent="Medium_22_Style">
         <item name="android:layout_marginStart">@dimen/header_margin_start</item>
-        <item name="android:layout_marginTop">@dimen/header_margin_top</item>
         <item name="android:layout_marginEnd">@dimen/header_margin_end</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:layout_width">wrap_content</item>
