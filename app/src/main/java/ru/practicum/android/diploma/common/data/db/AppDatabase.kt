@@ -11,5 +11,5 @@ import ru.practicum.android.diploma.common.data.db.entity.FavoriteVacancyEntity
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun favoriteTracksDao(): FavoriteVacancyDao
+    abstract fun favoriteVacancysDao(): FavoriteVacancyDao
 }
