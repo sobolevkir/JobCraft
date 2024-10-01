@@ -13,7 +13,7 @@ import ru.practicum.android.diploma.search.data.network.HHApi
 import ru.practicum.android.diploma.search.data.network.NetworkClient
 import ru.practicum.android.diploma.search.data.network.RetrofitNetworkClient
 
-val startModule = module{
+val startModule = module {
     single<HHApi> {
         Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
