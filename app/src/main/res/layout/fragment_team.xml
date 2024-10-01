@@ -12,12 +12,8 @@
         android:src="@drawable/mask"/>
 
     <TextView
-        style="@style/Medium_22_Style"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/header_team_margin_start"
-        android:layout_marginTop="@dimen/header_team_margin_top"
-        android:text="@string/Team" />
+        style="@style/Header"
+        android:text="@string/team_title" />
 
     <TextView
         style="@style/Bold_32_Style"
@@ -34,6 +30,6 @@
         android:layout_marginStart="@dimen/header_team_margin_start"
         android:layout_marginTop="220dp"
         android:lineSpacingExtra="@dimen/line_spacing"
-        android:text="@string/autors_list" />
+        android:text="@string/autors" />
 
 </FrameLayout>
