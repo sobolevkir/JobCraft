@@ -30,6 +30,6 @@
         android:layout_marginStart="@dimen/header_team_margin_start"
         android:layout_marginTop="220dp"
         android:lineSpacingExtra="@dimen/line_spacing"
-        android:text="@string/autors" />
+        android:text="@string/authors" />
 
 </FrameLayout>
