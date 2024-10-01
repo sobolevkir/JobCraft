@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources >
+    <!-- Силь для CheckBox -->
+    <style name="CheckBox_Style">
+        <item name="buttonTint">@color/blue</item>
+    </style>
+
+    <!-- Силь для RadioButton -->
+    <style name="RadioButton_Style">
+        <item name="buttonTint">@color/blue</item>
+    </style>
+
+    <!-- Силь для EditText -->
+    <style name="EditText_Style" parent="Regular_16_Style">
+        <item name="android:textColor">?attr/jcMainTextColor</item>
+        <item name="android:textColorHint">?attr/jcHintTextColor</item>
+        <item name="android:textCursorDrawable">@drawable/blue_cursor</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:inputType">textCapSentences</item>
+    </style>
+</resources>
