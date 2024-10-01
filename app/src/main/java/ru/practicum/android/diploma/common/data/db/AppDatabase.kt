@@ -3,7 +3,7 @@ package ru.practicum.android.diploma.common.data.db
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import ru.practicum.android.diploma.common.data.db.converters.Converters
+import ru.practicum.android.diploma.common.data.db.converter.Converters
 import ru.practicum.android.diploma.common.data.db.dao.FavoriteVacancyDao
 import ru.practicum.android.diploma.common.data.db.entity.FavoriteVacancyEntity
 

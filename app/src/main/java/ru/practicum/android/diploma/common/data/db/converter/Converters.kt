@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.common.data.db.converters
+package ru.practicum.android.diploma.common.data.db.converter
 
 import androidx.room.TypeConverter
 

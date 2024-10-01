@@ -12,7 +12,7 @@ interface FavoriteVacancyDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertVacancy(track: FavoriteVacancyEntity)
     @Query("SELECT * FROM favorite_vacancy_table")
-    fun getVacancys(): Flow<List<FavoriteVacancyEntity>>
+    fun getVacancies(): Flow<List<FavoriteVacancyEntity>>
     @Query("SELECT id FROM favorite_vacancy_table")
     fun getFavoritesIds(): Flow<List<String>>
 }
