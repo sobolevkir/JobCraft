@@ -19,8 +19,6 @@ android {
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField(type = "String", name = "HH_ACCESS_TOKEN", value = "\"${developProperties.hhAccessToken}\"")
-        buildConfigField(type = "String", name = "USER_AGENT", value = "\"JobCraft (sobolevkir@bk.ru)\"")
-        buildConfigField(type = "String", name = "BASE_URL", value = "\"https://api.hh.ru/\"")
     }
 
     buildTypes {
