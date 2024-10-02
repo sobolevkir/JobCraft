@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_navigation_graph"
+    app:startDestination="@id/searchFragment">
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="ru.practicum.android.diploma.search.ui.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_searchFragment_to_vacancyFragment"
+            app:destination="@id/vacancyFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_searchFragment_to_filtersFragment"
+            app:destination="@id/filtersFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/teamFragment"
+        android:name="ru.practicum.android.diploma.team.TeamFragment"
+        android:label="fragment_team"
+        tools:layout="@layout/fragment_team" />
+    <fragment
+        android:id="@+id/favoritesFragment"
+        android:name="ru.practicum.android.diploma.favorites.ui.FavoritesFragment"
+        android:label="fragment_favorites"
+        tools:layout="@layout/fragment_favorites">
+        <action
+            android:id="@+id/action_favoritesFragment_to_vacancyFragment"
+            app:destination="@id/vacancyFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/vacancyFragment"
+        android:name="ru.practicum.android.diploma.vacancy.ui.VacancyFragment"
+        android:label="fragment_vacancy"
+        tools:layout="@layout/fragment_vacancy" />
+    <fragment
+        android:id="@+id/filtersFragment"
+        android:name="ru.practicum.android.diploma.filters.ui.FiltersFragment"
+        android:label="fragment_filters"
+        tools:layout="@layout/fragment_filters">
+        <action
+            android:id="@+id/action_filtersFragment_to_selectPlaceFragment"
+            app:destination="@id/selectPlaceFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_filtersFragment_to_selectIndustryFragment"
+            app:destination="@id/selectIndustryFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/selectPlaceFragment"
+        android:name="ru.practicum.android.diploma.filters.ui.SelectPlaceFragment"
+        android:label="fragment_select_place"
+        tools:layout="@layout/fragment_select_place">
+        <action
+            android:id="@+id/action_selectPlaceFragment_to_selectRegionFragment"
+            app:destination="@id/selectRegionFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/selectRegionFragment"
+        android:name="ru.practicum.android.diploma.filters.ui.SelectRegionFragment"
+        android:label="fragment_select_region"
+        tools:layout="@layout/fragment_select_region" />
+    <fragment
+        android:id="@+id/selectIndustryFragment"
+        android:name="ru.practicum.android.diploma.filters.ui.SelectIndustryFragment"
+        android:label="fragment_select_industry"
+        tools:layout="@layout/fragment_select_industry" />
+</navigation>
