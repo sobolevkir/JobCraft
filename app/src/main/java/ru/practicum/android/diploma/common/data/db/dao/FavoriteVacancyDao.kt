@@ -14,5 +14,5 @@ interface FavoriteVacancyDao {
     @Query("SELECT * FROM favorite_vacancy_table")
     fun getVacancies(): Flow<List<FavoriteVacancyEntity>>
     @Query("SELECT id FROM favorite_vacancy_table")
-    fun getFavoritesIds(): Flow<List<String>>
+    fun getFavoritesIds(): Flow<List<Long>>
 }
