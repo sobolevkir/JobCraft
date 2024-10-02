@@ -2,12 +2,8 @@ package ru.practicum.android.diploma.common.ui
 
 import android.os.Bundle
 import android.view.View
-import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.doOnNextLayout
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.databinding.ActivityRootBinding
@@ -32,6 +28,7 @@ class RootActivity : AppCompatActivity() {
                 R.id.searchFragment, R.id.teamFragment, R.id.favoritesFragment -> {
                     binding.bottomNavigationView.visibility = View.VISIBLE
                 }
+
                 else -> {
                     binding.bottomNavigationView.visibility = View.GONE
                 }
