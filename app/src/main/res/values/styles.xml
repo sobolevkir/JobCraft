@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources >
-    <!-- Силь для CheckBox -->
+    <!-- Стиль для CheckBox -->
     <style name="CheckBox_Style">
         <item name="buttonTint">@color/blue</item>
     </style>
 
-    <!-- Силь для RadioButton -->
+    <!-- Стиль для RadioButton -->
     <style name="RadioButton_Style">
         <item name="buttonTint">@color/blue</item>
     </style>
 
-    <!-- Силь для EditText -->
+    <!-- Стиль для EditText -->
     <style name="EditText_Style" parent="Regular_16_Style">
         <item name="android:textColor">?attr/jcMainTextColor</item>
         <item name="android:textColorHint">?attr/jcHintTextColor</item>
@@ -26,5 +26,17 @@
         <item name="android:gravity">center_vertical</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">@dimen/header_height</item>
+    </style>
+
+    <!-- Стиль для BottomNavigationView -->
+    <style name="BottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="itemIconTint">@color/bottom_nav_colors</item>
+        <item name="itemTextColor">@color/bottom_nav_colors</item>
+        <item name="itemBackground">@android:color/transparent</item>
+        <item name="itemTextAppearanceActive">@style/Regular_12_Style</item>
+        <item name="itemTextAppearanceInactive">@style/Regular_12_Style</item>
+        <item name="labelVisibilityMode">labeled</item>
+        <item name="android:background">@drawable/bg_bottom_nav</item>
+        <item name="elevation">0dp</item>
     </style>
 </resources>

@@ -1,34 +1,57 @@
-# IntelliJ
-*.iml
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-/.idea/kotlinc.xml
-/.idea/gradle.xml
-/.idea/compiler.xml
-/.idea/misc.xml
-
-# Gradle files
+# Gradle
 .gradle/
 build/
 out/
 
-# Local configuration file (sdk path, etc)
+# Java & Kotlin
+*.class
+*.jar
+*.war
+*.ear
+*.rbc
+*.swp
+*~.nib
+*.iml
+*.hprof
+
+# Android/IntelliJ specific
+.idea/
+*.log
+*.pyc
 local.properties
 develop.properties
 
 # Gradle-profiler data
 profile-out*/
 gradle-user-home/
-*.hprof
 
-# Android Studio generated files and folders
+# Android Studio specific
 captures/
 .externalNativeBuild/
-.cxx/
+
+# Google Services
+app/google-services.json
+app/google-services-desktop.json
+
+# NDK
+/.cxx/
+
+# Miscellaneous
+*.lock
+*.out
+*.idx
+*.pid
+*.seed
+*.gz
+*.orig
+.trash/
+!.gitkeep
+
+# Firebase crashlytics
+crashlytics-build.properties
+
+# Android Profiling
+**/captures/*
 output.json
 
 # Built application files
@@ -46,5 +69,4 @@ google-services.json
 
 # OS specific
 .DS_Store
-*.log
 /.idea/
