@@ -1,37 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     tools:context=".filters.ui.SelectPlaceFragment">
+
+    <!-- Нужно будет использовать Toolbar, это упрощает код -->
+    <Button
+        android:id="@+id/btn_back"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@drawable/ic_back_arrow" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="@string/place_filter_sign"/>
+        android:text="@string/place_filter_sign" />
 
     <Button
+        android:id="@+id/btn_select_country"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/black"
-        android:text="@string/country_but_sign"
         android:layout_gravity="center"
-        android:layout_marginTop="40dp"
-        android:id="@+id/select_place_but"/>
+        android:text="@string/country_but_sign" />
 
     <Button
+        android:id="@+id/btn_select_region"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/black"
-        android:text="@string/region_but_sign"
         android:layout_gravity="center"
-        android:layout_marginTop="90dp"
-        android:id="@+id/select_industry_but"/>
+        android:text="@string/region_but_sign" />
 
-    <Button
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:background="@drawable/ic_back_arrow"
-        android:id="@+id/place_quite_but"/>
-</FrameLayout>
+</LinearLayout>

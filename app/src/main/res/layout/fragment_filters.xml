@@ -1,37 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     tools:context=".filters.ui.FiltersFragment">
+
+    <!-- Нужно будет использовать Toolbar, это упрощает код -->
+    <Button
+        android:id="@+id/btn_back"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@drawable/ic_back_arrow" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="@string/filters_sign"/>
+        android:text="@string/filters_sign" />
 
     <Button
+        android:id="@+id/btn_select_place"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/black"
-        android:text="@string/space_but_sign"
         android:layout_gravity="center"
-        android:layout_marginTop="40dp"
-        android:id="@+id/select_space_but"/>
+        android:text="@string/place_but_sign" />
 
     <Button
+        android:id="@+id/btn_select_industry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/black"
-        android:text="@string/industry_but_sign"
         android:layout_gravity="center"
-        android:layout_marginTop="90dp"
-        android:id="@+id/select_industry_but"/>
+        android:text="@string/industry_but_sign" />
 
-    <Button
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:background="@drawable/ic_back_arrow"
-        android:id="@+id/filters_quite_but"/>
-</FrameLayout>
+</LinearLayout>

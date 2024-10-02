@@ -3,9 +3,11 @@ package ru.practicum.android.diploma.search.ui
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.common.ext.viewBinding
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
+import ru.practicum.android.diploma.favorites.ui.FavoritesFragmentDirections
 
 class SearchFragment : Fragment(R.layout.fragment_search) {
     private val binding by viewBinding(FragmentSearchBinding::bind)
@@ -13,10 +15,19 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.btnFilters.setOnClickListener { openFilters() }
+        binding.btnVacancy.setOnClickListener { openVacancy() }
+
     }
 
-    companion object {
-        fun newInstance() = SearchFragment()
+    private fun openFilters() {
+        val action = SearchFragmentDirections.actionSearchFragmentToFiltersFragment()
+        findNavController().navigate(action)
+    }
+
+    private fun openVacancy() {
+        val action = SearchFragmentDirections.actionSearchFragmentToVacancyFragment()
+        findNavController().navigate(action)
     }
 
 }
