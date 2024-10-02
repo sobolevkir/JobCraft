@@ -15,8 +15,4 @@ class TeamFragment : Fragment(R.layout.fragment_team) {
 
     }
 
-    companion object {
-        fun newInstance() = TeamFragment()
-    }
-
 }

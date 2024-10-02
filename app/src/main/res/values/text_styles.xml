@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Сили шрифтов -->
-    <style name="Bold_32_Style">
+    <style name="Bold_32_Style" parent="Base.Theme.JobCraft">
         <item name="android:fontFamily">@font/ys_display_bold</item>
         <item name="android:textFontWeight" tools:targetApi="28">700</item>
         <item name="android:textSize">32sp</item>
     </style>
-    <style name="Medium_22_Style">
+    <style name="Medium_22_Style" parent="Base.Theme.JobCraft">
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:textFontWeight" tools:targetApi="28">500</item>
         <item name="android:textSize">22sp</item>
     </style>
-    <style name="Medium_16_Style">
+    <style name="Medium_16_Style" parent="Base.Theme.JobCraft">
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:textFontWeight" tools:targetApi="28">500</item>
         <item name="android:textSize">16sp</item>
     </style>
-    <style name="Regular_16_Style">
+    <style name="Regular_16_Style" parent="Base.Theme.JobCraft">
         <item name="android:fontFamily">@font/ys_display_regular</item>
         <item name="android:textFontWeight" tools:targetApi="28">400</item>
         <item name="android:textSize">16sp</item>
     </style>
-    <style name="Regular_12_Style">
+    <style name="Regular_12_Style" parent="Base.Theme.JobCraft">
         <item name="android:fontFamily">@font/ys_display_regular</item>
         <item name="android:textFontWeight" tools:targetApi="28">400</item>
         <item name="android:textSize">12sp</item>
