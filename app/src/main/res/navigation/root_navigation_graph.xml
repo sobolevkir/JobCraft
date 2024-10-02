@@ -14,15 +14,15 @@
             android:id="@+id/action_searchFragment_to_vacancyFragment"
             app:destination="@id/vacancyFragment"
             app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/hold"
-            app:popEnterAnim="@anim/hold"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/action_searchFragment_to_filtersFragment"
             app:destination="@id/filtersFragment"
             app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/hold"
-            app:popEnterAnim="@anim/hold"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
@@ -39,8 +39,8 @@
             android:id="@+id/action_favoritesFragment_to_vacancyFragment"
             app:destination="@id/vacancyFragment"
             app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/hold"
-            app:popEnterAnim="@anim/hold"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
