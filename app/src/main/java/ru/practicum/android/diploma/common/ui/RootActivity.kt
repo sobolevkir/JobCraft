@@ -25,15 +25,15 @@ class RootActivity : AppCompatActivity() {
         R.id.favoritesFragment
     )
 
-    private lateinit var navController: NavController
+    private val navController: NavController by lazy {
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView) as NavHostFragment
+        navHostFragment.navController
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityRootBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.rootFragmentContainerView) as NavHostFragment
-        navController = navHostFragment.navController
 
         binding.bottomNavigationView.setupWithNavController(navController)
 
