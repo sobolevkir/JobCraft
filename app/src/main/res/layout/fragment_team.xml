@@ -5,24 +5,24 @@
     android:orientation="vertical">
 
     <TextView
-        style="@style/Header"
+        style="@style/Header_Style"
         android:text="@string/team_title" />
 
     <TextView
         style="@style/Bold_32_Style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/header_margin_start"
-        android:layout_marginTop="@dimen/header_margin_start"
+        android:layout_marginStart="@dimen/margin_standard"
+        android:layout_marginTop="@dimen/margin_standard"
         android:text="@string/who_worked_on_the_application" />
 
     <TextView
         style="@style/Medium_16_Style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/header_margin_start"
-        android:layout_marginTop="@dimen/header_margin_top"
-        android:lineSpacingExtra="@dimen/line_spacing"
+        android:layout_marginStart="@dimen/margin_standard"
+        android:layout_marginTop="@dimen/margin_large"
+        android:lineSpacingExtra="@dimen/margin_standard"
         android:text="@string/authors" />
 
 </LinearLayout>

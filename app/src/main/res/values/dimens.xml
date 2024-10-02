@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="header_margin_start">16dp</dimen>
-    <dimen name="header_margin_top">24dp</dimen>
-    <dimen name="header_margin_end">8dp</dimen>
+    <dimen name="margin_standard">16dp</dimen>
+    <dimen name="margin_large">24dp</dimen>
+    <dimen name="margin_small">8dp</dimen>
     <dimen name="header_height">64dp</dimen>
-    <dimen name="line_spacing">16dp</dimen>
 </resources>

@@ -26,11 +26,4 @@
         <item name="android:textFontWeight" tools:targetApi="28">400</item>
         <item name="android:textSize">12sp</item>
     </style>
-    <style name="Header" parent="Medium_22_Style">
-        <item name="android:layout_marginStart">@dimen/header_margin_start</item>
-        <item name="android:layout_marginEnd">@dimen/header_margin_end</item>
-        <item name="android:gravity">center_vertical</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">@dimen/header_height</item>
-    </style>
 </resources>
