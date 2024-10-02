@@ -14,7 +14,9 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.btnBack.setOnClickListener { findNavController().popBackStack() }
+        binding.btnBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
 
     }
 

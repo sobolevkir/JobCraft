@@ -14,7 +14,9 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.btnBack.setOnClickListener { findNavController().popBackStack() }
+        binding.btnBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
 
     }
 

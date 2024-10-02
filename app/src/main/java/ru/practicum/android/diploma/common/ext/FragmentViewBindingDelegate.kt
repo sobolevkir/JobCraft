@@ -34,16 +34,14 @@ class FragmentViewBindingDelegate<T : ViewBinding>(
     }
 
     override fun getValue(thisRef: Fragment, property: KProperty<*>): T {
-        val binding = binding
-
-        if (binding != null && binding.root === thisRef.view) {
-            return binding
+        binding?.let {
+            if (it.root === thisRef.view) {
+                return it
+            }
         }
-
         val view = thisRef.view
             ?: error("Should not attempt to get bindings when the Fragment's view is null.")
-
-        return viewBindingFactory(view).also { this.binding = it }
+        return viewBindingFactory(view).also { binding = it }
     }
 }
 

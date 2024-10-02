@@ -58,13 +58,6 @@ dependencies {
     implementation(libs.ui.material)
     implementation(libs.ui.constraintLayout)
 
-    // Unit Tests
-    testImplementation(libs.unitTests.junit)
-
-    // UI Tests
-    androidTestImplementation(libs.uiTests.junitExt)
-    androidTestImplementation(libs.uiTests.espressoCore)
-
     // Network
     implementation(libs.network.retrofit)
     implementation(libs.network.converterGson)
@@ -85,4 +78,11 @@ dependencies {
     annotationProcessor(libs.db.roomCompiler)
     ksp(libs.db.roomCompiler)
     implementation(libs.db.roomKtx)
+
+    // Unit Tests
+    testImplementation(libs.unitTests.junit)
+
+    // UI Tests
+    androidTestImplementation(libs.uiTests.junitExt)
+    androidTestImplementation(libs.uiTests.espressoCore)
 }
