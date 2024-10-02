@@ -10,11 +10,9 @@ import ru.practicum.android.diploma.databinding.ActivityRootBinding
 
 class RootActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityRootBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityRootBinding.inflate(layoutInflater)
+        val binding = ActivityRootBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val navHostFragment =
