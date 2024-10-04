@@ -26,5 +26,16 @@
     <string name="authors">Кирилл Соболев\nЮлия Сычёва\nАндрей Трофимов\nДанил Цыганов\nМарат Галимов</string>
     <string name="vacancy_name">Название вакансии</string>
     <string name="employment">Место работы</string>
-    <string name="salary">Заработная плата</string>
+    <string name="no_internet">Нет интернета</string>
+    <string name="no_vacancies">Не удалось получить\nсписок вакансий</string>
+    <string name="server_error">Ошибка сервера</string>
+
+    <!-- Строка для зарплаты с диапазоном -->
+    <string name="salary_range">от %1$d до %2$d %3$s</string>
+    <!-- Строка для зарплаты с фиксированной суммой -->
+    <string name="salary_exact">%1$d %2$s</string>
+    <!-- Строка для случая, если зарплата не указана -->
+    <string name="no_salary">Зарплата не указана</string>
+    <!-- Строка для названия вакансии и местоположения -->
+    <string name="vacancy_name_place">%1$s, %2$s</string>
 </resources>
