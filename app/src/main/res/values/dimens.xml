@@ -4,4 +4,11 @@
     <dimen name="margin_large">24dp</dimen>
     <dimen name="margin_small">8dp</dimen>
     <dimen name="header_height">64dp</dimen>
+
+    <!-- Text sizes -->
+    <dimen name="text_size_16">16sp</dimen>
+    <dimen name="text_size_22">22sp</dimen>
+
+    <!-- Special dimens -->
+    <dimen name="vacancy_cover_size">48dp</dimen>
 </resources>

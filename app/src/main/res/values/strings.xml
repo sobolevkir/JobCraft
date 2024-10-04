@@ -19,4 +19,7 @@
     <string name="vacancy_info_sign">Здесь будет информация о конкретной вакансии</string>
     <string name="who_worked_on_the_application">Над приложением работали</string>
     <string name="authors">Кирилл Соболев\nЮлия Сычёва\nАндрей Трофимов\nДанил Цыганов\nМарат Галимов</string>
+    <string name="vacancy_name">Название вакансии</string>
+    <string name="employment">Место работы</string>
+    <string name="salary">Заработная плата</string>
 </resources>
