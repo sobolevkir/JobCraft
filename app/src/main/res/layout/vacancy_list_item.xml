@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -13,8 +12,9 @@
         android:id="@+id/iv_vacancy_cover"
         android:layout_width="@dimen/vacancy_cover_size"
         android:layout_height="@dimen/vacancy_cover_size"
-        android:layout_marginRight="@dimen/margin_small"
+        android:layout_marginEnd="@dimen/margin_small"
         android:background="@drawable/cover_border"
+        android:contentDescription="@string/logo_hint"
         tools:src="@drawable/ic_cover_placeholder" />
 
     <LinearLayout
@@ -24,7 +24,7 @@
 
         <TextView
             android:id="@+id/tv_vacancy_name"
-            style="@style/YS_Medium_22"
+            style="@style/Medium_22_Style"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
@@ -40,7 +40,7 @@
             android:ellipsize="end"
             android:gravity="start"
             android:maxLines="1"
-            android:textAppearance="@style/YS_Regular_16"
+            android:textAppearance="@style/Regular_16_Style"
             android:textColor="?attr/jcMainTextColor"
             tools:text="@string/employment" />
 
@@ -51,7 +51,7 @@
             android:ellipsize="end"
             android:gravity="start"
             android:maxLines="1"
-            android:textAppearance="@style/YS_Regular_16"
+            android:textAppearance="@style/Regular_16_Style"
             android:textColor="?attr/jcMainTextColor"
             tools:text="@string/salary" />
 

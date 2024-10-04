@@ -1,9 +1,14 @@
 <resources>
     <string name="app_name">JobCraft</string>
     <string name="main_title">Главная</string>
+    <string name="search_title">Поиск вакансий</string>
     <string name="favorites_title">Избранное</string>
     <string name="team_title">Команда</string>
+    <string name="enter_request_hint">Введите запрос</string>
+    <string name="clear_hint">Очистить</string>
+    <string name="logo_hint">Логотип компании</string>
     <string name="search_sign">Здесь будет экран поиска вакансий</string>
+    <string name="search_result_nothing_found_message">Таких вакансий нет</string>
     <string name="filter_but_sign">К фильтрам</string>
     <string name="favorites_sign">Здесь будет экран избранных вакансий</string>
     <string name="team_sign">Здесь будет экран команды</string>
