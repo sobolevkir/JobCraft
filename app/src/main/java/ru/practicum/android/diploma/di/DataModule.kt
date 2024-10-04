@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.di
 
+import androidx.room.Room
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -9,6 +10,7 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import ru.practicum.android.diploma.common.data.db.AppDatabase
 import ru.practicum.android.diploma.search.data.network.HHApi
 import ru.practicum.android.diploma.search.data.network.HeaderInterceptor
 import ru.practicum.android.diploma.search.data.network.NetworkClient
@@ -42,6 +44,10 @@ val dataModule = module {
     single<OkHttpClient>() {
         OkHttpClient.Builder()
             .addInterceptor(HeaderInterceptor())
+            .build()
+    }
+    single {
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
             .build()
     }
 }
