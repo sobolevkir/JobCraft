@@ -43,9 +43,9 @@
             android:id="@+id/iv_clear_request"
             android:layout_width="@dimen/small_icon_size"
             android:layout_height="@dimen/small_icon_size"
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:layout_gravity="end|center_vertical"
             android:layout_marginHorizontal="@dimen/margin_standard"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:backgroundTint="@color/black"
             android:contentDescription="@string/clear_hint"
             android:src="@drawable/ic_clear"
@@ -55,9 +55,9 @@
             android:id="@+id/iv_search"
             android:layout_width="@dimen/small_icon_size"
             android:layout_height="@dimen/small_icon_size"
-            android:background="?attr/selectableItemBackgroundBorderless"
             android:layout_gravity="end|center_vertical"
             android:layout_marginHorizontal="@dimen/margin_standard"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:backgroundTint="@color/black"
             android:contentDescription="@string/clear_hint"
             android:src="@drawable/ic_search"
@@ -67,39 +67,40 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible"
-        tools:visibility="visible">
+        android:visibility="gone"
+        tools:visibility="gone">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_found_vacancies_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
+            android:visibility="gone"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="4"
             tools:listitem="@layout/vacancy_list_item"
-            android:visibility="visible"
-            tools:visibility="visible"/>
+            tools:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_search_result_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|top"
-            android:text="@string/search_result_nothing_found_message"
             android:layout_marginTop="@dimen/margin_micro"
-            android:textColor="@color/white"
-            android:textAppearance="@style/Regular_16_Style"
-            android:paddingVertical="@dimen/margin_micro"
-            android:paddingHorizontal="@dimen/margin_medium"
             android:background="@drawable/bg_rounded_search_result_textview"
-            android:visibility="visible"
-            tools:visibility="visible"/>
+            android:paddingHorizontal="@dimen/margin_medium"
+            android:paddingVertical="@dimen/margin_micro"
+            android:text="@string/search_result_nothing_found_message"
+            android:textAppearance="@style/Regular_16_Style"
+            android:textColor="@color/white"
+            android:visibility="gone"
+            tools:visibility="gone" />
     </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/search_field_height"
         android:gravity="center|center_vertical"
         android:orientation="vertical">
 
@@ -108,9 +109,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="@dimen/margin_standard"
+            android:importantForAccessibility="no"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_vacancy_search_start"
-            android:importantForAccessibility="no"
             android:visibility="gone"
             tools:visibility="gone" />
 
@@ -119,8 +120,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_standard"
-            android:src="@drawable/ic_placeholder_no_internet"
             android:importantForAccessibility="no"
+            android:src="@drawable/ic_placeholder_no_internet"
             android:visibility="gone"
             tools:visibility="gone" />
 
@@ -139,11 +140,11 @@
             android:id="@+id/iv_placeholder_no_vacancies"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_standard"
-            android:scaleType="fitCenter"
             android:layout_gravity="center"
-            android:src="@drawable/ic_placeholder_no_vacancies"
+            android:layout_marginHorizontal="@dimen/margin_standard"
             android:importantForAccessibility="no"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_placeholder_no_vacancies"
             android:visibility="gone"
             tools:visibility="gone" />
 
@@ -163,11 +164,11 @@
             android:id="@+id/iv_placeholder_server_error"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_standard"
-            android:scaleType="fitCenter"
             android:layout_gravity="center"
-            android:src="@drawable/ic_placeholder_server_error"
+            android:layout_marginHorizontal="@dimen/margin_standard"
             android:importantForAccessibility="no"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_placeholder_server_error"
             android:visibility="gone"
             tools:visibility="gone" />
 
@@ -188,6 +189,6 @@
             android:layout_height="@dimen/progress_bar_size"
             android:indeterminateTint="@color/blue"
             android:visibility="gone"
-            tools:visibility="gone"/>
+            tools:visibility="gone" />
     </LinearLayout>
 </LinearLayout>
