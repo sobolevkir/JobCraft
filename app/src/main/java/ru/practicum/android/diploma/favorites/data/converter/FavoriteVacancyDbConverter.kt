@@ -9,7 +9,7 @@ import ru.practicum.android.diploma.common.domain.model.Salary
 import ru.practicum.android.diploma.common.domain.model.Vacancy
 import ru.practicum.android.diploma.favorites.data.entity.FavoriteVacancyEntity
 
-class FavoriteVacancyDbConverter: KoinComponent {
+class FavoriteVacancyDbConverter : KoinComponent {
     private val gson: Gson by inject()
     @TypeConverter
     fun convert(vacancy: Vacancy): FavoriteVacancyEntity = FavoriteVacancyEntity(
