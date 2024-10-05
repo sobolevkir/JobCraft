@@ -1,9 +1,14 @@
 <resources>
     <string name="app_name">JobCraft</string>
     <string name="main_title">Главная</string>
+    <string name="search_title">Поиск вакансий</string>
     <string name="favorites_title">Избранное</string>
     <string name="team_title">Команда</string>
+    <string name="enter_request_hint">Введите запрос</string>
+    <string name="clear_hint">Очистить</string>
+    <string name="logo_hint">Логотип компании</string>
     <string name="search_sign">Здесь будет экран поиска вакансий</string>
+    <string name="search_result_nothing_found_message">Таких вакансий нет</string>
     <string name="filter_but_sign">К фильтрам</string>
     <string name="favorites_sign">Здесь будет экран избранных вакансий</string>
     <string name="team_sign">Здесь будет экран команды</string>
@@ -19,4 +24,18 @@
     <string name="vacancy_info_sign">Здесь будет информация о конкретной вакансии</string>
     <string name="who_worked_on_the_application">Над приложением работали</string>
     <string name="authors">Кирилл Соболев\nЮлия Сычёва\nАндрей Трофимов\nДанил Цыганов\nМарат Галимов</string>
+    <string name="vacancy_name">Название вакансии</string>
+    <string name="employment">Место работы</string>
+    <string name="no_internet">Нет интернета</string>
+    <string name="no_vacancies">Не удалось получить\nсписок вакансий</string>
+    <string name="server_error">Ошибка сервера</string>
+
+    <!-- Строка для зарплаты с диапазоном -->
+    <string name="salary_range">от %1$d до %2$d %3$s</string>
+    <!-- Строка для зарплаты с фиксированной суммой -->
+    <string name="salary_exact">%1$d %2$s</string>
+    <!-- Строка для случая, если зарплата не указана -->
+    <string name="no_salary">Зарплата не указана</string>
+    <!-- Строка для названия вакансии и местоположения -->
+    <string name="vacancy_name_place">%1$s, %2$s</string>
 </resources>

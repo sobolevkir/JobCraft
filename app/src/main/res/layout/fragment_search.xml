@@ -1,30 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="?attr/jcBackgroundColor"
+    android:orientation="vertical"
     tools:context=".search.ui.SearchFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/search_sign" />
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        style="@style/Toolbar_Style"
+        app:title="@string/search_title">
 
-    <Button
-        android:id="@+id/btn_filters"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/filter_but_sign" />
+        <ImageButton
+            android:id="@+id/btn_filters"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/filter_but_sign"
+            android:padding="@dimen/margin_standard"
+            android:src="@drawable/ic_filters" />
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/search_field_height"
+        android:layout_marginHorizontal="@dimen/margin_standard"
+        android:layout_marginVertical="@dimen/margin_small">
+
+        <EditText
+            android:id="@+id/et_search_request"
+            style="@style/EditText_Style"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/enter_request_hint"
+            android:imeOptions="actionDone"
+            android:importantForAutofill="no" />
+
+        <ImageButton
+            android:id="@+id/iv_clear_request"
+            android:layout_width="@dimen/small_icon_size"
+            android:layout_height="@dimen/small_icon_size"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginHorizontal="@dimen/margin_standard"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:backgroundTint="@color/black"
+            android:contentDescription="@string/clear_hint"
+            android:src="@drawable/ic_clear"
+            android:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/iv_search"
+            android:layout_width="@dimen/small_icon_size"
+            android:layout_height="@dimen/small_icon_size"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginHorizontal="@dimen/margin_standard"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:backgroundTint="@color/black"
+            android:contentDescription="@string/clear_hint"
+            android:src="@drawable/ic_search"
+            android:visibility="visible" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:visibility="gone">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_found_vacancies_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:visibility="gone"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="4"
+            tools:listitem="@layout/vacancy_list_item"
+            tools:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_search_result_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|top"
+            android:layout_marginTop="@dimen/margin_micro"
+            android:background="@drawable/bg_rounded_search_result_textview"
+            android:paddingHorizontal="@dimen/margin_medium"
+            android:paddingVertical="@dimen/margin_micro"
+            android:text="@string/search_result_nothing_found_message"
+            android:textAppearance="@style/Regular_16_Style"
+            android:textColor="@color/white"
+            android:visibility="gone"
+            tools:visibility="gone" />
+    </FrameLayout>
 
     <Button
         android:id="@+id/btn_vacancy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="@string/vacancy_but_sign" />
+        android:text="@string/vacancy_but_sign"
+        android:visibility="gone"
+        tools:visibility="gone" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/search_field_height"
+        android:gravity="center|center_vertical"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/iv_search_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:layout_marginHorizontal="@dimen/margin_standard"
+            android:importantForAccessibility="no"
+            android:src="@drawable/vacancy_search_start"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_error"
+            style="@style/ErrorMessageStyle"
+            android:layout_marginTop="@dimen/margin_standard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/no_internet"
+            android:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="@dimen/progress_bar_size"
+            android:layout_height="@dimen/progress_bar_size"
+            android:indeterminateTint="@color/blue"
+            android:visibility="gone"
+            tools:visibility="gone" />
+    </LinearLayout>
 </LinearLayout>
