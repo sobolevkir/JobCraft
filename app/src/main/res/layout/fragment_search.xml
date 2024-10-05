@@ -97,6 +97,15 @@
             tools:visibility="gone" />
     </FrameLayout>
 
+    <Button
+        android:id="@+id/btn_vacancy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/vacancy_but_sign"
+        android:visibility="visible"
+        tools:visibility="visible"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -115,72 +124,34 @@
             android:visibility="gone"
             tools:visibility="gone" />
 
-        <ImageView
-            android:id="@+id/iv_placeholder_no_internet"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_standard"
-            android:importantForAccessibility="no"
-            android:src="@drawable/ic_placeholder_no_internet"
-            android:visibility="gone"
-            tools:visibility="gone" />
-
         <TextView
             android:id="@+id/tv_no_internet"
-            style="@style/Medium_22_Style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_standard"
-            android:text="@string/no_internet"
-            android:textColor="?attr/jcMainTextColor"
-            android:visibility="gone"
-            tools:visibility="gone" />
-
-        <ImageView
-            android:id="@+id/iv_placeholder_no_vacancies"
+            style="@style/ErrorMessageStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginHorizontal="@dimen/margin_standard"
-            android:importantForAccessibility="no"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_placeholder_no_vacancies"
+            android:text="@string/no_internet"
             android:visibility="gone"
+            app:drawableTopCompat="@drawable/ic_placeholder_no_internet"
             tools:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_no_vacancies"
-            style="@style/Medium_22_Style"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_standard"
-            android:gravity="center"
-            android:text="@string/no_vacancies"
-            android:textColor="?attr/jcMainTextColor"
-            android:visibility="gone"
-            tools:visibility="gone" />
-
-        <ImageView
-            android:id="@+id/iv_placeholder_server_error"
+            style="@style/ErrorMessageStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginHorizontal="@dimen/margin_standard"
-            android:importantForAccessibility="no"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_placeholder_server_error"
+            android:text="@string/no_vacancies"
             android:visibility="gone"
+            app:drawableTopCompat="@drawable/ic_placeholder_no_vacancies"
             tools:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_server_error"
-            style="@style/Medium_22_Style"
-            android:layout_width="wrap_content"
+            style="@style/ErrorMessageStyle"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_standard"
             android:text="@string/server_error"
-            android:textColor="?attr/jcMainTextColor"
             android:visibility="gone"
+            app:drawableTopCompat="@drawable/ic_placeholder_server_error"
             tools:visibility="gone" />
 
         <ProgressBar

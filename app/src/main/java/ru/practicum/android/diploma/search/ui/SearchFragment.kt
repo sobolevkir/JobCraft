@@ -18,7 +18,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             openFilters()
         }
 
-        binding.toolbar.setOnClickListener {
+        binding.btnVacancy.setOnClickListener {
             openVacancy()
         }
     }
