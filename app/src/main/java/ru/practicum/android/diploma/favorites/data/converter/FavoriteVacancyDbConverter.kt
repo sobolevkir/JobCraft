@@ -1,8 +1,8 @@
-package ru.practicum.android.diploma.common.data.db.converter
+package ru.practicum.android.diploma.favorites.data.converter
 
 import androidx.room.TypeConverter
-import ru.practicum.android.diploma.common.data.db.entity.FavoriteVacancyEntity
 import ru.practicum.android.diploma.common.domain.model.Vacancy
+import ru.practicum.android.diploma.favorites.data.entity.FavoriteVacancyEntity
 
 class FavoriteVacancyDbConverter {
     @TypeConverter

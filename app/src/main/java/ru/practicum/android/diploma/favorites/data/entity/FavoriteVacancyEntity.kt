@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.common.data.db.entity
+package ru.practicum.android.diploma.favorites.data.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

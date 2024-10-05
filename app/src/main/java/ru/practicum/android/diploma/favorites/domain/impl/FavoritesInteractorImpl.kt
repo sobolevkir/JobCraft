@@ -10,6 +10,10 @@ class FavoritesInteractorImpl(private val repository: FavoritesRepository) : Fav
         repository.addVacancyToFavorites(vacancy)
     }
 
+    override suspend fun updateVacancyInFavorites(vacancy: Vacancy) {
+        repository.updateVacancyInFavorites(vacancy)
+    }
+
     override suspend fun removeVacancyFromFavorites(vacancyId: Long) {
         repository.removeVacancyFromFavorites(vacancyId)
     }
