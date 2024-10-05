@@ -114,17 +114,20 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/iv_search_vacancy_image"
+            android:id="@+id/iv_search result"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
             android:layout_marginHorizontal="@dimen/margin_standard"
             android:importantForAccessibility="no"
-            android:src="@drawable/ic_vacancy_search_start"
-            android:visibility="visible" />
+            android:src="@drawable/vacancy_search_start"
+            android:visibility="gone" />
 
         <TextView
-            android:id="@+id/tv_no_internet"
+            android:id="@+id/tv_error"
             style="@style/ErrorMessageStyle"
+            android:layout_marginTop="@dimen/margin_standard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/no_internet"

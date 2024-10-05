@@ -45,13 +45,11 @@
         <item name="elevation">0dp</item>
     </style>
 
-    <!-- Стиль для изображения и текста ошибок -->
+    <!-- Стиль для текста ошибок -->
     <style name="ErrorMessageStyle">
         <item name="android:layout_marginHorizontal">@dimen/margin_standard</item>
         <item name="android:gravity">center</item>
         <item name="android:textAppearance">@style/Medium_22_Style</item>
         <item name="android:textColor">?attr/jcMainTextColor</item>
-        <item name="drawableTopCompat">@drawable/ic_placeholder_no_internet</item>
-        <item name="android:drawablePadding">@dimen/margin_standard</item>
     </style>
 </resources>
