@@ -51,6 +51,7 @@
         <item name="android:gravity">center</item>
         <item name="android:textAppearance">@style/Medium_22_Style</item>
         <item name="android:textColor">?attr/jcMainTextColor</item>
+        <item name="drawableTopCompat">@drawable/ic_placeholder_no_internet</item>
         <item name="android:drawablePadding">@dimen/margin_standard</item>
     </style>
 </resources>
