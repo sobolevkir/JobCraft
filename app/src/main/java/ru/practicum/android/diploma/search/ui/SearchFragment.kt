@@ -17,10 +17,10 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         binding.btnFilters.setOnClickListener {
             openFilters()
         }
+
         binding.btnVacancy.setOnClickListener {
             openVacancy()
         }
-
     }
 
     private fun openFilters() {
@@ -32,5 +32,4 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         val action = SearchFragmentDirections.actionSearchFragmentToVacancyFragment()
         findNavController().navigate(action)
     }
-
 }
