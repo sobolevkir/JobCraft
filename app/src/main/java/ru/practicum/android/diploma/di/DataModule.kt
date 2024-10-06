@@ -41,7 +41,7 @@ val dataModule = module {
         Dispatchers.IO
     }
 
-    single<OkHttpClient>() {
+    single<OkHttpClient> {
         OkHttpClient.Builder()
             .addInterceptor(HeaderInterceptor())
             .build()
