@@ -7,7 +7,10 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.common.ext.viewBinding
@@ -21,17 +24,12 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private val binding by viewBinding(FragmentSearchBinding::bind)
     private val viewModel by viewModel<SearchViewModel>()
 
+    private var isSearch = false
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if(binding.etSearchRequest.text.isEmpty()){
-            with(binding.tvError){
-                isVisible = true
-                val errorImage =
-                    ContextCompat.getDrawable(requireContext(), R.drawable.vacancy_search_start)
-                setCompoundDrawables(null, errorImage, null, null)
-            }
-        }
+        setStartOptions()
 
         val vacancyOnClicked = object : VacancyOnClicked {
             override fun startVacancy() {
@@ -47,6 +45,16 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             adapter.submitList(it.vacancies)
         }
 
+        fun searchDebounce(){
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.search(binding.etSearchRequest.text.toString())
+                delay(CLICK_DELAY)
+                if(isSearch) {
+                    binding.progressBar.visibility = View.VISIBLE
+                }
+            }
+        }
+
         binding.etSearchRequest.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {}
 
@@ -59,13 +67,15 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 s: CharSequence, start: Int,
                 before: Int, count: Int
             ) {
-                setClearBtn(binding.etSearchRequest.text.isEmpty())
+                isSearch = s.isNotEmpty()
+                setStartOptions()
+                searchDebounce()
             }
         })
 
         binding.ivClearRequest.setOnClickListener{
             binding.etSearchRequest.setText("")
-            setClearBtn(true)
+            setStartOptions()
         }
 
         binding.btnFilters.setOnClickListener {
@@ -73,19 +83,35 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     }
 
-    private fun setClearBtn(isEmpty: Boolean){
-        if (isEmpty){
-            binding.ivClearRequest.isVisible = false
-            binding.ivSearch.isVisible = true
+    private fun setStartOptions(){
+        //Показать начальную картинку
+        val isEmpty = binding.etSearchRequest.text.isEmpty()
+        with(binding.tvError){
+            isVisible = isEmpty
+            val errorImage =
+                ContextCompat.getDrawable(requireContext(), R.drawable.vacancy_search_start)
+            setCompoundDrawables(null, errorImage, null, null)
         }
-        else{
-            binding.ivClearRequest.isVisible = true
-            binding.ivSearch.isVisible = false
+
+        //Показать кнопку поиска или очистки
+        with(binding){
+            if (isEmpty){
+                ivClearRequest.isVisible = false
+                ivSearch.isVisible = true
+            }
+            else{
+                ivClearRequest.isVisible = true
+                ivSearch.isVisible = false
+            }
         }
     }
 
     private fun openFilters() {
         val action = SearchFragmentDirections.actionSearchFragmentToFiltersFragment()
         findNavController().navigate(action)
+    }
+
+    companion object{
+        const val CLICK_DELAY = 2000L
     }
 }
