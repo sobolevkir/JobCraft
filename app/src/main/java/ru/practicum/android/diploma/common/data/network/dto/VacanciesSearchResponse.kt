@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.search.data.network.dto
+package ru.practicum.android.diploma.common.data.network.dto
 
 data class VacanciesSearchResponse(
     val items: List<VacancyFromListDto>,

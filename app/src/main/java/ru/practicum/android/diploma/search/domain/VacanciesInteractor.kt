@@ -5,5 +5,5 @@ import ru.practicum.android.diploma.common.domain.model.ErrorType
 import ru.practicum.android.diploma.search.domain.model.VacanciesSearchResult
 
 interface VacanciesInteractor {
-    fun searchVacancies(queryText: String, page: Int): Flow<Pair<VacanciesSearchResult?, ErrorType?>>
+    fun searchVacancies(options: Map<String, String>): Flow<Pair<VacanciesSearchResult?, ErrorType?>>
 }

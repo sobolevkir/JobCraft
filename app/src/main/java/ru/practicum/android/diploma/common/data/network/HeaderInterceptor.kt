@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.search.data.network
+package ru.practicum.android.diploma.common.data.network
 
 import okhttp3.Interceptor
 import okhttp3.Response

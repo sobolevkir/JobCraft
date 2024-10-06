@@ -4,13 +4,13 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import ru.practicum.android.diploma.common.data.mapper.VacancyMapper.toDomain
+import ru.practicum.android.diploma.common.data.network.NetworkClient
+import ru.practicum.android.diploma.common.data.network.dto.ResultCode
+import ru.practicum.android.diploma.common.data.network.dto.VacanciesSearchRequest
+import ru.practicum.android.diploma.common.data.network.dto.VacanciesSearchResponse
 import ru.practicum.android.diploma.common.domain.model.ErrorType
 import ru.practicum.android.diploma.common.util.Resource
-import ru.practicum.android.diploma.search.data.mapper.VacancyMapper.toDomain
-import ru.practicum.android.diploma.search.data.network.NetworkClient
-import ru.practicum.android.diploma.search.data.network.dto.ResultCode
-import ru.practicum.android.diploma.search.data.network.dto.VacanciesSearchRequest
-import ru.practicum.android.diploma.search.data.network.dto.VacanciesSearchResponse
 import ru.practicum.android.diploma.search.domain.VacanciesRepository
 import ru.practicum.android.diploma.search.domain.model.VacanciesSearchResult
 
@@ -19,9 +19,8 @@ class VacanciesRepositoryImpl(
     private val ioDispatcher: CoroutineDispatcher
 ) : VacanciesRepository {
 
-    override fun searchVacancies(queryText: String, page: Int): Flow<Resource<VacanciesSearchResult>> = flow {
-
-        val response = networkClient.doRequest(VacanciesSearchRequest(queryText, page))
+    override fun searchVacancies(options: Map<String, String>): Flow<Resource<VacanciesSearchResult>> = flow {
+        val response = networkClient.doRequest(VacanciesSearchRequest(options))
         when (response.resultCode) {
             ResultCode.SUCCESS -> {
                 val vacanciesSearchResponse = response as VacanciesSearchResponse

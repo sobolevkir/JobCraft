@@ -1,9 +1,9 @@
-package ru.practicum.android.diploma.search.data.mapper
+package ru.practicum.android.diploma.common.data.mapper
 
+import ru.practicum.android.diploma.common.data.network.dto.SalaryDto
+import ru.practicum.android.diploma.common.data.network.dto.VacancyFromListDto
 import ru.practicum.android.diploma.common.domain.model.Salary
 import ru.practicum.android.diploma.common.domain.model.VacancyFromList
-import ru.practicum.android.diploma.search.data.network.dto.SalaryDto
-import ru.practicum.android.diploma.search.data.network.dto.VacancyFromListDto
 
 object VacancyMapper {
 
