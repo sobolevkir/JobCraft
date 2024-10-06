@@ -5,5 +5,6 @@ enum class ErrorType {
     NOTHING_FOUND,
     BAD_REQUEST,
     SERVER_ERROR,
+    FORBIDDEN_ERROR,
     UNKNOWN_ERROR
 }

@@ -19,9 +19,9 @@ class VacanciesRepositoryImpl(
     private val ioDispatcher: CoroutineDispatcher
 ) : VacanciesRepository {
 
-    override fun searchVacancies(options: Map<String, String>): Flow<Resource<VacanciesSearchResult>> = flow {
+    override fun searchVacancies(queryText: String, page: Int): Flow<Resource<VacanciesSearchResult>> = flow {
 
-        val response = networkClient.doRequest(VacanciesSearchRequest(options))
+        val response = networkClient.doRequest(VacanciesSearchRequest(queryText, page))
         when (response.resultCode) {
             ResultCode.SUCCESS -> {
                 val vacanciesSearchResponse = response as VacanciesSearchResponse
@@ -43,6 +43,7 @@ class VacanciesRepositoryImpl(
             ResultCode.BAD_REQUEST -> emit(Resource.Error(ErrorType.BAD_REQUEST))
             ResultCode.NOTHING_FOUND -> emit(Resource.Error(ErrorType.NOTHING_FOUND))
             ResultCode.SERVER_ERROR -> emit(Resource.Error(ErrorType.SERVER_ERROR))
+            ResultCode.FORBIDDEN_ERROR -> emit(Resource.Error(ErrorType.FORBIDDEN_ERROR))
             else -> emit(Resource.Error(ErrorType.UNKNOWN_ERROR))
         }
 
