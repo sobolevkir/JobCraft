@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.common.domain
+package ru.practicum.android.diploma.vacancy.domain
 
 interface ExternalNavigator {
     fun shareText(text: String)

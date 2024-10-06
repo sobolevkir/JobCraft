@@ -1,8 +1,8 @@
-package ru.practicum.android.diploma.common.data
+package ru.practicum.android.diploma.vacancy.data.impl
 
 import android.content.Context
 import android.content.Intent
-import ru.practicum.android.diploma.common.domain.ExternalNavigator
+import ru.practicum.android.diploma.vacancy.domain.ExternalNavigator
 
 class ExternalNavigatorImpl(private val appContext: Context) : ExternalNavigator {
     override fun shareText(text: String) {
