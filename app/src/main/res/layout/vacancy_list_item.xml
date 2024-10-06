@@ -12,7 +12,8 @@
         android:id="@+id/iv_vacancy_cover"
         android:layout_width="@dimen/vacancy_cover_size"
         android:layout_height="@dimen/vacancy_cover_size"
-        android:layout_marginEnd="@dimen/margin_small"
+        android:layout_marginEnd="@dimen/margin_medium"
+        android:scaleType="centerInside"
         android:background="@drawable/cover_border"
         android:contentDescription="@string/logo_hint"
         tools:src="@drawable/ic_cover_placeholder" />
@@ -53,7 +54,7 @@
             android:maxLines="1"
             android:textAppearance="@style/Regular_16_Style"
             android:textColor="?attr/jcMainTextColor"
-            tools:text="@string/salary" />
+            tools:text="@string/no_salary" />
 
     </LinearLayout>
 </LinearLayout>

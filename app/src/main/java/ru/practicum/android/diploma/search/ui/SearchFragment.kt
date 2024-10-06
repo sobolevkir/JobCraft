@@ -63,7 +63,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         binding.btnFilters.setOnClickListener {
             openFilters()
         }
-
     }
 
     private fun openFilters() {
