@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -22,6 +23,15 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if(binding.etSearchRequest.text.isEmpty()){
+            with(binding.tvError){
+                isVisible = true
+                val errorImage =
+                    ContextCompat.getDrawable(requireContext(), R.drawable.vacancy_search_start)
+                setCompoundDrawables(null, errorImage, null, null)
+            }
+        }
 
         val vacancyOnClicked = object : VacancyOnClicked {
             override fun startVacancy() {
@@ -49,19 +59,28 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 s: CharSequence, start: Int,
                 before: Int, count: Int
             ) {
-                if(binding.etSearchRequest.text.isEmpty()){
-                    binding.ivClearRequest.isVisible = false
-                    binding.ivSearch.isVisible = true
-                }
-                else{
-                    binding.ivClearRequest.isVisible = true
-                    binding.ivSearch.isVisible = false
-                }
+                setClearBtn(binding.etSearchRequest.text.isEmpty())
             }
         })
 
+        binding.ivClearRequest.setOnClickListener{
+            binding.etSearchRequest.setText("")
+            setClearBtn(true)
+        }
+
         binding.btnFilters.setOnClickListener {
             openFilters()
+        }
+    }
+
+    private fun setClearBtn(isEmpty: Boolean){
+        if (isEmpty){
+            binding.ivClearRequest.isVisible = false
+            binding.ivSearch.isVisible = true
+        }
+        else{
+            binding.ivClearRequest.isVisible = true
+            binding.ivSearch.isVisible = false
         }
     }
 
