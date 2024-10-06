@@ -16,39 +16,29 @@ class RetrofitNetworkClient(
 ) : NetworkClient {
 
     override suspend fun doRequest(dto: Any): Response {
+        val response = Response()
+
         if (!context.isNetworkConnected) {
-            return Response().apply {
-                resultCode = ResultCode.CONNECTION_PROBLEM
-            }
-        }
-        if (dto !is VacanciesSearchRequest) {
-            return Response().apply {
-                resultCode = ResultCode.BAD_REQUEST
-            }
-        }
-        return withContext(ioDispatcher) {
-            try {
-                val response = api.searchVacancies(dto.options)
-                /*val response = when(dto) {
-                    is VacanciesSearchRequest -> api.searchVacancies(dto.options)
-                    is VacancyDetailsRequest -> api.getVacancy(dto.id)
-                }*/
-                response.apply { resultCode = ResultCode.SUCCESS }
-            } catch (ex: HttpException) {
-                Response().apply {
-                    resultCode = when (ex.code()) {
+            response.resultCode = ResultCode.CONNECTION_PROBLEM
+        } else if (dto !is VacanciesSearchRequest) {
+            response.resultCode = ResultCode.BAD_REQUEST
+        } else {
+            return withContext(ioDispatcher) {
+                try {
+                    val apiResponse = api.searchVacancies(dto.options)
+                    apiResponse.apply { resultCode = ResultCode.SUCCESS }
+                } catch (ex: HttpException) {
+                    response.resultCode = when (ex.code()) {
                         ResultCode.NOTHING_FOUND,
                         ResultCode.SERVER_ERROR,
                         ResultCode.FORBIDDEN_ERROR -> ex.code()
-
                         else -> ResultCode.UNKNOWN_ERROR
                     }
-                }
-            } catch (er: Error) {
-                Response().apply {
-                    resultCode = ResultCode.UNKNOWN_ERROR
+                    response
                 }
             }
         }
+
+        return response
     }
 }
