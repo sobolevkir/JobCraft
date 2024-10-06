@@ -4,8 +4,6 @@ import okhttp3.Interceptor
 import okhttp3.Response
 import ru.practicum.android.diploma.BuildConfig
 
-private const val USER_AGENT = "JobCraft (sobolevkir@bk.ru)"
-
 class HeaderInterceptor : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
@@ -18,5 +16,9 @@ class HeaderInterceptor : Interceptor {
             .build()
 
         return chain.proceed(request)
+    }
+
+    companion object {
+        private const val USER_AGENT = "JobCraft (sobolevkir@bk.ru)"
     }
 }

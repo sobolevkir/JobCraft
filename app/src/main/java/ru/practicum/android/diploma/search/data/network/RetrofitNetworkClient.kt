@@ -1,43 +1,50 @@
 package ru.practicum.android.diploma.search.data.network
 
 import android.content.Context
-import android.util.Log
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import ru.practicum.android.diploma.common.ext.isNetworkConnected
-import ru.practicum.android.diploma.search.data.dto.Response
-import ru.practicum.android.diploma.search.data.dto.ResultCode.RESULT_CODE_BAD_REQUEST
-import ru.practicum.android.diploma.search.data.dto.ResultCode.RESULT_CODE_NO_INTERNET
-import ru.practicum.android.diploma.search.data.dto.ResultCode.RESULT_CODE_SERVER_ERROR
-import ru.practicum.android.diploma.search.data.dto.ResultCode.RESULT_CODE_SUCCESS
-import ru.practicum.android.diploma.search.data.dto.VacancyRequest
+import ru.practicum.android.diploma.search.data.network.dto.Response
+import ru.practicum.android.diploma.search.data.network.dto.ResultCode
 
-private const val LOG_RESULT_CODE = "ResultCode"
+import ru.practicum.android.diploma.search.data.network.dto.VacanciesSearchRequest
 
 class RetrofitNetworkClient(
     private val api: HHApi,
     private val context: Context,
     private val ioDispatcher: CoroutineDispatcher
 ) : NetworkClient {
+
     override suspend fun doRequest(dto: Any): Response {
-        val result = when {
-            !context.isNetworkConnected -> Response().apply { resultCode = RESULT_CODE_NO_INTERNET }
-            dto !is VacancyRequest -> Response().apply { resultCode = RESULT_CODE_BAD_REQUEST }
-            else -> {
-                withContext(ioDispatcher) {
-                    try {
-                        val response = api.getVacancy(dto.vacancyId.toString())
-                        response.apply { resultCode = RESULT_CODE_SUCCESS }
-                    } catch (e: HttpException) {
-                        Response().apply {
-                            resultCode = RESULT_CODE_SERVER_ERROR
-                            Log.e(LOG_RESULT_CODE, "VacancyResponse - resultCode: $resultCode", e)
-                        }
+        // Проверка соединения с интернетом
+        if (!context.isNetworkConnected) {
+            return Response().apply { resultCode = ResultCode.CONNECTION_PROBLEM }
+        }
+
+        // Проверка типа запроса
+        if (dto !is VacanciesSearchRequest) {
+            return Response().apply { resultCode = ResultCode.BAD_REQUEST }
+        }
+
+        // Выполнение запроса в IO-диспетчере
+        return withContext(ioDispatcher) {
+            try {
+                val response = api.searchVacancies(dto.options)
+                response.apply { resultCode = ResultCode.SUCCESS }  // Успешный результат
+            } catch (ex: HttpException) {
+                // Обработка кода ошибки сервера
+                Response().apply {
+                    resultCode = when (ex.code()) {
+                        ResultCode.NOTHING_FOUND -> ResultCode.NOTHING_FOUND  // Ничего не найдено
+                        ResultCode.SERVER_ERROR -> ResultCode.SERVER_ERROR    // Ошибка сервера (500)
+                        else -> ResultCode.UNKNOWN_ERROR                // Остальные ошибки
                     }
                 }
+            } catch (ex: Exception) {
+                // Общая обработка исключений
+                Response().apply { resultCode = ResultCode.UNKNOWN_ERROR }
             }
         }
-        return result
     }
 }

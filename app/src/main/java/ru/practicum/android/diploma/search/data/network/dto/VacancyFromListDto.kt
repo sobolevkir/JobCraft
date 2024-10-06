@@ -1,7 +1,7 @@
-package ru.practicum.android.diploma.search.data.dto
+package ru.practicum.android.diploma.search.data.network.dto
 
 class VacancyFromListDto(
-    val id: Long,
+    val id: String,
     val name: String,
     val salary: SalaryDto?,
     val area: AreaDto,

@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.search.data.dto
+package ru.practicum.android.diploma.search.data.network.dto
 
 import com.google.gson.annotations.SerializedName
 
