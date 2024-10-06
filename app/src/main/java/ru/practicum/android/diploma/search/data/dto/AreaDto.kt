@@ -1,5 +1,3 @@
 package ru.practicum.android.diploma.search.data.dto
 
-open class Response {
-    var resultCode = 0
-}
+data class AreaDto(val name: String)
