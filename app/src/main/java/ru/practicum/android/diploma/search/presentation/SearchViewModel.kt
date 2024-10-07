@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.search.presentation
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -30,6 +31,28 @@ class SearchViewModel(private val interactor: SearchInteractor) : ViewModel() {
         searchJob = viewModelScope.launch {
             delay(SEARCH_DELAY)
             searchRequest(request)
+        }
+    }
+
+    fun searchTest() {
+        viewModelScope.launch {
+            val options = mapOf(
+                "text" to "android developer",
+                "page" to "0",
+                "per_page" to "20"
+            )
+            vacanciesInteractor.searchVacancies(options)
+                .collect { (searchResult, errorType) ->
+                    if (searchResult != null) {
+                        val vacancies = searchResult.items
+                        Log.d("vacancies_array", vacancies.toString())
+                        Log.d("page_number", searchResult.page.toString())
+                        Log.d("vacancies_found_number", searchResult.found.toString())
+                    }
+                    if (errorType != null) {
+                        Log.d("error", errorType.toString())
+                    }
+                }
         }
     }
 

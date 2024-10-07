@@ -8,5 +8,4 @@ val interactorModule = module {
     single<SearchInteractor>{
         SearchInteractorImpl(repository = get())
     }
-
 }

@@ -1,11 +1,17 @@
 package ru.practicum.android.diploma.di
 
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
-import ru.practicum.android.diploma.search.data.impl.SearchRepositoryImpl
-import ru.practicum.android.diploma.search.domain.SearchRepository
+import ru.practicum.android.diploma.search.data.impl.VacanciesRepositoryImpl
+import ru.practicum.android.diploma.search.domain.VacanciesRepository
 
 val repositoryModule = module {
-    single<SearchRepository> {
-        SearchRepositoryImpl(network = get())
+
+    single<VacanciesRepository> {
+        VacanciesRepositoryImpl(
+            networkClient = get(),
+            ioDispatcher = get(named("ioDispatcher"))
+        )
     }
+
 }

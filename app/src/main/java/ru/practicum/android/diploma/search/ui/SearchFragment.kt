@@ -104,6 +104,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 ivSearch.isVisible = false
             }
         }
+
+        viewModel.searchTest()
+
     }
 
     private fun openFilters() {
