@@ -4,13 +4,13 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import ru.practicum.android.diploma.search.data.mapper.VacanciesListMapper
 import ru.practicum.android.diploma.common.data.network.NetworkClient
 import ru.practicum.android.diploma.common.data.network.dto.ResultCode
 import ru.practicum.android.diploma.common.data.network.dto.VacanciesSearchRequest
 import ru.practicum.android.diploma.common.data.network.dto.VacanciesSearchResponse
 import ru.practicum.android.diploma.common.domain.model.ErrorType
 import ru.practicum.android.diploma.common.util.Resource
+import ru.practicum.android.diploma.search.data.mapper.VacanciesListMapper
 import ru.practicum.android.diploma.search.domain.VacanciesRepository
 import ru.practicum.android.diploma.search.domain.model.VacanciesSearchResult
 
