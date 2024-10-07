@@ -1,5 +1,7 @@
 package ru.practicum.android.diploma.favorites.presentation
 
+import android.database.sqlite.SQLiteException
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -41,12 +43,17 @@ class FavoritesViewModel(private val favoritesInteractor: FavoritesInteractor) :
     fun observeState(): LiveData<FavoritesState> = favoriteStateLiveData
 
     fun fillData() {
-        viewModelScope.launch(Dispatchers.IO) {
-            favoritesInteractor
-                .getFavoriteVacancies()
-                .collect { favorites ->
-                    processResult(favorites)
-                }
+        try {
+            viewModelScope.launch(Dispatchers.IO) {
+                favoritesInteractor
+                    .getFavoriteVacancies()
+                    .collect { favorites ->
+                        processResult(favorites)
+                    }
+            }
+        } catch (ex: SQLiteException) {
+            renderState(FavoritesState.Error)
+            Log.e("FavoritesViewModel", "Ошибка: ${ex.message}")
         }
     }
 

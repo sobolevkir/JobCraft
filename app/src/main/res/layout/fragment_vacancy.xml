@@ -15,6 +15,7 @@
         android:background="@drawable/ic_back_arrow" />
 
     <TextView
+        android:id="@+id/tx_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

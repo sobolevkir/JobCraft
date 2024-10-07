@@ -6,12 +6,13 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.common.domain.model.VacancyFromList
 import ru.practicum.android.diploma.common.ext.viewBinding
 import ru.practicum.android.diploma.common.ui.VacancyListAdapter
-import ru.practicum.android.diploma.common.util.debounce
 import ru.practicum.android.diploma.databinding.FragmentFavoritesBinding
 import ru.practicum.android.diploma.favorites.presentation.FavoritesState
 import ru.practicum.android.diploma.favorites.presentation.FavoritesViewModel
@@ -20,11 +21,7 @@ class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
     private val viewModel: FavoritesViewModel by viewModel()
     private val binding by viewBinding(FragmentFavoritesBinding::bind)
     private var favoritesAdapter: VacancyListAdapter? = null
-    private val onVacancyClickDebounce: (VacancyFromList) -> Unit = debounce(
-        CLICK_DEBOUNCE_DELAY_MILLIS,
-        viewLifecycleOwner.lifecycleScope,
-        false
-    ) { vacancy -> openVacancy(vacancy) }
+    private var isClickAllowed = true
 
     companion object {
         private const val CLICK_DEBOUNCE_DELAY_MILLIS = 100L
@@ -33,7 +30,7 @@ class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.testDb()
-        favoritesAdapter = VacancyListAdapter(onItemClick = { onVacancyClickDebounce(it) })
+        favoritesAdapter = VacancyListAdapter(onItemClick = { if (clickDebounce()) openVacancy(it) })
         binding.rvFoundVacanciesList.adapter = favoritesAdapter
         viewModel.fillData()
         viewModel.observeState().observe(viewLifecycleOwner) { render(it) }
@@ -54,7 +51,7 @@ class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
         when (state) {
             is FavoritesState.Empty -> showEmpty()
             is FavoritesState.Content -> showContent(state.tracks)
-            else -> showNothingFound()
+            is FavoritesState.Error -> showNothingFound()
         }
     }
 
@@ -87,6 +84,18 @@ class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
             this.vacancies.addAll(vacancies)
             notifyDataSetChanged()
         }
+    }
+
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            viewLifecycleOwner.lifecycleScope.launch {
+                delay(CLICK_DEBOUNCE_DELAY_MILLIS)
+                isClickAllowed = true
+            }
+        }
+        return current
     }
 
     private fun openVacancy(vacancy: VacancyFromList) {
