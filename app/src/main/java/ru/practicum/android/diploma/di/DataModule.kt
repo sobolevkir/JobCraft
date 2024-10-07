@@ -13,6 +13,8 @@ import ru.practicum.android.diploma.common.data.network.HHApi
 import ru.practicum.android.diploma.common.data.network.HeaderInterceptor
 import ru.practicum.android.diploma.common.data.network.NetworkClient
 import ru.practicum.android.diploma.common.data.network.RetrofitNetworkClient
+import ru.practicum.android.diploma.vacancy.data.impl.ExternalNavigatorImpl
+import ru.practicum.android.diploma.vacancy.domain.ExternalNavigator
 
 private const val BASE_URL = "https://api.hh.ru/"
 
@@ -43,5 +45,9 @@ val dataModule = module {
         OkHttpClient.Builder()
             .addInterceptor(HeaderInterceptor())
             .build()
+    }
+
+    single <ExternalNavigator>{
+        ExternalNavigatorImpl(androidContext())
     }
 }

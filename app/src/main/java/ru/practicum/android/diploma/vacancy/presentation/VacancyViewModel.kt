@@ -36,4 +36,16 @@ class VacancyViewModel (
             vacancyLiveData.postValue(ScreenState(ScreenMode.ERROR, null))
     }
 
+    fun sendVacancy(text: String) {
+        interactor.sendVacancy(text)
+    }
+
+    fun addToFavorites (vacancy: VacancyDetails) {
+        interactor.addToFavorites(vacancy)
+    }
+
+    fun removeFromFavorites (vacancyId: Long) {
+        interactor.removeFromFavorites(vacancyId)
+    }
+
 }

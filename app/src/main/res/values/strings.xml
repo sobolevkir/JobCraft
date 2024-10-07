@@ -39,6 +39,6 @@
     <!-- Строка для названия вакансии и местоположения -->
     <string name="vacancy_name_place">%1$s, %2$s</string>
     <string name="vacancy_not_found">Вакансия не найдена или удалена</string>
-    <string name="select_mail_service">Выберите почтовый сервис:</string>
+    <string name="select_send_service">Выберите сервис для отправки:</string>
 
 </resources>

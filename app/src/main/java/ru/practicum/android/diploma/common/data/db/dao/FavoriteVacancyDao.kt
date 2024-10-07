@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 import ru.practicum.android.diploma.common.data.db.entity.FavoriteVacancyEntity
 
@@ -17,4 +18,10 @@ interface FavoriteVacancyDao {
 
     @Query("SELECT id FROM favorite_vacancy_table")
     fun getFavoritesIds(): Flow<List<Long>>
+
+    @Query("DELETE FROM favorite_vacancy_table WHERE id = :vacancyId")
+    fun deleteVacancyById (vacancyId: Long)
+
+    @Update(entity = FavoriteVacancyEntity::class, onConflict = OnConflictStrategy.REPLACE)
+    fun updateVacancy(playlist: FavoriteVacancyEntity)
 }

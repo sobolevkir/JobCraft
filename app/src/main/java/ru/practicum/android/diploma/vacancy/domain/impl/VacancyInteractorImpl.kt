@@ -11,6 +11,18 @@ class VacancyInteractorImpl (
     private val repository: VacancyRepository,
 ) : VacancyInteractor {
 
+    override fun sendVacancy(text: String) {
+        repository.sendVacancy(text)
+    }
+
+    override fun addToFavorites(vacancy: VacancyDetails) {
+        repository.addToFavorites(vacancy)
+    }
+
+    override fun removeFromFavorites(vacancyId: Long) {
+        repository.removeFromFavorites(vacancyId)
+    }
+
     override fun getVacancyDetails(vacancyId: Long): Flow<Pair<VacancyDetails?, String?>> {
         return repository.getVacancyDetails (vacancyId).map { result ->
             when(result) {

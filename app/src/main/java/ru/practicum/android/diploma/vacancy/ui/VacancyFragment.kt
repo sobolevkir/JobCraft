@@ -32,7 +32,7 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
     private val binding by viewBinding(FragmentVacancyBinding::bind)
     private var vacancy: VacancyDetails? = null
     private var isFavorite: Boolean = false
-    private var idVacancy = 0L
+    private var vacancyId = 0L
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -51,9 +51,9 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
             }
         }
 
-        idVacancy = requireArguments().getLong(EXTRA_ID_VACANCY, 0)
+        vacancyId = requireArguments().getLong(EXTRA_ID_VACANCY, 0)
 
-        viewModel.getVacancyDetails(idVacancy)
+        viewModel.getVacancyDetails(vacancyId)
 
         binding.btnBack.setOnClickListener { findNavController().popBackStack() }
         binding.btnSend.setOnClickListener { sendVacancy() }
@@ -61,27 +61,23 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
             if (vacancy != null) {
                 isFavorite = !isFavorite
                 changeFavoriteIcon()
-                if (isFavorite) addToFavorites() else removeFromFavorites()
+                if (isFavorite) addToFavorites(vacancy!!) else removeFromFavorites(vacancyId)
             }
         }
     }
     // Отправка вакансии
     private fun sendVacancy () {
         if (vacancy != null) {
-            val intent = Intent(Intent.ACTION_SEND)
-            intent.type = "text/plain"
-            intent.putExtra(Intent.EXTRA_TEXT, vacancy!!.alternateUrl)
-            val chooserIntent = Intent.createChooser(intent, getString(R.string.select_mail_service))
-            startActivity(chooserIntent)
+            viewModel.sendVacancy(vacancy!!.alternateUrl)
         }
     }
 
-    private fun addToFavorites () {
-        // Добавить вакансию в фавориты
+    private fun addToFavorites (vacancy: VacancyDetails) {
+        viewModel.addToFavorites(vacancy)
     }
 
-    private fun removeFromFavorites () {
-        // Убрать вакансию из фаворитов
+    private fun removeFromFavorites (vacancyId: Long) {
+        viewModel.removeFromFavorites(vacancyId)
     }
 
     private fun showLoading() {
@@ -153,7 +149,7 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
             binding.btnFavorite.setImageResource(R.drawable.ic_favorite_off)
         }
     }
-    // Строка зарплата
+    // Формируем строку зарплата
     private fun getSalary (salary: Salary): String {
         var strFrom = ""
         var strTo = ""
@@ -165,6 +161,7 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
         return (strFrom + strTo + strCurrency).trimStart()
     }
 
+    // Формируем строку адрес
     private fun getAddress (address: Address): String {
         var strCity = ""
         var strStreet = ""
