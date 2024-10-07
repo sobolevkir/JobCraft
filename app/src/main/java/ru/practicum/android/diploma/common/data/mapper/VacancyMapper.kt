@@ -9,50 +9,57 @@ import ru.practicum.android.diploma.common.domain.model.Salary
 import ru.practicum.android.diploma.common.domain.model.VacancyDetails
 import ru.practicum.android.diploma.common.domain.model.VacancyFromList
 
-object VacancyMapper {
+class VacancyMapper {
 
-    fun VacancyFromListDto.toDomain(): VacancyFromList {
-        return VacancyFromList(
-            id = this.id.toLongOrNull() ?: -1L,
-            name = this.name,
-            salary = this.salary?.toDomain(),
-            areaName = this.area.name,
-            employerName = this.employer.name,
-            employerLogoUrl240 = this.employer.logoUrls?.logoUrl240
-        )
+    fun mapVacancyFromList(vacancyFromListDto: VacancyFromListDto): VacancyFromList {
+        return with(vacancyFromListDto) {
+            VacancyFromList(
+                id = id.toLongOrNull() ?: -1L,
+                name = name,
+                salary = salary?.let { mapSalary(it) },
+                areaName = area.name,
+                employerName = employer.name,
+                employerLogoUrl240 = employer.logoUrls?.logoUrl240
+            )
+        }
     }
 
-    private fun SalaryDto.toDomain(): Salary {
-        return Salary(
-            currency = this.currency,
-            from = this.from,
-            to = this.to
-        )
+    fun mapVacancyDetails(vacancyDetailsDto: VacancyDetailsDto): VacancyDetails {
+        return with(vacancyDetailsDto) {
+            VacancyDetails(
+                id = id.toLongOrNull() ?: -1L,
+                name = name,
+                salary = salary?.let { mapSalary(it) },
+                areaName = area.name,
+                employerName = employer?.name,
+                employerLogoUrl240 = employer?.logoUrls?.logoUrl240,
+                experience = experience?.name,
+                scheduleName = schedule?.name,
+                description = description,
+                keySkills = keySkills,
+                address = address?.let { mapAddress(it) },
+                alternateUrl = alternateUrl
+            )
+        }
     }
 
-    private fun AddressDto.toDomain(): Address {
-        return Address(
-            city = this.city,
-            street = this.street,
-            building = this.building
-        )
+    private fun mapSalary(salaryDto: SalaryDto): Salary {
+        return with(salaryDto) {
+            Salary(
+                currency = currency,
+                from = from,
+                to = to
+            )
+        }
     }
 
-    fun VacancyDetailsDto.toDomain(): VacancyDetails {
-        return VacancyDetails(
-            id = this.id.toLongOrNull() ?: -1L,
-            name = this.name,
-            salary = this.salary?.toDomain(),
-            areaName = this.area.name,
-            employerName = this.employer?.name,
-            employerLogoUrl240 = this.employer?.logoUrls?.logoUrl240,
-            experience = this.experience.name,
-            scheduleName = this.schedule.name,
-            description = this.description,
-            keySkills = this.keySkills,
-            address = this.address?.toDomain(),
-            alternateUrl = this.alternateUrl
-        )
+    private fun mapAddress(addressDto: AddressDto): Address {
+        return with(addressDto) {
+            Address(
+                city = city,
+                street = street,
+                building = building
+            )
+        }
     }
-
 }

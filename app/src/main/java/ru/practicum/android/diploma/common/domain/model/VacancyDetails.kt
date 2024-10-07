@@ -8,7 +8,7 @@ data class VacancyDetails(
     val employerName: String?,
     val employerLogoUrl240: String?,
     val experience: String?,
-    val scheduleName: String,
+    val scheduleName: String?,
     val description: String,
     val keySkills: List<String>,
     val address: Address?,
