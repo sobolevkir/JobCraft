@@ -27,6 +27,7 @@ class FavoriteVacancyDbConverter : KoinComponent {
         vacancy.description,
         gson.toJson(vacancy.keySkills),
         gson.toJson(vacancy.address),
+        vacancy.alternateUrl
     )
 
     @TypeConverter
@@ -42,6 +43,7 @@ class FavoriteVacancyDbConverter : KoinComponent {
         favoriteVacancyEntity.description,
         gson.fromJson(favoriteVacancyEntity.keySkills, object : TypeToken<List<String>>() {}.type),
         gson.fromJson(favoriteVacancyEntity.address, object : TypeToken<Address>() {}.type),
+        favoriteVacancyEntity.alternateUrl,
         isFavorite = true
     )
 

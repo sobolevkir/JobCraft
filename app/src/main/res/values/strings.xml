@@ -38,4 +38,5 @@
     <string name="no_salary">Зарплата не указана</string>
     <!-- Строка для названия вакансии и местоположения -->
     <string name="vacancy_name_place">%1$s, %2$s</string>
+    <string name="list_is_empty">Список пуст</string>
 </resources>
