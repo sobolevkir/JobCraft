@@ -1,10 +1,8 @@
-package ru.practicum.android.diploma.search.data.network
+package ru.practicum.android.diploma.common.data.network
 
 import okhttp3.Interceptor
 import okhttp3.Response
 import ru.practicum.android.diploma.BuildConfig
-
-private const val USER_AGENT = "JobCraft (sobolevkir@bk.ru)"
 
 class HeaderInterceptor : Interceptor {
 
@@ -18,5 +16,9 @@ class HeaderInterceptor : Interceptor {
             .build()
 
         return chain.proceed(request)
+    }
+
+    companion object {
+        private const val USER_AGENT = "JobCraft (sobolevkir@bk.ru)"
     }
 }
