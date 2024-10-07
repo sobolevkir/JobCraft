@@ -14,11 +14,38 @@ import ru.practicum.android.diploma.favorites.domain.FavoritesInteractor
 
 class FavoritesViewModel(private val favoritesInteractor: FavoritesInteractor) : ViewModel() {
     fun testDb() {
+        var startId = 0L
         val vacancyTestList = listOf(
-            VacancyDetails(1, "1", null, "moscow", "1", null, null, "1", "1", listOf("1", "2"), null, "", false),
-            VacancyDetails(2, "2", null, "moscow", "1", null, null, "1", "1", listOf("1", "2"), null, "", false),
-            VacancyDetails(3, "3", null, "moscow", "1", null, null, "1", "1", listOf("1", "2"), null, "", false)
-
+            VacancyDetails(
+                startId++,
+                "первый",
+                null,
+                "москва",
+                "серг",
+                null,
+                null,
+                "22",
+                "ропаа",
+                listOf("77", "786"),
+                null,
+                "",
+                false
+            ),
+            VacancyDetails(
+                startId + 2,
+                "второй",
+                null,
+                "питер",
+                "леш",
+                null,
+                null,
+                "91",
+                "лропалрпа",
+                listOf("1876", "2769"),
+                null,
+                "",
+                false
+            )
         )
         viewModelScope.launch(Dispatchers.IO) {
             vacancyTestList.forEach { favoritesInteractor.addVacancyToFavorites(it) }
