@@ -11,12 +11,12 @@ import ru.practicum.android.diploma.common.domain.model.VacancyFromList
 
 class VacancyMapper {
 
-    fun mapVacancyFromList(vacancyFromListDto: VacancyFromListDto): VacancyFromList {
+    fun map(vacancyFromListDto: VacancyFromListDto): VacancyFromList {
         return with(vacancyFromListDto) {
             VacancyFromList(
                 id = id.toLongOrNull() ?: -1L,
                 name = name,
-                salary = salary?.let { mapSalary(it) },
+                salary = salary?.let { map(it) },
                 areaName = area.name,
                 employerName = employer.name,
                 employerLogoUrl240 = employer.logoUrls?.logoUrl240
@@ -24,12 +24,12 @@ class VacancyMapper {
         }
     }
 
-    fun mapVacancyDetails(vacancyDetailsDto: VacancyDetailsDto): VacancyDetails {
+    fun map(vacancyDetailsDto: VacancyDetailsDto): VacancyDetails {
         return with(vacancyDetailsDto) {
             VacancyDetails(
                 id = id.toLongOrNull() ?: -1L,
                 name = name,
-                salary = salary?.let { mapSalary(it) },
+                salary = salary?.let { map(it) },
                 areaName = area.name,
                 employerName = employer?.name,
                 employerLogoUrl240 = employer?.logoUrls?.logoUrl240,
@@ -37,13 +37,13 @@ class VacancyMapper {
                 scheduleName = schedule?.name,
                 description = description,
                 keySkills = keySkills,
-                address = address?.let { mapAddress(it) },
+                address = address?.let { map(it) },
                 alternateUrl = alternateUrl
             )
         }
     }
 
-    private fun mapSalary(salaryDto: SalaryDto): Salary {
+    private fun map(salaryDto: SalaryDto): Salary {
         return with(salaryDto) {
             Salary(
                 currency = currency,
@@ -53,7 +53,7 @@ class VacancyMapper {
         }
     }
 
-    private fun mapAddress(addressDto: AddressDto): Address {
+    private fun map(addressDto: AddressDto): Address {
         return with(addressDto) {
             Address(
                 city = city,
