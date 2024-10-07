@@ -4,7 +4,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import ru.practicum.android.diploma.common.data.mapper.VacancyMapper.toDomain
+import ru.practicum.android.diploma.search.data.mapper.VacanciesListMapper
 import ru.practicum.android.diploma.common.data.network.NetworkClient
 import ru.practicum.android.diploma.common.data.network.dto.ResultCode
 import ru.practicum.android.diploma.common.data.network.dto.VacanciesSearchRequest
@@ -29,7 +29,7 @@ class VacanciesRepositoryImpl(
                     emit(Resource.Error(ErrorType.NOTHING_FOUND))
                 } else {
                     val searchResultData = VacanciesSearchResult(
-                        items = vacanciesDto.map { it.toDomain() },
+                        items = VacanciesListMapper.map(vacanciesDto),
                         found = vacanciesSearchResponse.found,
                         page = vacanciesSearchResponse.page,
                         pages = vacanciesSearchResponse.pages

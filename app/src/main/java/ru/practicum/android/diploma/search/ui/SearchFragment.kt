@@ -36,7 +36,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     }
 
     private fun openVacancy() {
-        val action = SearchFragmentDirections.actionSearchFragmentToVacancyFragment()
+        val action = SearchFragmentDirections.actionSearchFragmentToVacancyFragment(123)
         findNavController().navigate(action)
     }
 }
