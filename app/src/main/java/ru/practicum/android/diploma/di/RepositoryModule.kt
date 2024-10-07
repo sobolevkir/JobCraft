@@ -6,6 +6,8 @@ import ru.practicum.android.diploma.favorites.data.impl.FavoritesRepositoryImpl
 import ru.practicum.android.diploma.favorites.domain.FavoritesRepository
 import ru.practicum.android.diploma.search.data.impl.VacanciesRepositoryImpl
 import ru.practicum.android.diploma.search.domain.VacanciesRepository
+import ru.practicum.android.diploma.vacancy.data.impl.VacancyDetailsRepositoryImpl
+import ru.practicum.android.diploma.vacancy.domain.VacancyDetailsRepository
 
 val repositoryModule = module {
 
@@ -19,6 +21,13 @@ val repositoryModule = module {
         FavoritesRepositoryImpl(
             appDatabase = get(),
             vacancyDbConverter = get()
+        )
+    }
+
+    single<VacancyDetailsRepository> {
+        VacancyDetailsRepositoryImpl(
+            networkClient = get(),
+            ioDispatcher = get(named("ioDispatcher"))
         )
     }
 
