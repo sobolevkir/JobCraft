@@ -9,7 +9,6 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.practicum.android.diploma.common.data.mapper.VacancyMapper
 import ru.practicum.android.diploma.common.data.network.HHApi
 import ru.practicum.android.diploma.common.data.network.HeaderInterceptor
 import ru.practicum.android.diploma.common.data.network.NetworkClient
@@ -44,9 +43,5 @@ val dataModule = module {
         OkHttpClient.Builder()
             .addInterceptor(HeaderInterceptor())
             .build()
-    }
-
-    single {
-        VacancyMapper()
     }
 }

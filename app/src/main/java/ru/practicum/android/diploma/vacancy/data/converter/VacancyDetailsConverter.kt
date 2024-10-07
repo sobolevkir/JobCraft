@@ -1,35 +1,20 @@
-package ru.practicum.android.diploma.common.data.mapper
+package ru.practicum.android.diploma.vacancy.data.converter
 
 import ru.practicum.android.diploma.common.data.network.dto.AddressDto
 import ru.practicum.android.diploma.common.data.network.dto.SalaryDto
 import ru.practicum.android.diploma.common.data.network.dto.VacancyDetailsDto
-import ru.practicum.android.diploma.common.data.network.dto.VacancyFromListDto
 import ru.practicum.android.diploma.common.domain.model.Address
 import ru.practicum.android.diploma.common.domain.model.Salary
 import ru.practicum.android.diploma.common.domain.model.VacancyDetails
-import ru.practicum.android.diploma.common.domain.model.VacancyFromList
 
-class VacancyMapper {
+object VacancyDetailsConverter {
 
-    fun map(vacancyFromListDto: VacancyFromListDto): VacancyFromList {
-        return with(vacancyFromListDto) {
-            VacancyFromList(
-                id = id.toLongOrNull() ?: -1L,
-                name = name,
-                salary = salary?.let { map(it) },
-                areaName = area.name,
-                employerName = employer.name,
-                employerLogoUrl240 = employer.logoUrls?.logoUrl240
-            )
-        }
-    }
-
-    fun map(vacancyDetailsDto: VacancyDetailsDto): VacancyDetails {
+    fun convert(vacancyDetailsDto: VacancyDetailsDto): VacancyDetails {
         return with(vacancyDetailsDto) {
             VacancyDetails(
                 id = id.toLongOrNull() ?: -1L,
                 name = name,
-                salary = salary?.let { map(it) },
+                salary = salary?.let { convert(it) },
                 areaName = area.name,
                 employerName = employer?.name,
                 employerLogoUrl240 = employer?.logoUrls?.logoUrl240,
@@ -37,13 +22,13 @@ class VacancyMapper {
                 scheduleName = schedule?.name,
                 description = description,
                 keySkills = keySkills,
-                address = address?.let { map(it) },
+                address = address?.let { convert(it) },
                 alternateUrl = alternateUrl
             )
         }
     }
 
-    private fun map(salaryDto: SalaryDto): Salary {
+    private fun convert(salaryDto: SalaryDto): Salary {
         return with(salaryDto) {
             Salary(
                 currency = currency,
@@ -53,7 +38,7 @@ class VacancyMapper {
         }
     }
 
-    private fun map(addressDto: AddressDto): Address {
+    private fun convert(addressDto: AddressDto): Address {
         return with(addressDto) {
             Address(
                 city = city,
