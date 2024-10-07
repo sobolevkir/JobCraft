@@ -2,15 +2,15 @@ package ru.practicum.android.diploma.vacancy.data.converter
 
 import ru.practicum.android.diploma.common.data.network.dto.AddressDto
 import ru.practicum.android.diploma.common.data.network.dto.SalaryDto
-import ru.practicum.android.diploma.common.data.network.dto.VacancyDetailsDto
+import ru.practicum.android.diploma.common.data.network.dto.VacancyDetailsResponse
 import ru.practicum.android.diploma.common.domain.model.Address
 import ru.practicum.android.diploma.common.domain.model.Salary
 import ru.practicum.android.diploma.common.domain.model.VacancyDetails
 
 object VacancyDetailsConverter {
 
-    fun convert(vacancyDetailsDto: VacancyDetailsDto): VacancyDetails {
-        return with(vacancyDetailsDto) {
+    fun convert(vacancyDetailsResponse: VacancyDetailsResponse): VacancyDetails {
+        return with(vacancyDetailsResponse) {
             VacancyDetails(
                 id = id.toLongOrNull() ?: -1L,
                 name = name,
@@ -21,7 +21,7 @@ object VacancyDetailsConverter {
                 experience = experience?.name,
                 scheduleName = schedule?.name,
                 description = description,
-                keySkills = keySkills,
+                keySkills = keySkills.map { it.name },
                 address = address?.let { convert(it) },
                 alternateUrl = alternateUrl
             )

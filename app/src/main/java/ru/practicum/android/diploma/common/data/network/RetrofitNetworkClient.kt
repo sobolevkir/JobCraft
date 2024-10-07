@@ -30,7 +30,7 @@ class RetrofitNetworkClient(
                         if (dto is VacanciesSearchRequest) {
                             api.searchVacancies(dto.options)
                         } else {
-                            api.getVacancy((dto as VacancyDetailsRequest).vacancyId)
+                            api.getVacancyDetails((dto as VacancyDetailsRequest).vacancyId.toString())
                         }
                     apiResponse.apply { resultCode = ResultCode.SUCCESS }
                 } catch (ex: HttpException) {
