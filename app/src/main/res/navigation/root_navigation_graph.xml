@@ -35,19 +35,26 @@
         android:name="ru.practicum.android.diploma.favorites.ui.FavoritesFragment"
         android:label="fragment_favorites"
         tools:layout="@layout/fragment_favorites">
+
         <action
             android:id="@+id/action_favoritesFragment_to_vacancyFragment"
             app:destination="@id/vacancyFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:popExitAnim="@anim/slide_out_right"
+            />
     </fragment>
     <fragment
         android:id="@+id/vacancyFragment"
         android:name="ru.practicum.android.diploma.vacancy.ui.VacancyFragment"
         android:label="fragment_vacancy"
-        tools:layout="@layout/fragment_vacancy" />
+        tools:layout="@layout/fragment_vacancy" >
+        <argument
+            android:name="vacancy_id"
+            app:argType="long"
+            android:defaultValue="-1L" />
+    </fragment>
     <fragment
         android:id="@+id/filtersFragment"
         android:name="ru.practicum.android.diploma.filters.ui.FiltersFragment"

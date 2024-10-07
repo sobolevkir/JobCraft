@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.favorites.data.converter
 
-import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import org.koin.core.component.KoinComponent
@@ -14,7 +13,6 @@ import ru.practicum.android.diploma.favorites.data.entity.FavoriteVacancyEntity
 class FavoriteVacancyDbConverter : KoinComponent {
     private val gson: Gson by inject()
 
-    @TypeConverter
     fun convert(vacancy: VacancyDetails): FavoriteVacancyEntity = FavoriteVacancyEntity(
         vacancy.id,
         vacancy.name,
@@ -30,7 +28,6 @@ class FavoriteVacancyDbConverter : KoinComponent {
         vacancy.alternateUrl
     )
 
-    @TypeConverter
     fun convert(favoriteVacancyEntity: FavoriteVacancyEntity) = VacancyDetails(
         favoriteVacancyEntity.id,
         favoriteVacancyEntity.name,
