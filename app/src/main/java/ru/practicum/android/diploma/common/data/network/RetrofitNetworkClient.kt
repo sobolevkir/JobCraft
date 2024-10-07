@@ -21,33 +21,35 @@ class RetrofitNetworkClient(
 
         if (!context.isNetworkConnected) {
             response.resultCode = ResultCode.CONNECTION_PROBLEM
-        } else if ((dto !is VacanciesSearchRequest) && (dto !is VacancyDetailsRequest)) {
+        } else if (dto !is VacanciesSearchRequest && dto !is VacancyDetailsRequest) {
             response.resultCode = ResultCode.BAD_REQUEST
         } else {
             return withContext(ioDispatcher) {
                 try {
                     val apiResponse =
-                        when (dto) {
-                            is VacanciesSearchRequest -> api.searchVacancies(dto.options)
-                            is VacancyDetailsRequest -> api.getVacancy(dto.vacancyId)
-                            else -> {
-                                response.resultCode = ResultCode.BAD_REQUEST
-                                return@withContext response
-                            }
+                        if (dto is VacanciesSearchRequest) {
+                            api.searchVacancies(dto.options)
+                        } else {
+                            api.getVacancy((dto as VacancyDetailsRequest).vacancyId)
                         }
                     apiResponse.apply { resultCode = ResultCode.SUCCESS }
                 } catch (ex: HttpException) {
-                    response.resultCode = when (ex.code()) {
-                        ResultCode.NOTHING_FOUND,
-                        ResultCode.SERVER_ERROR,
-                        ResultCode.FORBIDDEN_ERROR -> ex.code()
-                        else -> ResultCode.UNKNOWN_ERROR
-                    }
+                    response.resultCode = handleHttpException(ex)
                     response
                 }
             }
         }
 
         return response
+    }
+
+    private fun handleHttpException(ex: HttpException): Int {
+        return when (ex.code()) {
+            ResultCode.NOTHING_FOUND,
+            ResultCode.SERVER_ERROR,
+            ResultCode.FORBIDDEN_ERROR -> ex.code()
+
+            else -> ResultCode.UNKNOWN_ERROR
+        }
     }
 }

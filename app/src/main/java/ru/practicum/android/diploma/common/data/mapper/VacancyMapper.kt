@@ -2,7 +2,7 @@ package ru.practicum.android.diploma.common.data.mapper
 
 import ru.practicum.android.diploma.common.data.network.dto.AddressDto
 import ru.practicum.android.diploma.common.data.network.dto.SalaryDto
-import ru.practicum.android.diploma.common.data.network.dto.VacancyDetailsResponse
+import ru.practicum.android.diploma.common.data.network.dto.VacancyDetailsDto
 import ru.practicum.android.diploma.common.data.network.dto.VacancyFromListDto
 import ru.practicum.android.diploma.common.domain.model.Address
 import ru.practicum.android.diploma.common.domain.model.Salary
@@ -38,7 +38,7 @@ object VacancyMapper {
         )
     }
 
-    fun VacancyDetailsResponse.toDomain(): VacancyDetails {
+    fun VacancyDetailsDto.toDomain(): VacancyDetails {
         return VacancyDetails(
             id = this.id.toLongOrNull() ?: -1L,
             name = this.name,
@@ -49,7 +49,7 @@ object VacancyMapper {
             experience = this.experience.name,
             scheduleName = this.schedule.name,
             description = this.description,
-            keySkills = this.keySkills.map { it.name },
+            keySkills = this.keySkills,
             address = this.address?.toDomain(),
             alternateUrl = this.alternateUrl
         )
