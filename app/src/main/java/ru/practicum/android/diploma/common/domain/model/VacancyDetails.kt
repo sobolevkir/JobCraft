@@ -5,7 +5,7 @@ data class VacancyDetails(
     val name: String,
     val salary: Salary?,
     val areaName: String,
-    val employerName: String,
+    val employerName: String?,
     val employerLogoUrl240: String?,
     val experience: String?,
     val scheduleName: String,

@@ -7,6 +7,7 @@ import retrofit2.HttpException
 import ru.practicum.android.diploma.common.data.network.dto.Response
 import ru.practicum.android.diploma.common.data.network.dto.ResultCode
 import ru.practicum.android.diploma.common.data.network.dto.VacanciesSearchRequest
+import ru.practicum.android.diploma.common.data.network.dto.VacancyDetailsRequest
 import ru.practicum.android.diploma.common.ext.isNetworkConnected
 
 class RetrofitNetworkClient(
@@ -20,12 +21,20 @@ class RetrofitNetworkClient(
 
         if (!context.isNetworkConnected) {
             response.resultCode = ResultCode.CONNECTION_PROBLEM
-        } else if (dto !is VacanciesSearchRequest) {
+        } else if ((dto !is VacanciesSearchRequest) && (dto !is VacancyDetailsRequest)) {
             response.resultCode = ResultCode.BAD_REQUEST
         } else {
             return withContext(ioDispatcher) {
                 try {
-                    val apiResponse = api.searchVacancies(dto.options)
+                    val apiResponse =
+                        when (dto) {
+                            is VacanciesSearchRequest -> api.searchVacancies(dto.options)
+                            is VacancyDetailsRequest -> api.getVacancy(dto.vacancyId)
+                            else -> {
+                                response.resultCode = ResultCode.BAD_REQUEST
+                                return@withContext response
+                            }
+                        }
                     apiResponse.apply { resultCode = ResultCode.SUCCESS }
                 } catch (ex: HttpException) {
                     response.resultCode = when (ex.code()) {
