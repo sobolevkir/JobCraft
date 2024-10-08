@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.common.data.formatter
+package ru.practicum.android.diploma.common.data.converter
 
 import android.content.Context
 import ru.practicum.android.diploma.R
