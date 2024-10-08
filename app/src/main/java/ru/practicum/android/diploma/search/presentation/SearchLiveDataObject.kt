@@ -1,5 +1,5 @@
 package ru.practicum.android.diploma.search.presentation
 
-import ru.practicum.android.diploma.search.domain.model.VacancyListItem
+import ru.practicum.android.diploma.common.domain.model.VacancyFromList
 
-data class SearchLiveDataObject(val vacancies: List<VacancyListItem>)
+data class SearchLiveDataObject(val vacancies: List<VacancyFromList>, val code: Int)

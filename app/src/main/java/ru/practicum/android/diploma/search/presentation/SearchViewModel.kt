@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.search.presentation
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,17 +8,28 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import ru.practicum.android.diploma.search.domain.SearchInteractor
-import ru.practicum.android.diploma.search.domain.model.VacancyListItem
+import ru.practicum.android.diploma.common.domain.model.ErrorType
+import ru.practicum.android.diploma.common.domain.model.VacancyFromList
+import ru.practicum.android.diploma.search.domain.VacanciesInteractor
+import ru.practicum.android.diploma.search.domain.model.VacanciesRequestObject
 
-class SearchViewModel(private val interactor: SearchInteractor) : ViewModel() {
+class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel() {
 
     private val liveDataSearchRes = MutableLiveData<SearchLiveDataObject>()
 
     private var lastRequest: String? = null
     private var searchJob: Job? = null
+    private var paddingPage = 1
+    private var maxPage = 0
 
     fun getSearchRes(): LiveData<SearchLiveDataObject> = liveDataSearchRes
+
+    fun onLastItemReached() {
+        if (paddingPage != maxPage) {
+            paddingPage += 1
+            searchRequest(lastRequest!!, paddingPage)
+        }
+    }
 
     fun search(request: String) {
         if (request == lastRequest) {
@@ -30,47 +40,40 @@ class SearchViewModel(private val interactor: SearchInteractor) : ViewModel() {
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
             delay(SEARCH_DELAY)
-            searchRequest(request)
+            searchRequest(request, paddingPage)
         }
     }
 
     fun searchTest() {
         viewModelScope.launch {
-            val options = mapOf(
-                "text" to "android developer",
-                "page" to "0",
-                "per_page" to "20"
-            )
-            vacanciesInteractor.searchVacancies(options)
-                .collect { (searchResult, errorType) ->
-                    if (searchResult != null) {
-                        val vacancies = searchResult.items
-                        Log.d("vacancies_array", vacancies.toString())
-                        Log.d("page_number", searchResult.page.toString())
-                        Log.d("vacancies_found_number", searchResult.found.toString())
-                    }
-                    if (errorType != null) {
-                        Log.d("error", errorType.toString())
-                    }
-                }
+
         }
     }
 
-    private fun searchRequest(searchText: String) {
+    private fun searchRequest(searchText: String, page: Int) {
         if (searchText.isNotEmpty()) {
             viewModelScope.launch(Dispatchers.IO) {
-                interactor.doSearch(searchText).collect{
-                    processResult(it)
-                }
+                interactor.searchVacancies(VacanciesRequestObject(searchText, page))
+                    .collect { (searchResult, errorType) ->
+                        when (errorType) {
+                            null -> {
+                                bind(200, searchResult!!.items)
+                                maxPage = searchResult.pages
+                            }
+
+                            ErrorType.CONNECTION_PROBLEM -> bind(401)
+                            else -> bind(400)
+                        }
+                    }
             }
         }
     }
 
-    private fun processResult(result: List<VacancyListItem>){
-        liveDataSearchRes.postValue(SearchLiveDataObject(result))
+    private fun bind(error: Int, list: List<VacancyFromList> = listOf()) {
+        liveDataSearchRes.postValue(SearchLiveDataObject(list, error))
     }
 
-    companion object{
+    companion object {
         const val SEARCH_DELAY = 2000L
     }
 }

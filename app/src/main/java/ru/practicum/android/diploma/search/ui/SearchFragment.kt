@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.search.ui
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,6 +10,8 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -42,15 +45,18 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         binding.rvFoundVacanciesList.adapter = adapter
 
         viewModel.getSearchRes().observe(requireActivity()) {
+            binding.progressBar.isVisible = false
             adapter.submitList(it.vacancies)
+            setError(it.code, it.vacancies.size)
         }
 
-        fun searchDebounce(){
+        fun searchDebounce() {
             viewLifecycleOwner.lifecycleScope.launch {
                 viewModel.search(binding.etSearchRequest.text.toString())
                 delay(CLICK_DELAY)
-                if(isSearch) {
-                    binding.progressBar.visibility = View.VISIBLE
+                if (isSearch) {
+                    adapter.submitList(listOf())
+                    binding.progressBar.isVisible = true
                 }
             }
         }
@@ -61,7 +67,8 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             override fun beforeTextChanged(
                 s: CharSequence, start: Int,
                 count: Int, after: Int
-            ) {}
+            ) {
+            }
 
             override fun onTextChanged(
                 s: CharSequence, start: Int,
@@ -73,7 +80,22 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             }
         })
 
-        binding.ivClearRequest.setOnClickListener{
+        binding.rvFoundVacanciesList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                if (dy > 0) {
+                    val pos =
+                        (binding.rvFoundVacanciesList.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                    val itemsCount = adapter.itemCount
+                    if (pos >= itemsCount - 1) {
+                        viewModel.onLastItemReached()
+                    }
+                }
+            }
+        })
+
+        binding.ivClearRequest.setOnClickListener {
             binding.etSearchRequest.setText("")
             setStartOptions()
         }
@@ -83,30 +105,63 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     }
 
-    private fun setStartOptions(){
+    private fun setError(code: Int, count: Int) {
+        when (code) {
+            200 -> {
+                with(binding) {
+                    tvSearchResultMessage.text = getCountResource(count)
+                    rvFoundVacanciesList.isVisible = true
+                    tvError.isVisible = false
+                }
+            }
+
+            400 -> {
+                binding.tvSearchResultMessage.isVisible = false
+                binding.tvError.isVisible = true
+                bindErrorImage(ContextCompat.getDrawable(requireContext(), R.drawable.er_server_error))
+            }
+
+            401 -> {
+                with(binding){
+                    tvSearchResultMessage.isVisible = false
+                    tvError.isVisible = true
+                    tvError.text = getString(R.string.no_internet)
+                }
+                bindErrorImage(ContextCompat.getDrawable(requireContext(), R.drawable.er_no_internet))
+            }
+        }
+    }
+
+    private fun bindErrorImage(image: Drawable?) {
+        binding.tvError.setCompoundDrawables(null, image, null, null)
+    }
+
+    private fun setStartOptions() {
         //Показать начальную картинку
         val isEmpty = binding.etSearchRequest.text.isEmpty()
-        with(binding.tvError){
-            isVisible = isEmpty
-            val errorImage =
-                ContextCompat.getDrawable(requireContext(), R.drawable.vacancy_search_start)
-            setCompoundDrawables(null, errorImage, null, null)
-        }
+        binding.tvError.isVisible = isEmpty
+        binding.tvSearchResultMessage.isVisible = false
+        bindErrorImage(ContextCompat.getDrawable(requireContext(), R.drawable.vacancy_search_start))
 
         //Показать кнопку поиска или очистки
-        with(binding){
-            if (isEmpty){
-                ivClearRequest.isVisible = false
-                ivSearch.isVisible = true
-            }
-            else{
-                ivClearRequest.isVisible = true
-                ivSearch.isVisible = false
-            }
+        with(binding) {
+            ivClearRequest.isVisible = !isEmpty
+            ivSearch.isVisible = isEmpty
         }
+    }
 
-        viewModel.searchTest()
-
+    private fun getCountResource(count: Int): String {
+        val countLast = count % 10
+        if (count == 0) {
+            bindErrorImage(ContextCompat.getDrawable(requireContext(), R.drawable.er_nothing_found))
+            return "Таких вакансий нет"
+        }
+        return when {
+            count == 11 or 12 or 13 or 14 -> "Найдено $count вакансий"
+            countLast == 1 -> "Найдено $count вакансия"
+            countLast == 2 or 3 or 4 -> "Найдено $count вакансии"
+            else -> "Найдено $count вакансий"
+        }
     }
 
     private fun openFilters() {
@@ -114,7 +169,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         findNavController().navigate(action)
     }
 
-    companion object{
+    companion object {
         const val CLICK_DELAY = 2000L
     }
 }

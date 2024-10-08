@@ -1,14 +1,14 @@
 package ru.practicum.android.diploma.search.ui.adapter
 
 import androidx.recyclerview.widget.DiffUtil
-import ru.practicum.android.diploma.search.domain.model.VacancyListItem
+import ru.practicum.android.diploma.common.domain.model.VacancyFromList
 
-class VacancyItemComparator : DiffUtil.ItemCallback<VacancyListItem>() {
-    override fun areItemsTheSame(oldItem: VacancyListItem, newItem: VacancyListItem): Boolean {
+class VacancyItemComparator : DiffUtil.ItemCallback<VacancyFromList>() {
+    override fun areItemsTheSame(oldItem: VacancyFromList, newItem: VacancyFromList): Boolean {
         return oldItem == newItem
     }
 
-    override fun areContentsTheSame(oldItem: VacancyListItem, newItem: VacancyListItem): Boolean {
+    override fun areContentsTheSame(oldItem: VacancyFromList, newItem: VacancyFromList): Boolean {
         return oldItem == newItem
     }
 
