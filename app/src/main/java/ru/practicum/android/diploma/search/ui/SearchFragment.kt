@@ -46,6 +46,8 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
         viewModel.getSearchRes().observe(requireActivity()) {
             binding.progressBar.isVisible = false
+            binding.rvFoundVacanciesList.isVisible = true
+            binding.tvError.isVisible = false
             adapter.submitList(it.vacancies)
             setError(it.code, it.vacancies.size)
         }
@@ -110,8 +112,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             200 -> {
                 with(binding) {
                     tvSearchResultMessage.text = getCountResource(count)
-                    rvFoundVacanciesList.isVisible = true
-                    tvError.isVisible = false
+                    tvSearchResultMessage.isVisible = true
                 }
             }
 
@@ -151,6 +152,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     }
 
     private fun getCountResource(count: Int): String {
+        binding.tvSearchResultMessage.isVisible = true
         val countLast = count % 10
         if (count == 0) {
             bindErrorImage(ContextCompat.getDrawable(requireContext(), R.drawable.er_nothing_found))

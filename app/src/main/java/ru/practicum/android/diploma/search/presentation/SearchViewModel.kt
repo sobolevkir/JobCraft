@@ -44,12 +44,6 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
         }
     }
 
-    fun searchTest() {
-        viewModelScope.launch {
-
-        }
-    }
-
     private fun searchRequest(searchText: String, page: Int) {
         if (searchText.isNotEmpty()) {
             viewModelScope.launch(Dispatchers.IO) {
@@ -60,9 +54,12 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
                                 bind(200, searchResult!!.items)
                                 maxPage = searchResult.pages
                             }
-
                             ErrorType.CONNECTION_PROBLEM -> bind(401)
-                            else -> bind(400)
+                            ErrorType.SERVER_ERROR -> bind(402)
+                            ErrorType.UNKNOWN_ERROR -> bind(403)
+                            ErrorType.FORBIDDEN_ERROR -> bind(404)
+                            ErrorType.BAD_REQUEST -> bind(405)
+                            ErrorType.NOTHING_FOUND -> bind(406)
                         }
                     }
             }
