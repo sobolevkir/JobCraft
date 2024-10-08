@@ -21,6 +21,7 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
     private var searchJob: Job? = null
     private var paddingPage = 1
     private var maxPage = 0
+    private var fullList = listOf<VacancyFromList>()
 
     fun getSearchRes(): LiveData<SearchLiveDataObject> = liveDataSearchRes
 
@@ -37,6 +38,8 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
         }
         lastRequest = request
 
+        paddingPage = 1
+        maxPage = 0
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
             delay(SEARCH_DELAY)
@@ -51,23 +54,20 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
                     .collect { (searchResult, errorType) ->
                         when (errorType) {
                             null -> {
-                                bind(200, searchResult!!.items)
+                                fullList += searchResult!!.items
+                                bind(200, fullList, searchResult.found)
                                 maxPage = searchResult.pages
                             }
                             ErrorType.CONNECTION_PROBLEM -> bind(401)
-                            ErrorType.SERVER_ERROR -> bind(402)
-                            ErrorType.UNKNOWN_ERROR -> bind(403)
-                            ErrorType.FORBIDDEN_ERROR -> bind(404)
-                            ErrorType.BAD_REQUEST -> bind(405)
-                            ErrorType.NOTHING_FOUND -> bind(406)
+                            else -> bind(402)
                         }
                     }
             }
         }
     }
 
-    private fun bind(error: Int, list: List<VacancyFromList> = listOf()) {
-        liveDataSearchRes.postValue(SearchLiveDataObject(list, error))
+    private fun bind(error: Int, list: List<VacancyFromList> = listOf(), count: Int = 0) {
+        liveDataSearchRes.postValue(SearchLiveDataObject(list, error, count))
     }
 
     companion object {

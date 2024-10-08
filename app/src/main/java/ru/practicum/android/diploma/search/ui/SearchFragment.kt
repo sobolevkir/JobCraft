@@ -47,9 +47,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         viewModel.getSearchRes().observe(requireActivity()) {
             binding.progressBar.isVisible = false
             binding.rvFoundVacanciesList.isVisible = true
-            binding.tvError.isVisible = false
+            binding.tvSearchResultMessage.text = getCountResource(it.count)
             adapter.submitList(it.vacancies)
-            setError(it.code, it.vacancies.size)
+            setError(it.code)
         }
 
         fun searchDebounce() {
@@ -58,6 +58,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 delay(CLICK_DELAY)
                 if (isSearch) {
                     adapter.submitList(listOf())
+                    showError(true)
                     binding.progressBar.isVisible = true
                 }
             }
@@ -107,46 +108,43 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     }
 
-    private fun setError(code: Int, count: Int) {
+    private fun setError(code: Int) {
         when (code) {
             200 -> {
-                with(binding) {
-                    tvSearchResultMessage.text = getCountResource(count)
-                    tvSearchResultMessage.isVisible = true
-                }
-            }
-
-            400 -> {
-                binding.tvSearchResultMessage.isVisible = false
-                binding.tvError.isVisible = true
-                bindErrorImage(ContextCompat.getDrawable(requireContext(), R.drawable.er_server_error))
+                showError(false)
             }
 
             401 -> {
-                with(binding){
-                    tvSearchResultMessage.isVisible = false
-                    tvError.isVisible = true
-                    tvError.text = getString(R.string.no_internet)
-                }
-                bindErrorImage(ContextCompat.getDrawable(requireContext(), R.drawable.er_no_internet))
+                showError(true)
+                bindErrorImage(R.drawable.er_no_internet, R.string.no_internet)
+            }
+
+            402 -> {
+                showError(true)
+                bindErrorImage(R.drawable.er_server_error, R.string.server_error)
             }
         }
     }
 
-    private fun bindErrorImage(image: Drawable?) {
-        with(binding.tvError){
-            isVisible = true
-            setCompoundDrawables(null, image, null, null)
-            text = ""
+    private fun showError(visible: Boolean) {
+        binding.layoutError.isVisible = visible
+    }
+
+    private fun bindErrorImage(image: Int, text: Int?){
+        binding.ivSearchResult.setImageResource(image)
+        if (text == null){
+            binding.tvError.text = ""
         }
-        binding.rvFoundVacanciesList.isVisible = false
+        else{
+            binding.tvError.setText(text)
+        }
     }
 
     private fun setStartOptions() {
         //Показать начальную картинку
         val isEmpty = binding.etSearchRequest.text.isEmpty()
-        binding.tvSearchResultMessage.isVisible = false
-        bindErrorImage(ContextCompat.getDrawable(requireContext(), R.drawable.vacancy_search_start))
+        showError(isEmpty)
+        bindErrorImage(R.drawable.vacancy_search_start, null)
 
         //Показать кнопку поиска или очистки
         with(binding) {
@@ -159,7 +157,8 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         binding.tvSearchResultMessage.isVisible = true
         val countLast = count % 10
         if (count == 0) {
-            bindErrorImage(ContextCompat.getDrawable(requireContext(), R.drawable.er_nothing_found))
+            showError(true)
+            bindErrorImage(R.drawable.er_nothing_found, null)
             return "Таких вакансий нет"
         }
         return when {
