@@ -14,7 +14,7 @@ class FavoriteVacancyDbConverter : KoinComponent {
     fun convert(vacancy: VacancyDetails): FavoriteVacancyEntity = FavoriteVacancyEntity(
         vacancy.id,
         vacancy.name,
-        gson.toJson(vacancy.salary),
+        vacancy.salary,
         vacancy.areaName,
         vacancy.employerName,
         vacancy.employerLogoUrl240,
@@ -22,7 +22,7 @@ class FavoriteVacancyDbConverter : KoinComponent {
         vacancy.scheduleName,
         vacancy.description,
         gson.toJson(vacancy.keySkills),
-        gson.toJson(vacancy.address),
+        vacancy.address,
         vacancy.alternateUrl
     )
 
