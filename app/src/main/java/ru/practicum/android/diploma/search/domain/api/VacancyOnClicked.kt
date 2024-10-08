@@ -1,5 +1,5 @@
 package ru.practicum.android.diploma.search.domain.api
 
 interface VacancyOnClicked {
-    fun startVacancy()
+    fun startVacancy(vacancyId: Long)
 }

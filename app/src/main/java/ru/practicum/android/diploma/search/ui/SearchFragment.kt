@@ -6,12 +6,9 @@ import android.text.TextWatcher
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.common.ext.viewBinding
@@ -20,21 +17,19 @@ import ru.practicum.android.diploma.search.domain.api.VacancyOnClicked
 import ru.practicum.android.diploma.search.presentation.SearchViewModel
 import ru.practicum.android.diploma.search.ui.adapter.SearchAdapter
 
-
 class SearchFragment : Fragment(R.layout.fragment_search) {
     private val binding by viewBinding(FragmentSearchBinding::bind)
     private val viewModel by viewModel<SearchViewModel>()
 
-    private var isSearch = false
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setStartOptions()
+        setStartOptions(true)
 
         val vacancyOnClicked = object : VacancyOnClicked {
-            override fun startVacancy() {
-                TODO("Not yet implemented")
+            override fun startVacancy(vacancyId: Long) {
+                val action = SearchFragmentDirections.actionSearchFragmentToVacancyFragment(vacancyId)
+                findNavController().navigate(action)
             }
         }
 
@@ -43,22 +38,19 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         binding.rvFoundVacanciesList.adapter = adapter
 
         viewModel.getSearchRes().observe(requireActivity()) {
-            binding.progressBar.isVisible = false
-            binding.rvFoundVacanciesList.isVisible = true
-            binding.tvSearchResultMessage.text = getCountResource(it.count)
-            adapter.submitList(it.vacancies)
-            setError(it.code)
-        }
-
-        fun searchDebounce() {
-            viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.search(binding.etSearchRequest.text.toString())
-                delay(CLICK_DELAY)
-                if (isSearch) {
+            if(it.code == 500){
+                if(it.isSearch){
                     adapter.submitList(listOf())
                     showError(true)
                     binding.progressBar.isVisible = true
                 }
+            }
+            else{
+                binding.progressBar.isVisible = false
+                binding.rvFoundVacanciesList.isVisible = true
+                binding.tvSearchResultMessage.text = getCountResource(it.count)
+                adapter.submitList(it.vacancies)
+                setError(it.code)
             }
         }
 
@@ -66,18 +58,21 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             override fun afterTextChanged(s: Editable) {}
 
             override fun beforeTextChanged(
-                s: CharSequence, start: Int,
-                count: Int, after: Int
-            ) {
-            }
+                s: CharSequence,
+                start: Int,
+                count: Int,
+                after: Int
+            ){}
 
             override fun onTextChanged(
-                s: CharSequence, start: Int,
-                before: Int, count: Int
+                s: CharSequence,
+                start: Int,
+                before: Int,
+                count: Int
             ) {
-                isSearch = s.isNotEmpty()
-                setStartOptions()
-                searchDebounce()
+                viewModel.setIsSearch(s.isNotEmpty())
+                setStartOptions(s.isEmpty())
+                viewModel.search(s.toString())
             }
         })
 
@@ -98,7 +93,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
         binding.ivClearRequest.setOnClickListener {
             binding.etSearchRequest.setText("")
-            setStartOptions()
+            setStartOptions(true)
         }
 
         binding.btnFilters.setOnClickListener {
@@ -137,13 +132,12 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     }
 
-    private fun setStartOptions() {
-        //Показать начальную картинку
-        val isEmpty = binding.etSearchRequest.text.isEmpty()
-        showError(isEmpty)
+    private fun setStartOptions(isEmpty: Boolean) {
+        // Показать начальную картинку
+        binding.ivSearchResult.isVisible = isEmpty
         bindErrorImage(R.drawable.vacancy_search_start, null)
 
-        //Показать кнопку поиска или очистки
+        // Показать кнопку поиска или очистки
         with(binding) {
             ivClearRequest.isVisible = !isEmpty
             ivSearch.isVisible = isEmpty

@@ -19,7 +19,7 @@ class SearchAdapter(
         val item = getItem(position)
         holder.bind(item)
         holder.itemView.setOnClickListener {
-            vacancyOnClicked.startVacancy()
+            vacancyOnClicked.startVacancy(item.id)
         }
     }
 }

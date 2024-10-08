@@ -22,8 +22,14 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
     private var paddingPage = 1
     private var maxPage = 0
     private var fullList = listOf<VacancyFromList>()
+    private var isSearch = false
 
     fun getSearchRes(): LiveData<SearchLiveDataObject> = liveDataSearchRes
+
+    fun setIsSearch(boolean: Boolean){
+        isSearch = boolean
+        bind(500)
+    }
 
     fun onLastItemReached() {
         if (paddingPage != maxPage) {
@@ -37,7 +43,7 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
             return
         }
         lastRequest = request
-
+        isSearch = false
         paddingPage = 1
         maxPage = 0
         searchJob?.cancel()
@@ -55,20 +61,23 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
                         when (errorType) {
                             null -> {
                                 fullList += searchResult!!.items
-                                bind(200, fullList, searchResult.found)
+                                bind(200, searchResult.found)
                                 maxPage = searchResult.pages
                             }
 
                             ErrorType.CONNECTION_PROBLEM -> bind(401)
-                            else -> bind(402)
+                            else -> {
+                                fullList = listOf()
+                                bind(402)
+                            }
                         }
                     }
             }
         }
     }
 
-    private fun bind(error: Int, list: List<VacancyFromList> = listOf(), count: Int = 0) {
-        liveDataSearchRes.postValue(SearchLiveDataObject(list, error, count))
+    private fun bind(error: Int, count: Int = 0) {
+        liveDataSearchRes.postValue(SearchLiveDataObject(fullList, error, count, isSearch))
     }
 
     companion object {
