@@ -37,7 +37,7 @@ class FavoritesViewModel(private val favoritesInteractor: FavoritesInteractor) :
                 null,
                 "питер",
                 "леш",
-                null,
+                "https://logodix.com/logo/1931259.png",
                 null,
                 "91",
                 "лропалрпа",
