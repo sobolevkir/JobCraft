@@ -12,8 +12,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.common.domain.model.Address
-import ru.practicum.android.diploma.common.domain.model.Salary
 import ru.practicum.android.diploma.common.domain.model.VacancyDetails
 import ru.practicum.android.diploma.common.ext.viewBinding
 import ru.practicum.android.diploma.databinding.FragmentVacancyBinding
@@ -110,7 +108,7 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
             binding.salary.isVisible = false
         } else {
             binding.salary.isVisible = true
-            binding.salary.text = getSalary(vacancy.salary)
+            binding.salary.text = vacancy.salary
         }
 
         Glide.with(requireContext())
@@ -129,16 +127,37 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
             .into(binding.ivLogo)
 
         binding.tvEmployerName.text = vacancy.employerName
-        binding.tvAddress.text = if (vacancy.address != null) getAddress(vacancy.address) else vacancy.areaName
-        binding.tvExperience.setText(Html.fromHtml(vacancy.experience, Html.FROM_HTML_MODE_COMPACT))
-        binding.tvScheduleName.setText(Html.fromHtml(vacancy.scheduleName, Html.FROM_HTML_MODE_COMPACT))
+        binding.tvAddress.text = if (vacancy.address != null) vacancy.address else vacancy.areaName
+        if (vacancy.experience == null) {
+            binding.tvExperience.isVisible = false
+            binding.tvExperienceTitle.isVisible = false
+        } else {
+            binding.tvExperience.isVisible = true
+            binding.tvExperienceTitle.isVisible = true
+            binding.tvExperience.text = vacancy.experience
+        }
+        if (vacancy.scheduleName == null) {
+            binding.tvScheduleName.isVisible = false
+        } else {
+            binding.tvScheduleName.isVisible = true
+            binding.tvScheduleName.setText(Html.fromHtml(vacancy.scheduleName, Html.FROM_HTML_MODE_COMPACT))
+        }
         binding.tvDescription.setText(Html.fromHtml(vacancy.description, Html.FROM_HTML_MODE_COMPACT))
-        binding.tvKeySkills.setText(Html.fromHtml(formattingKeySkills(vacancy.keySkills), Html.FROM_HTML_MODE_COMPACT))
+
+        if (vacancy.keySkills == null) {
+            binding.tvKeySkillsTitle.isVisible = false
+            binding.tvKeySkills.isVisible = false
+        } else {
+            binding.tvKeySkillsTitle.isVisible = true
+            binding.tvKeySkills.isVisible = true
+            binding.tvKeySkills.setText(Html.fromHtml(formattingKeySkills(vacancy.keySkills), Html.FROM_HTML_MODE_COMPACT))
+        }
     }
 
     private fun formattingKeySkills (keySkills: List<String>): String {
-        // строка KeySkills будет переводиться в то же формат, что и Description, ScheduleName, Experience
-        return ""
+        val builder = StringBuilder()
+        for (s: String in keySkills) builder.append("<li>" + s + "</li>")
+        return builder.toString()
     }
 
     // Иконка Избранное
@@ -149,6 +168,8 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
             binding.btnFavorite.setImageResource(R.drawable.ic_favorite_off)
         }
     }
+
+    /*
     // Формируем строку зарплата
     private fun getSalary (salary: Salary): String {
         var strFrom = ""
@@ -159,9 +180,9 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
         if (salary.currency != null) strCurrency = " " + salary.currency
 
         return (strFrom + strTo + strCurrency).trimStart()
-    }
+    }*/
 
-    // Формируем строку адрес
+    /*// Формируем строку адрес
     private fun getAddress (address: Address): String {
         var strCity = ""
         var strStreet = ""
@@ -172,5 +193,5 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
         }
 
         return strCity + strStreet
-    }
+    }*/
 }

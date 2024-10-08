@@ -6,13 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import ru.practicum.android.diploma.common.domain.model.ErrorType
 import ru.practicum.android.diploma.common.domain.model.VacancyDetails
-import ru.practicum.android.diploma.vacancy.domain.api.VacancyInteractor
+import ru.practicum.android.diploma.vacancy.domain.api.VacancyDetailsInteractor
 import ru.practicum.android.diploma.vacancy.ui.model.ScreenMode
 import ru.practicum.android.diploma.vacancy.ui.model.ScreenState
 
 class VacancyViewModel (
-    private val interactor: VacancyInteractor,
+    private val interactor: VacancyDetailsInteractor,
 ) : ViewModel() {
 
     private var vacancyLiveData = MutableLiveData(ScreenState(ScreenMode.LOADING, null))
@@ -29,7 +30,7 @@ class VacancyViewModel (
         }
     }
 
-    private fun processingResult(vacancy: VacancyDetails?, errorMessage: String?) {
+    private fun processingResult(vacancy: VacancyDetails?, errorType: ErrorType?) {
         if (vacancy != null) {
             vacancyLiveData.postValue(ScreenState(ScreenMode.RESULTS,  vacancy))
         } else

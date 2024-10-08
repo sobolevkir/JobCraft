@@ -12,7 +12,7 @@ import ru.practicum.android.diploma.common.data.network.dto.VacanciesSearchRespo
 import ru.practicum.android.diploma.common.data.network.dto.VacancyFromListDto
 import ru.practicum.android.diploma.common.domain.model.ErrorType
 import ru.practicum.android.diploma.common.domain.model.VacancyFromList
-import ru.practicum.android.diploma.common.util.Resource
+import ru.practicum.android.diploma.vacancy.util.Resource
 import ru.practicum.android.diploma.search.domain.VacanciesRepository
 import ru.practicum.android.diploma.search.domain.model.VacanciesSearchResult
 

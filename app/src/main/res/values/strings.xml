@@ -26,6 +26,9 @@
     <string name="authors">Кирилл Соболев\nЮлия Сычёва\nАндрей Трофимов\nДанил Цыганов\nМарат Галимов</string>
     <string name="vacancy_name">Название вакансии</string>
     <string name="employment">Место работы</string>
+    <string name="experience">Требуемый опыт</string>
+    <string name="description">Описание вакансии</string>
+    <string name="key_skills">Ключевые навыки</string>
     <string name="no_internet">Нет интернета</string>
     <string name="no_vacancies">Не удалось получить\nсписок вакансий</string>
     <string name="server_error">Ошибка сервера</string>
