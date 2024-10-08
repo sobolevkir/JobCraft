@@ -4,8 +4,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import ru.practicum.android.diploma.common.domain.model.Address
-import ru.practicum.android.diploma.common.domain.model.Salary
 import ru.practicum.android.diploma.common.domain.model.VacancyDetails
 import ru.practicum.android.diploma.common.domain.model.VacancyFromList
 import ru.practicum.android.diploma.favorites.data.entity.FavoriteVacancyEntity
@@ -31,7 +29,7 @@ class FavoriteVacancyDbConverter : KoinComponent {
     fun convert(favoriteVacancyEntity: FavoriteVacancyEntity) = VacancyDetails(
         favoriteVacancyEntity.id,
         favoriteVacancyEntity.name,
-        gson.fromJson(favoriteVacancyEntity.salary, object : TypeToken<Salary>() {}.type),
+        favoriteVacancyEntity.salary,
         favoriteVacancyEntity.areaName,
         favoriteVacancyEntity.employerName,
         favoriteVacancyEntity.employerLogoUrl240,
@@ -39,7 +37,7 @@ class FavoriteVacancyDbConverter : KoinComponent {
         favoriteVacancyEntity.scheduleName,
         favoriteVacancyEntity.description,
         gson.fromJson(favoriteVacancyEntity.keySkills, object : TypeToken<List<String>>() {}.type),
-        gson.fromJson(favoriteVacancyEntity.address, object : TypeToken<Address>() {}.type),
+        favoriteVacancyEntity.address,
         favoriteVacancyEntity.alternateUrl,
         isFavorite = true
     )
@@ -47,7 +45,7 @@ class FavoriteVacancyDbConverter : KoinComponent {
     fun convertToVacancyFromList(favoriteVacancyEntity: FavoriteVacancyEntity) = VacancyFromList(
         favoriteVacancyEntity.id,
         favoriteVacancyEntity.name,
-        gson.fromJson(favoriteVacancyEntity.salary, object : TypeToken<Salary>() {}.type),
+        favoriteVacancyEntity.salary,
         favoriteVacancyEntity.areaName,
         favoriteVacancyEntity.employerName,
         favoriteVacancyEntity.employerLogoUrl240,

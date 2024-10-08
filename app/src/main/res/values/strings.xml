@@ -52,5 +52,6 @@
     <string name="address_separator">, </string>
     <string name="address_building_prefix">д. %1$s</string>
     <string name="address_not_specified">Адрес не указан</string>
+    <string name="list_is_empty">Список пуст</string>
 
 </resources>
