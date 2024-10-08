@@ -14,7 +14,8 @@ val repositoryModule = module {
     single<VacanciesRepository> {
         VacanciesRepositoryImpl(
             networkClient = get(),
-            ioDispatcher = get(named("ioDispatcher"))
+            ioDispatcher = get(named("ioDispatcher")),
+            parametersConverter = get()
         )
     }
     single<FavoritesRepository> {
@@ -27,7 +28,8 @@ val repositoryModule = module {
     single<VacancyDetailsRepository> {
         VacancyDetailsRepositoryImpl(
             networkClient = get(),
-            ioDispatcher = get(named("ioDispatcher"))
+            ioDispatcher = get(named("ioDispatcher")),
+            parametersConverter = get()
         )
     }
 

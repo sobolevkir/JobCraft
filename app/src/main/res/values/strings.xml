@@ -1,4 +1,5 @@
 <resources>
+
     <string name="app_name">JobCraft</string>
     <string name="main_title">Главная</string>
     <string name="search_title">Поиск вакансий</string>
@@ -30,13 +31,26 @@
     <string name="no_vacancies">Не удалось получить\nсписок вакансий</string>
     <string name="server_error">Ошибка сервера</string>
 
-    <!-- Строка для зарплаты с диапазоном -->
-    <string name="salary_range">от %1$d до %2$d %3$s</string>
-    <!-- Строка для зарплаты с фиксированной суммой -->
-    <string name="salary_exact">%1$d %2$s</string>
-    <!-- Строка для случая, если зарплата не указана -->
-    <string name="no_salary">Зарплата не указана</string>
-    <!-- Строка для названия вакансии и местоположения -->
-    <string name="vacancy_name_place">%1$s, %2$s</string>
-    <string name="list_is_empty">Список пуст</string>
+    <!-- Указание зарплаты -->
+    <string name="salary_range">От %1$s до %2$s %3$s</string>
+    <string name="salary_from">От %1$s %2$s</string>
+    <string name="salary_to">До %1$s %2$s</string>
+    <string name="salary_not_specified">Зарплата не указана</string>
+    <string name="currency_rub">₽</string>
+    <string name="currency_byr">Br</string>
+    <string name="currency_usd">$</string>
+    <string name="currency_eur">€</string>
+    <string name="currency_kzt">₸</string>
+    <string name="currency_uah">₴</string>
+    <string name="currency_azn">₼</string>
+    <string name="currency_uzs">сум</string>
+    <string name="currency_gel">₾</string>
+    <string name="currency_kgt">сом</string>
+    <string name="currency_default"> </string>
+
+    <!-- Форматы адреса -->
+    <string name="address_separator">, </string>
+    <string name="address_building_prefix">д. %1$s</string>
+    <string name="address_not_specified">Адрес не указан</string>
+
 </resources>
