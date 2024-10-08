@@ -9,7 +9,6 @@ val viewModelModule = module {
 
     viewModel { SearchViewModel(vacanciesInteractor = get()) }
 
-    viewModel {
-        VacancyViewModel(get())
-    }
+    viewModel { VacancyViewModel(vacancyDetailsInteractor = get()) }
+
 }
