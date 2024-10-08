@@ -134,13 +134,17 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     }
 
     private fun bindErrorImage(image: Drawable?) {
-        binding.tvError.setCompoundDrawables(null, image, null, null)
+        with(binding.tvError){
+            isVisible = true
+            setCompoundDrawables(null, image, null, null)
+            text = ""
+        }
+        binding.rvFoundVacanciesList.isVisible = false
     }
 
     private fun setStartOptions() {
         //Показать начальную картинку
         val isEmpty = binding.etSearchRequest.text.isEmpty()
-        binding.tvError.isVisible = isEmpty
         binding.tvSearchResultMessage.isVisible = false
         bindErrorImage(ContextCompat.getDrawable(requireContext(), R.drawable.vacancy_search_start))
 
