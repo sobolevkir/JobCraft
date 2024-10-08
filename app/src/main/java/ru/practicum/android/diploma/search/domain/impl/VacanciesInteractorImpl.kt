@@ -12,7 +12,7 @@ import ru.practicum.android.diploma.search.domain.model.VacanciesSearchResult
 class VacanciesInteractorImpl(private val repository: VacanciesRepository) : VacanciesInteractor {
 
     override fun searchVacancies(options: VacanciesRequestObject): Flow<Pair<VacanciesSearchResult?, ErrorType?>> {
-        return repository.searchVacancies(mapOf(Pair(options.request, "${options.page}"))).map { result ->
+        return repository.searchVacancies(mapOf(Pair(options.request, options.page.toString()))).map { result ->
             when (result) {
                 is Resource.Success -> {
                     Pair(result.data, null)

@@ -58,6 +58,7 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
                                 bind(200, fullList, searchResult.found)
                                 maxPage = searchResult.pages
                             }
+
                             ErrorType.CONNECTION_PROBLEM -> bind(401)
                             else -> bind(402)
                         }

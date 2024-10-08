@@ -1,11 +1,9 @@
 package ru.practicum.android.diploma.search.ui
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -130,12 +128,11 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         binding.layoutError.isVisible = visible
     }
 
-    private fun bindErrorImage(image: Int, text: Int?){
+    private fun bindErrorImage(image: Int, text: Int?) {
         binding.ivSearchResult.setImageResource(image)
-        if (text == null){
+        if (text == null) {
             binding.tvError.text = ""
-        }
-        else{
+        } else {
             binding.tvError.setText(text)
         }
     }
