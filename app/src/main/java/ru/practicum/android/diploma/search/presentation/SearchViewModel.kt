@@ -26,7 +26,7 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
 
     fun getSearchRes(): LiveData<SearchLiveDataObject> = liveDataSearchRes
 
-    fun setIsSearch(boolean: Boolean){
+    fun setIsSearch(boolean: Boolean) {
         isSearch = boolean
         bind(500)
     }
