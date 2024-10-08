@@ -79,11 +79,7 @@ class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
         binding.ivNoVacancies.visibility = View.GONE
         binding.ivEmptyList.visibility = View.GONE
         binding.tvErrorText.visibility = View.GONE
-        favoritesAdapter?.apply {
-            this.vacancies.clear()
-            this.vacancies.addAll(vacancies)
-            notifyDataSetChanged()
-        }
+        favoritesAdapter?.submitList(vacancies)
     }
 
     private fun clickDebounce(): Boolean {

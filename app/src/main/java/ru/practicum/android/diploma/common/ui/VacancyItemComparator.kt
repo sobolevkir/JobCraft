@@ -13,4 +13,3 @@ class VacancyItemComparator : DiffUtil.ItemCallback<VacancyFromList>() {
     }
 
 }
-
