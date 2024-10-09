@@ -16,9 +16,22 @@ class VacancyViewModel(
     private val interactor: VacancyDetailsInteractor,
 ) : ViewModel() {
 
+    private var isFavorite = false
+    private var currentVacancy: VacancyDetails? = null
     private var vacancyLiveData = MutableLiveData(ScreenState(ScreenMode.LOADING, null))
+    private var isFavoriteLiveData = MutableLiveData(isFavorite)
 
+    fun getIsFavoriteLiveData(): LiveData<Boolean> = isFavoriteLiveData
     fun getVacancyLiveData(): LiveData<ScreenState> = vacancyLiveData
+
+    fun changeFavorite () {
+        if (currentVacancy != null) {
+            isFavorite = !isFavorite
+            isFavoriteLiveData.postValue(isFavorite)
+            if (isFavorite) addToFavorites(currentVacancy!!) else removeFromFavorites(currentVacancy!!.id)
+        }
+
+    }
 
     fun getVacancyDetails(vacancyId: Long) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -32,14 +45,20 @@ class VacancyViewModel(
 
     private fun processingResult(vacancy: VacancyDetails?, errorType: ErrorType?) {
         if (vacancy != null) {
+            currentVacancy = vacancy
+            isFavorite = currentVacancy!!.isFavorite
             vacancyLiveData.postValue(ScreenState(ScreenMode.RESULTS, vacancy))
+            isFavoriteLiveData.postValue(isFavorite)
         } else {
+            currentVacancy = null
             vacancyLiveData.postValue(ScreenState(ScreenMode.ERROR, null))
         }
     }
 
-    fun shareVacancyUrl(text: String) {
-        interactor.shareVacancyUrl(text)
+    fun shareVacancyUrl() {
+        if (currentVacancy != null) {
+            interactor.shareVacancyUrl(currentVacancy!!.alternateUrl)
+        }
     }
 
     fun addToFavorites(vacancy: VacancyDetails) {

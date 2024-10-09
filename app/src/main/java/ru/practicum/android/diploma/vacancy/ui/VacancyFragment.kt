@@ -24,9 +24,6 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
     private val viewModel by viewModel<VacancyViewModel>()
     private val args: VacancyFragmentArgs by navArgs()
     private val binding by viewBinding(FragmentVacancyBinding::bind)
-    private var vacancy: VacancyDetails? = null
-    private var isFavorite: Boolean = false
-    private var vacancyId = 0L
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -34,38 +31,20 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
             findNavController().popBackStack()
         }
         viewModel.getVacancyLiveData().observe(viewLifecycleOwner) { newState ->
-            vacancy = newState.vacancy
             when (newState.screenMode) {
                 ScreenMode.LOADING -> showLoading()
                 ScreenMode.RESULTS -> showVacancy(newState.vacancy!!)
                 ScreenMode.ERROR -> showPlaceholder()
             }
         }
-        vacancyId = args.vacancyId
-        viewModel.getVacancyDetails(vacancyId)
+        viewModel.getIsFavoriteLiveData().observe(viewLifecycleOwner) { newState ->
+            changeFavoriteIcon(newState)
+        }
+        viewModel.getVacancyDetails(args.vacancyId)
         binding.btnBack.setOnClickListener { findNavController().popBackStack() }
-        binding.btnSend.setOnClickListener { sendVacancy() }
-        binding.btnFavorite.setOnClickListener {
-            if (vacancy != null) {
-                isFavorite = !isFavorite
-                changeFavoriteIcon()
-                if (isFavorite) addToFavorites(vacancy!!) else removeFromFavorites(vacancyId)
-            }
-        }
-    }
+        binding.btnSend.setOnClickListener { viewModel.shareVacancyUrl() }
+        binding.btnFavorite.setOnClickListener { viewModel.changeFavorite() }
 
-    private fun sendVacancy() {
-        if (vacancy != null) {
-            viewModel.shareVacancyUrl(vacancy!!.alternateUrl)
-        }
-    }
-
-    private fun addToFavorites(vacancy: VacancyDetails) {
-        viewModel.addToFavorites(vacancy)
-    }
-
-    private fun removeFromFavorites(vacancyId: Long) {
-        viewModel.removeFromFavorites(vacancyId)
     }
 
     private fun showLoading() {
@@ -88,8 +67,6 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
     }
 
     private fun bind(vacancy: VacancyDetails) {
-        isFavorite = vacancy.isFavorite
-        changeFavoriteIcon()
         binding.tvVacancyName.text = vacancy.name
         bindSalary (vacancy.salary)
         Glide.with(requireContext())
@@ -161,7 +138,7 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
     }
 
     // Иконка Избранное
-    private fun changeFavoriteIcon() {
+    private fun changeFavoriteIcon(isFavorite:Boolean) {
         if (isFavorite) {
             binding.btnFavorite.setImageResource(R.drawable.ic_favorite_on)
         } else {

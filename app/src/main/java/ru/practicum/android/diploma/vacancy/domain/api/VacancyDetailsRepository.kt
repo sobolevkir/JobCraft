@@ -8,5 +8,6 @@ interface VacancyDetailsRepository {
     fun shareVacancyUrl(text: String)
     fun addToFavorites(vacancy: VacancyDetails)
     fun removeFromFavorites(vacancyId: Long)
+    fun getFavoritesIdList(): Flow<List<Long>>
     fun getVacancyDetails(vacancyId: Long): Flow<Resource<VacancyDetails>>
 }

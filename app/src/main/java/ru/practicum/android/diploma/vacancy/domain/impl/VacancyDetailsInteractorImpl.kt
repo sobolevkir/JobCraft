@@ -24,7 +24,7 @@ class VacancyDetailsInteractorImpl(
     }
 
     override fun shareVacancyUrl(text: String) {
-        repository.sendVacancy(text)
+        repository.shareVacancyUrl(text)
     }
 
     override fun addToFavorites(vacancy: VacancyDetails) {
@@ -34,4 +34,5 @@ class VacancyDetailsInteractorImpl(
     override fun removeFromFavorites(vacancyId: Long) {
         repository.removeFromFavorites(vacancyId)
     }
+
 }
