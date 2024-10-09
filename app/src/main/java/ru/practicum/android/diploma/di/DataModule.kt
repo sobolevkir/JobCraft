@@ -14,8 +14,6 @@ import ru.practicum.android.diploma.common.data.network.HHApi
 import ru.practicum.android.diploma.common.data.network.HeaderInterceptor
 import ru.practicum.android.diploma.common.data.network.NetworkClient
 import ru.practicum.android.diploma.common.data.network.RetrofitNetworkClient
-import ru.practicum.android.diploma.vacancy.data.impl.ExternalNavigatorImpl
-import ru.practicum.android.diploma.vacancy.domain.ExternalNavigator
 
 private const val BASE_URL = "https://api.hh.ru/"
 
@@ -35,6 +33,7 @@ val dataModule = module {
     }
 
     factory { ParametersConverter(context = get()) }
+    factory { FavoriteVacancyDbConverter(get()) }
 
     single<NetworkClient> {
         RetrofitNetworkClient(api = get(), context = androidContext(), ioDispatcher = get(named("ioDispatcher")))
@@ -47,6 +46,11 @@ val dataModule = module {
     single<OkHttpClient> {
         OkHttpClient.Builder()
             .addInterceptor(HeaderInterceptor())
+            .build()
+    }
+    single {
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
+            .fallbackToDestructiveMigration()
             .build()
     }
 

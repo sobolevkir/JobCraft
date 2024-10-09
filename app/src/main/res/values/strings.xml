@@ -32,6 +32,7 @@
     <string name="key_skills">Ключевые навыки</string>
     <string name="no_internet">Нет интернета</string>
     <string name="no_vacancies">Не удалось получить\nсписок вакансий</string>
+    <string name="list_is_empty">Список пуст</string>
     <string name="server_error">Ошибка сервера</string>
 
     <!-- Указание зарплаты -->

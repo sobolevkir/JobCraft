@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="?attr/jcBackgroundColor"
     tools:context=".vacancy.ui.VacancyFragment">
 
     <LinearLayout
@@ -234,5 +235,4 @@
             android:indeterminate="true"
             android:visibility="gone"/>
 
-    </FrameLayout>
 </LinearLayout>
