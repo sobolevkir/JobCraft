@@ -85,7 +85,8 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
                 if (dy > ZERO) {
                     val pos =
-                        (binding.rvFoundVacanciesList.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+                        (binding.rvFoundVacanciesList.layoutManager as LinearLayoutManager)
+                            .findLastVisibleItemPosition()
                     val itemsCount = adapter.itemCount
                     if (pos >= itemsCount - 1) {
                         viewModel.onLastItemReached()
