@@ -9,8 +9,8 @@ val repositoryModule = module {
 
     single<VacancyDetailsRepository> {
         VacancyDetailsRepositoryImpl(
-            externalNavigator = get (),
-            appDatabase = get (),
+            externalNavigator = get(),
+            appDatabase = get(),
             dbConvertor = get(),
             networkClient = get(),
             ioDispatcher = get(named("ioDispatcher")),

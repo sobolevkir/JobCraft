@@ -25,7 +25,6 @@ interface FavoriteVacancyDao {
     @Update(entity = FavoriteVacancyEntity::class, onConflict = OnConflictStrategy.REPLACE)
     fun updateVacancy(playlist: FavoriteVacancyEntity)
 
-    //**********************************************
     @Query("SELECT id FROM favorite_vacancy_table")
     fun getFavoritesIdsList(): List<Long>
 

@@ -50,7 +50,7 @@ val dataModule = module {
             .build()
     }
 
-    single <ExternalNavigator>{
+    single<ExternalNavigator> {
         ExternalNavigatorImpl(androidContext())
     }
 }

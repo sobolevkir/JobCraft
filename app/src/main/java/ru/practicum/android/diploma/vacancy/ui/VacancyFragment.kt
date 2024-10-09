@@ -36,8 +36,8 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
         viewModel.getVacancyLiveData().observe(viewLifecycleOwner) { newState ->
             vacancy = newState.vacancy
             when (newState.screenMode) {
-                ScreenMode.LOADING ->  showLoading()
-                ScreenMode.RESULTS ->  showVacancy(newState.vacancy!!)
+                ScreenMode.LOADING -> showLoading()
+                ScreenMode.RESULTS -> showVacancy(newState.vacancy!!)
                 ScreenMode.ERROR -> showPlaceholder()
             }
         }
@@ -108,14 +108,14 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
             .into(binding.ivLogo)
         binding.tvEmployerName.text = vacancy.employerName
         binding.tvAddress.text = if (vacancy.address != null) vacancy.address else vacancy.areaName
-        bindExperience (vacancy.experience)
-        bindScheduleName (vacancy.scheduleName)
+        bindExperience(vacancy.experience)
+        bindScheduleName(vacancy.scheduleName)
         binding.tvDescription.setText(Html.fromHtml(vacancy.description, Html.FROM_HTML_MODE_COMPACT))
-        bindkeySkills (vacancy.keySkills)
+        bindkeySkills(vacancy.keySkills)
     }
 
     private fun bindSalary(salary: String?) {
-        if(salary == null) {
+        if (salary == null) {
             binding.salary.isVisible = false
         } else {
             binding.salary.isVisible = true
