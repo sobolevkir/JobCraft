@@ -4,7 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import ru.practicum.android.diploma.favorites.data.entity.FavoriteVacancyEntity
 
-@Database(version = 3, entities = [FavoriteVacancyEntity::class])
+@Database(version = 4, entities = [FavoriteVacancyEntity::class])
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun getFavoriteVacanciesDao(): FavoriteVacancyDao
