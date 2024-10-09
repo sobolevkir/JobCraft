@@ -8,15 +8,19 @@
     android:background="?attr/jcBackgroundColor"
     android:orientation="horizontal">
 
-    <ImageView
-        android:id="@+id/iv_vacancy_cover"
+    <LinearLayout
         android:layout_width="@dimen/vacancy_cover_size"
         android:layout_height="@dimen/vacancy_cover_size"
         android:layout_marginEnd="@dimen/margin_medium"
-        android:scaleType="centerInside"
-        android:background="@drawable/cover_border"
-        android:contentDescription="@string/logo_hint"
-        tools:src="@drawable/ic_cover_placeholder" />
+        android:background="@drawable/cover_border">
+
+        <ImageView
+            android:id="@+id/iv_vacancy_cover"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/logo_hint"
+            android:padding="@dimen/margin_mini" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
