@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.common.domain.model.VacancyFromList
 import ru.practicum.android.diploma.favorites.domain.FavoritesInteractor
 
-class FavoritesViewModel(private val favoritesInteractor: FavoritesInteractor) : ViewModel() {
+class FavoritesViewModel(private val interactor: FavoritesInteractor) : ViewModel() {
 
     private val favoriteStateLiveData = MutableLiveData<FavoritesState>()
     fun observeState(): LiveData<FavoritesState> = favoriteStateLiveData
@@ -19,7 +19,7 @@ class FavoritesViewModel(private val favoritesInteractor: FavoritesInteractor) :
     fun fillData() {
         try {
             viewModelScope.launch(Dispatchers.IO) {
-                favoritesInteractor
+                interactor
                     .getFavoriteVacancies()
                     .collect { favorites ->
                         processResult(favorites)
