@@ -32,12 +32,10 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
     }
 
     fun onLastItemReached() {
-        if(!isNextPageLoading){
-            if (paddingPage != maxPage) {
-                isNextPageLoading = true
-                paddingPage += 1
-                searchRequest(lastRequest!!, paddingPage)
-            }
+        if (!isNextPageLoading && (paddingPage != maxPage)) {
+            isNextPageLoading = true
+            paddingPage += 1
+            searchRequest(lastRequest!!, paddingPage)
         }
     }
 

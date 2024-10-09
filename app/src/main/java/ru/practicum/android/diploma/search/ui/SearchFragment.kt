@@ -23,19 +23,19 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private val binding by viewBinding(FragmentSearchBinding::bind)
     private val viewModel by viewModel<SearchViewModel>()
 
-    private lateinit var adapter: SearchAdapter
+    private val vacancyOnClicked = object : VacancyOnClicked {
+        override fun startVacancy(vacancyId: Long) {
+            val action = SearchFragmentDirections.actionSearchFragmentToVacancyFragment(vacancyId)
+            findNavController().navigate(action)
+        }
+    }
+
+    private var adapter = SearchAdapter(vacancyOnClicked)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setStartOptions(true)
-
-        val vacancyOnClicked = object : VacancyOnClicked {
-            override fun startVacancy(vacancyId: Long) {
-                val action = SearchFragmentDirections.actionSearchFragmentToVacancyFragment(vacancyId)
-                findNavController().navigate(action)
-            }
-        }
 
         adapter = SearchAdapter(vacancyOnClicked)
         adapter.submitList(listOf())
@@ -155,7 +155,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private fun setStartOptions(isEmpty: Boolean) {
         // Показать начальную картинку
-        if(isEmpty){
+        if (isEmpty) {
             binding.layoutError.isVisible = false
             binding.ivSearchResult.isVisible = true
             bindErrorImage(R.drawable.vacancy_search_start, null)
