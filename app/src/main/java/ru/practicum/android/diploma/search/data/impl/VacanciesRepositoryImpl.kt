@@ -12,7 +12,7 @@ import ru.practicum.android.diploma.common.data.network.dto.VacanciesSearchRespo
 import ru.practicum.android.diploma.common.data.network.dto.VacancyFromListDto
 import ru.practicum.android.diploma.common.domain.model.ErrorType
 import ru.practicum.android.diploma.common.domain.model.VacancyFromList
-import ru.practicum.android.diploma.common.util.Resource
+import ru.practicum.android.diploma.vacancy.util.ResourceDetails
 import ru.practicum.android.diploma.search.domain.VacanciesRepository
 import ru.practicum.android.diploma.search.domain.model.VacanciesSearchResult
 
@@ -22,14 +22,14 @@ class VacanciesRepositoryImpl(
     private val parametersConverter: ParametersConverter
 ) : VacanciesRepository {
 
-    override fun searchVacancies(options: Map<String, String>): Flow<Resource<VacanciesSearchResult>> = flow {
+    override fun searchVacancies(options: Map<String, String>): Flow<ResourceDetails<VacanciesSearchResult>> = flow {
         val response = networkClient.doRequest(VacanciesSearchRequest(options))
         when (response.resultCode) {
             ResultCode.SUCCESS -> {
                 val vacanciesSearchResponse = response as VacanciesSearchResponse
                 val vacanciesDto = vacanciesSearchResponse.items
                 if (vacanciesDto.isEmpty()) {
-                    emit(Resource.Error(ErrorType.NOTHING_FOUND))
+                    emit(ResourceDetails.Error(ErrorType.NOTHING_FOUND))
                 } else {
                     val searchResultData = VacanciesSearchResult(
                         items = vacanciesDto.convertToVacancyFromList(),
@@ -37,16 +37,16 @@ class VacanciesRepositoryImpl(
                         page = vacanciesSearchResponse.page,
                         pages = vacanciesSearchResponse.pages
                     )
-                    emit(Resource.Success(searchResultData))
+                    emit(ResourceDetails.Success(searchResultData))
                 }
             }
 
-            ResultCode.CONNECTION_PROBLEM -> emit(Resource.Error(ErrorType.CONNECTION_PROBLEM))
-            ResultCode.BAD_REQUEST -> emit(Resource.Error(ErrorType.BAD_REQUEST))
-            ResultCode.NOTHING_FOUND -> emit(Resource.Error(ErrorType.NOTHING_FOUND))
-            ResultCode.SERVER_ERROR -> emit(Resource.Error(ErrorType.SERVER_ERROR))
-            ResultCode.FORBIDDEN_ERROR -> emit(Resource.Error(ErrorType.FORBIDDEN_ERROR))
-            else -> emit(Resource.Error(ErrorType.UNKNOWN_ERROR))
+            ResultCode.CONNECTION_PROBLEM -> emit(ResourceDetails.Error(ErrorType.CONNECTION_PROBLEM))
+            ResultCode.BAD_REQUEST -> emit(ResourceDetails.Error(ErrorType.BAD_REQUEST))
+            ResultCode.NOTHING_FOUND -> emit(ResourceDetails.Error(ErrorType.NOTHING_FOUND))
+            ResultCode.SERVER_ERROR -> emit(ResourceDetails.Error(ErrorType.SERVER_ERROR))
+            ResultCode.FORBIDDEN_ERROR -> emit(ResourceDetails.Error(ErrorType.FORBIDDEN_ERROR))
+            else -> emit(ResourceDetails.Error(ErrorType.UNKNOWN_ERROR))
         }
 
     }.flowOn(ioDispatcher)
