@@ -25,6 +25,7 @@
     <string name="who_worked_on_the_application">Над приложением работали</string>
     <string name="authors">Кирилл Соболев\nЮлия Сычёва\nАндрей Трофимов\nДанил Цыганов\nМарат Галимов</string>
     <string name="vacancy_name">Название вакансии</string>
+    <string name="vacancy_not_found">Вакансия не найдена или удалена</string>
     <string name="employment">Место работы</string>
     <string name="experience">Требуемый опыт</string>
     <string name="description">Описание вакансии</string>

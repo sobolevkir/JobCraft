@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.vacancy.ui
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.Html
 import android.util.TypedValue
@@ -22,11 +21,6 @@ import ru.practicum.android.diploma.vacancy.ui.model.ScreenMode
 private const val CORNERRADIUS_DP = 12f
 
 class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
-
-    companion object {
-        private const val EXTRA_ID_VACANCY = "id_vacancy"                     // Тег для сохранения позиции таймера
-    }
-
     private val viewModel by viewModel<VacancyViewModel>()
     private val args: VacancyFragmentArgs by navArgs()
     private val binding by viewBinding(FragmentVacancyBinding::bind)
@@ -34,14 +28,11 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
     private var isFavorite: Boolean = false
     private var vacancyId = 0L
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding.btnBack.setOnClickListener {
             findNavController().popBackStack()
         }
-
         viewModel.getVacancyLiveData().observe(viewLifecycleOwner) { newState ->
             vacancy = newState.vacancy
             when (newState.screenMode) {
@@ -50,11 +41,8 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
                 ScreenMode.ERROR -> showPlaceholder()
             }
         }
-
         vacancyId = args.vacancyId
-
         viewModel.getVacancyDetails(vacancyId)
-
         binding.btnBack.setOnClickListener { findNavController().popBackStack() }
         binding.btnSend.setOnClickListener { sendVacancy() }
         binding.btnFavorite.setOnClickListener {
@@ -65,18 +53,18 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
             }
         }
     }
-    // Отправка вакансии
-    private fun sendVacancy () {
+
+    private fun sendVacancy() {
         if (vacancy != null) {
             viewModel.sendVacancy(vacancy!!.alternateUrl)
         }
     }
 
-    private fun addToFavorites (vacancy: VacancyDetails) {
+    private fun addToFavorites(vacancy: VacancyDetails) {
         viewModel.addToFavorites(vacancy)
     }
 
-    private fun removeFromFavorites (vacancyId: Long) {
+    private fun removeFromFavorites(vacancyId: Long) {
         viewModel.removeFromFavorites(vacancyId)
     }
 
@@ -86,33 +74,24 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
         binding.progressBar.isVisible = true
     }
 
-    private fun showVacancy (vacancy: VacancyDetails) {
+    private fun showVacancy(vacancy: VacancyDetails) {
         binding.svVacancy.isVisible = true
         binding.llPlaceholder.isVisible = false
         binding.progressBar.isVisible = false
         bind(vacancy)
     }
 
-    private fun showPlaceholder () {
+    private fun showPlaceholder() {
         binding.svVacancy.isVisible = false
         binding.llPlaceholder.isVisible = true
         binding.progressBar.isVisible = false
     }
 
-    private fun bind (vacancy: VacancyDetails) {
-
+    private fun bind(vacancy: VacancyDetails) {
         isFavorite = vacancy.isFavorite
         changeFavoriteIcon()
-
         binding.tvVacancyName.text = vacancy.name
-
-        if(vacancy.salary == null) {
-            binding.salary.isVisible = false
-        } else {
-            binding.salary.isVisible = true
-            binding.salary.text = vacancy.salary
-        }
-
+        bindSalary (vacancy.salary)
         Glide.with(requireContext())
             .load(vacancy.employerLogoUrl240)
             .placeholder(R.drawable.ic_cover_placeholder)
@@ -127,73 +106,66 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
                 )
             )
             .into(binding.ivLogo)
-
         binding.tvEmployerName.text = vacancy.employerName
         binding.tvAddress.text = if (vacancy.address != null) vacancy.address else vacancy.areaName
-        if (vacancy.experience == null) {
+        bindExperience (vacancy.experience)
+        bindScheduleName (vacancy.scheduleName)
+        binding.tvDescription.setText(Html.fromHtml(vacancy.description, Html.FROM_HTML_MODE_COMPACT))
+        bindkeySkills (vacancy.keySkills)
+    }
+
+    private fun bindSalary(salary: String?) {
+        if(salary == null) {
+            binding.salary.isVisible = false
+        } else {
+            binding.salary.isVisible = true
+            binding.salary.text = salary
+        }
+    }
+
+    private fun bindExperience(experience: String?) {
+        if (experience == null) {
             binding.tvExperience.isVisible = false
             binding.tvExperienceTitle.isVisible = false
         } else {
             binding.tvExperience.isVisible = true
             binding.tvExperienceTitle.isVisible = true
-            binding.tvExperience.text = vacancy.experience
+            binding.tvExperience.text = experience
         }
-        if (vacancy.scheduleName == null) {
+    }
+
+    private fun bindScheduleName(scheduleName: String?) {
+        if (scheduleName == null) {
             binding.tvScheduleName.isVisible = false
         } else {
             binding.tvScheduleName.isVisible = true
-            binding.tvScheduleName.setText(Html.fromHtml(vacancy.scheduleName, Html.FROM_HTML_MODE_COMPACT))
+            binding.tvScheduleName.setText(Html.fromHtml(scheduleName, Html.FROM_HTML_MODE_COMPACT))
         }
-        binding.tvDescription.setText(Html.fromHtml(vacancy.description, Html.FROM_HTML_MODE_COMPACT))
+    }
 
-        if (vacancy.keySkills == null) {
+    private fun bindkeySkills(keySkills: List<String>) {
+        if (keySkills.isEmpty()) {
             binding.tvKeySkillsTitle.isVisible = false
             binding.tvKeySkills.isVisible = false
         } else {
             binding.tvKeySkillsTitle.isVisible = true
             binding.tvKeySkills.isVisible = true
-            binding.tvKeySkills.setText(Html.fromHtml(formattingKeySkills(vacancy.keySkills), Html.FROM_HTML_MODE_COMPACT))
+            binding.tvKeySkills.setText(Html.fromHtml(formattingKeySkills(keySkills), Html.FROM_HTML_MODE_COMPACT))
         }
     }
 
-    private fun formattingKeySkills (keySkills: List<String>): String {
+    private fun formattingKeySkills(keySkills: List<String>): String {
         val builder = StringBuilder()
         for (s: String in keySkills) builder.append("<li>" + s + "</li>")
         return builder.toString()
     }
 
     // Иконка Избранное
-    private fun changeFavoriteIcon () {
+    private fun changeFavoriteIcon() {
         if (isFavorite) {
             binding.btnFavorite.setImageResource(R.drawable.ic_favorite_on)
         } else {
             binding.btnFavorite.setImageResource(R.drawable.ic_favorite_off)
         }
     }
-
-    /*
-    // Формируем строку зарплата
-    private fun getSalary (salary: Salary): String {
-        var strFrom = ""
-        var strTo = ""
-        var strCurrency = ""
-        if (salary.from != null) strFrom = "от " + salary.from.toString()
-        if (salary.to != null) strTo = " до " + salary.to.toString()
-        if (salary.currency != null) strCurrency = " " + salary.currency
-
-        return (strFrom + strTo + strCurrency).trimStart()
-    }*/
-
-    /*// Формируем строку адрес
-    private fun getAddress (address: Address): String {
-        var strCity = ""
-        var strStreet = ""
-        if (address.city != null) strCity = address.city + ", "
-        if (address.street != null) {
-            strStreet = address.street
-            if (address.building != null) strStreet += ", " + address.building
-        }
-
-        return strCity + strStreet
-    }*/
 }

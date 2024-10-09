@@ -33,19 +33,19 @@ class VacancyDetailsRepositoryImpl(
     }
 
     override fun addToFavorites(vacancy: VacancyDetails) {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(ioDispatcher).launch {
             appDatabase.favoriteVacancysDao().insertVacancy(dbConvertor.map(vacancy))
         }
     }
 
     override fun removeFromFavorites(vacancyId: Long) {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(ioDispatcher).launch {
             appDatabase.favoriteVacancysDao().deleteVacancyById(vacancyId)
         }
     }
 
     private fun updateFavorite(vacancy: VacancyDetails) {
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(ioDispatcher).launch {
             appDatabase.favoriteVacancysDao().updateVacancy(dbConverter.convert(vacancy))
         }
     }

@@ -12,7 +12,7 @@ import ru.practicum.android.diploma.vacancy.domain.api.VacancyDetailsInteractor
 import ru.practicum.android.diploma.vacancy.ui.model.ScreenMode
 import ru.practicum.android.diploma.vacancy.ui.model.ScreenState
 
-class VacancyViewModel (
+class VacancyViewModel(
     private val interactor: VacancyDetailsInteractor,
 ) : ViewModel() {
 
@@ -20,7 +20,7 @@ class VacancyViewModel (
 
     fun getVacancyLiveData(): LiveData<ScreenState> = vacancyLiveData
 
-    fun getVacancyDetails (vacancyId: Long) {
+    fun getVacancyDetails(vacancyId: Long) {
         viewModelScope.launch(Dispatchers.IO) {
             interactor
                 .getVacancyDetails(vacancyId)
@@ -32,7 +32,7 @@ class VacancyViewModel (
 
     private fun processingResult(vacancy: VacancyDetails?, errorType: ErrorType?) {
         if (vacancy != null) {
-            vacancyLiveData.postValue(ScreenState(ScreenMode.RESULTS,  vacancy))
+            vacancyLiveData.postValue(ScreenState(ScreenMode.RESULTS, vacancy))
         } else
             vacancyLiveData.postValue(ScreenState(ScreenMode.ERROR, null))
     }
@@ -41,11 +41,11 @@ class VacancyViewModel (
         interactor.sendVacancy(text)
     }
 
-    fun addToFavorites (vacancy: VacancyDetails) {
+    fun addToFavorites(vacancy: VacancyDetails) {
         interactor.addToFavorites(vacancy)
     }
 
-    fun removeFromFavorites (vacancyId: Long) {
+    fun removeFromFavorites(vacancyId: Long) {
         interactor.removeFromFavorites(vacancyId)
     }
 
