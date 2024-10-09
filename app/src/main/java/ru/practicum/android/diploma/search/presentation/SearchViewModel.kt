@@ -62,7 +62,6 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
 
     private fun searchRequest(searchText: String, page: Int) {
         if (searchText.isNotEmpty()) {
-            isNextPageLoading = false
             val options = mapOf(
                 "text" to searchText,
                 "page" to page.toString(),
@@ -83,6 +82,7 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
 
                         else -> bind(SearchState.ServerError)
                     }
+                    isNextPageLoading = false
                 }
                 .launchIn(viewModelScope)
         }
