@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.favorites.data.converter
+package ru.practicum.android.diploma.common.data.converter
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken

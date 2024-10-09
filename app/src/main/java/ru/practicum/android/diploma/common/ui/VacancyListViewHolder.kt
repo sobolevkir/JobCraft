@@ -18,11 +18,9 @@ class VacancyListViewHolder(val binding: VacancyListItemBinding) :
         val cornerRadius = binding.root.resources.getDimensionPixelSize(R.dimen.radius_small)
         Glide.with(binding.root)
             .load(vacancy.employerLogoUrl240)
-            .centerInside()
             .centerCrop()
             .placeholder(R.drawable.ic_cover_placeholder)
             .transform(RoundedCorners(cornerRadius))
-            .apply(RequestOptions().transform(RoundedCorners(cornerRadius)))
             .into(binding.ivVacancyCover)
     }
 

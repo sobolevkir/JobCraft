@@ -16,7 +16,7 @@ import ru.practicum.android.diploma.common.data.network.HHApi
 import ru.practicum.android.diploma.common.data.network.HeaderInterceptor
 import ru.practicum.android.diploma.common.data.network.NetworkClient
 import ru.practicum.android.diploma.common.data.network.RetrofitNetworkClient
-import ru.practicum.android.diploma.favorites.data.converter.FavoriteVacancyDbConverter
+import ru.practicum.android.diploma.common.data.converter.FavoriteVacancyDbConverter
 
 private const val BASE_URL = "https://api.hh.ru/"
 
