@@ -48,7 +48,7 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
             delay(SEARCH_DELAY)
-            if(isSearch){
+            if (isSearch) {
                 searchRequest(request, paddingPage)
                 bind(SearchState.Loading)
             }

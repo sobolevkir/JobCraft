@@ -41,7 +41,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         adapter.submitList(listOf())
         binding.rvFoundVacanciesList.adapter = adapter
 
-        viewModel.getSearchRes().observe(viewLifecycleOwner) {setError(it)}
+        viewModel.getSearchRes().observe(viewLifecycleOwner) { setError(it) }
 
         binding.etSearchRequest.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
@@ -105,29 +105,29 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     }
 
-    private fun setInternetError(){
+    private fun setInternetError() {
         bindErrorImage(R.drawable.er_no_internet, R.string.no_internet)
     }
 
-    private fun setServerError(){
+    private fun setServerError() {
         bindErrorImage(R.drawable.er_server_error, R.string.server_error)
     }
 
-    private fun setNothingFound(){
+    private fun setNothingFound() {
         bindErrorImage(R.drawable.er_nothing_found, R.string.no_vacancies)
     }
 
-    private fun setLoading(){
-        with(binding){
+    private fun setLoading() {
+        with(binding) {
             layoutError.isVisible = true
             ivSearchResult.isVisible = false
             progressBar.isVisible = true
         }
     }
 
-    private fun showResults(list: List<VacancyFromList>, found: Int){
+    private fun showResults(list: List<VacancyFromList>, found: Int) {
         adapter.submitList(list)
-        with(binding){
+        with(binding) {
             layoutError.isVisible = false
             tvSearchResultMessage.isVisible = true
             tvSearchResultMessage.text = binding.root.context.resources.getQuantityString(
@@ -139,7 +139,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     }
 
     private fun bindErrorImage(image: Int, text: Int? = null, messageState: Boolean = false) {
-        with(binding){
+        with(binding) {
             layoutError.isVisible = true
             ivSearchResult.setImageResource(image)
             ivSearchResult.isVisible = true
@@ -170,7 +170,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         findNavController().navigate(action)
     }
 
-    companion object{
+    companion object {
         const val ZERO = 0
     }
 }
