@@ -15,7 +15,7 @@ import ru.practicum.android.diploma.search.domain.VacanciesInteractor
 
 class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel() {
 
-    private val liveDataSearchRes = MutableLiveData<SearchState>()
+    private val stateLiveData = MutableLiveData<SearchState>()
 
     private var lastRequest: String? = null
     private var searchJob: Job? = null
@@ -23,18 +23,18 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
     private var maxPage = 0
     private var fullList = listOf<VacancyFromList>()
     private var isSearch = false
-    private var isLastItemLoading = false
+    private var isNextPageLoading = false
 
-    fun getSearchRes(): LiveData<SearchState> = liveDataSearchRes
+    fun getSearchRes(): LiveData<SearchState> = stateLiveData
 
     fun setIsSearch(boolean: Boolean) {
         isSearch = boolean
     }
 
     fun onLastItemReached() {
-        if(!isLastItemLoading){
+        if(!isNextPageLoading){
             if (paddingPage != maxPage) {
-                isLastItemLoading = true
+                isNextPageLoading = true
                 paddingPage += 1
                 searchRequest(lastRequest!!, paddingPage)
             }
@@ -62,7 +62,7 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
 
     private fun searchRequest(searchText: String, page: Int) {
         if (searchText.isNotEmpty()) {
-            isLastItemLoading = false
+            isNextPageLoading = false
             val options = mapOf(
                 "text" to searchText,
                 "page" to page.toString(),
@@ -89,7 +89,7 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
     }
 
     private fun bind(state: SearchState) {
-        liveDataSearchRes.postValue(state)
+        stateLiveData.postValue(state)
     }
 
     companion object {
