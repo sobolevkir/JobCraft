@@ -38,14 +38,13 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         binding.rvFoundVacanciesList.adapter = adapter
 
         viewModel.getSearchRes().observe(requireActivity()) {
-            if(it.code == 500){
-                if(it.isSearch){
+            if (it.code == ERROR_500) {
+                if (it.isSearch) {
                     adapter.submitList(listOf())
                     showError(true)
                     binding.progressBar.isVisible = true
                 }
-            }
-            else{
+            } else {
                 binding.progressBar.isVisible = false
                 binding.rvFoundVacanciesList.isVisible = true
                 binding.tvSearchResultMessage.text = getCountResource(it.count)
@@ -55,14 +54,18 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
 
         binding.etSearchRequest.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable) {}
+            override fun afterTextChanged(s: Editable) {
+                // Empty
+            }
 
             override fun beforeTextChanged(
                 s: CharSequence,
                 start: Int,
                 count: Int,
                 after: Int
-            ){}
+            ) {
+                // Empty
+            }
 
             override fun onTextChanged(
                 s: CharSequence,
@@ -80,7 +83,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
-                if (dy > 0) {
+                if (dy > ZERO) {
                     val pos =
                         (binding.rvFoundVacanciesList.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
                     val itemsCount = adapter.itemCount
@@ -103,16 +106,16 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private fun setError(code: Int) {
         when (code) {
-            200 -> {
+            ERROR_200 -> {
                 showError(false)
             }
 
-            401 -> {
+            ERROR_401 -> {
                 showError(true)
                 bindErrorImage(R.drawable.er_no_internet, R.string.no_internet)
             }
 
-            402 -> {
+            ERROR_402 -> {
                 showError(true)
                 bindErrorImage(R.drawable.er_server_error, R.string.server_error)
             }
@@ -146,16 +149,16 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private fun getCountResource(count: Int): String {
         binding.tvSearchResultMessage.isVisible = true
-        val countLast = count % 10
+        val countLast = count % TEN
         if (count == 0) {
             showError(true)
             bindErrorImage(R.drawable.er_nothing_found, null)
             return "Таких вакансий нет"
         }
         return when {
-            count == 11 or 12 or 13 or 14 -> "Найдено $count вакансий"
-            countLast == 1 -> "Найдено $count вакансия"
-            countLast == 2 or 3 or 4 -> "Найдено $count вакансии"
+            count == CHECK_11 or CHECK_12 or CHECK_13 or CHECK_14 -> "Найдено $count вакансий"
+            countLast == CHECK_1 -> "Найдено $count вакансия"
+            countLast == CHECK_2 or CHECK_3 or CHECK_4 -> "Найдено $count вакансии"
             else -> "Найдено $count вакансий"
         }
     }
@@ -166,6 +169,19 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     }
 
     companion object {
-        const val CLICK_DELAY = 2000L
+        const val ERROR_200 = 200
+        const val ERROR_401 = 401
+        const val ERROR_402 = 402
+        const val ERROR_500 = 500
+        const val CHECK_11 = 11
+        const val CHECK_12 = 12
+        const val CHECK_13 = 13
+        const val CHECK_14 = 14
+        const val CHECK_1 = 1
+        const val CHECK_2 = 2
+        const val CHECK_3 = 3
+        const val CHECK_4 = 4
+        const val ZERO = 0
+        const val TEN = 10
     }
 }

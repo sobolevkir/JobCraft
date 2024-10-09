@@ -28,7 +28,7 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
 
     fun setIsSearch(boolean: Boolean) {
         isSearch = boolean
-        bind(500)
+        bind(ERROR_500)
     }
 
     fun onLastItemReached() {
@@ -61,14 +61,14 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
                         when (errorType) {
                             null -> {
                                 fullList += searchResult!!.items
-                                bind(200, searchResult.found)
+                                bind(ERROR_200, searchResult.found)
                                 maxPage = searchResult.pages
                             }
 
-                            ErrorType.CONNECTION_PROBLEM -> bind(401)
+                            ErrorType.CONNECTION_PROBLEM -> bind(ERROR_401)
                             else -> {
                                 fullList = listOf()
-                                bind(402)
+                                bind(ERROR_402)
                             }
                         }
                     }
@@ -82,5 +82,9 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
 
     companion object {
         const val SEARCH_DELAY = 2000L
+        const val ERROR_200 = 200
+        const val ERROR_401 = 401
+        const val ERROR_402 = 402
+        const val ERROR_500 = 500
     }
 }
