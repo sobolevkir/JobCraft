@@ -24,7 +24,7 @@ class VacancyViewModel(
     fun getIsFavoriteLiveData(): LiveData<Boolean> = isFavoriteLiveData
     fun getVacancyLiveData(): LiveData<ScreenState> = vacancyLiveData
 
-    fun changeFavorite () {
+    fun changeFavorite() {
         if (currentVacancy != null) {
             isFavorite = !isFavorite
             isFavoriteLiveData.postValue(isFavorite)

@@ -68,7 +68,7 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
 
     private fun bind(vacancy: VacancyDetails) {
         binding.tvVacancyName.text = vacancy.name
-        bindSalary (vacancy.salary)
+        bindSalary(vacancy.salary)
         Glide.with(requireContext())
             .load(vacancy.employerLogoUrl240)
             .placeholder(R.drawable.ic_cover_placeholder)
@@ -138,7 +138,7 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
     }
 
     // Иконка Избранное
-    private fun changeFavoriteIcon(isFavorite:Boolean) {
+    private fun changeFavoriteIcon(isFavorite: Boolean) {
         if (isFavorite) {
             binding.btnFavorite.setImageResource(R.drawable.ic_favorite_on)
         } else {

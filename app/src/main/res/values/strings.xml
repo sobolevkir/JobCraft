@@ -34,6 +34,7 @@
     <string name="no_vacancies">Не удалось получить\nсписок вакансий</string>
     <string name="list_is_empty">Список пуст</string>
     <string name="server_error">Ошибка сервера</string>
+    <string name="select_send_service">Выберите почтовый сервис</string>
 
     <!-- Указание зарплаты -->
     <string name="salary_range">От %1$s до %2$s %3$s</string>

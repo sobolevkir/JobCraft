@@ -29,7 +29,7 @@ val repositoryModule = module {
         VacancyDetailsRepositoryImpl(
             externalNavigator = get(),
             appDatabase = get(),
-            dbConvertor = get(),
+            dbConverter = get(),
             networkClient = get(),
             ioDispatcher = get(named("ioDispatcher")),
             parametersConverter = get()

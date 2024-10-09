@@ -234,5 +234,5 @@
             android:indeterminateTint="@color/blue"
             android:indeterminate="true"
             android:visibility="gone"/>
-
+    </FrameLayout>
 </LinearLayout>
