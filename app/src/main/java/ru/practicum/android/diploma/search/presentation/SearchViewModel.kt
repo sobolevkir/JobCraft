@@ -23,7 +23,7 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
     private var maxPage = 0
     private var fullList = listOf<VacancyFromList>()
     private var isSearch = false
-    private var isLastItemReached = false
+    private var isLastItemLoading = false
 
     fun getSearchRes(): LiveData<SearchState> = liveDataSearchRes
 
@@ -32,9 +32,9 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
     }
 
     fun onLastItemReached() {
-        if(!isLastItemReached){
+        if(!isLastItemLoading){
             if (paddingPage != maxPage) {
-                isLastItemReached = true
+                isLastItemLoading = true
                 paddingPage += 1
                 searchRequest(lastRequest!!, paddingPage)
             }
@@ -62,7 +62,7 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
 
     private fun searchRequest(searchText: String, page: Int) {
         if (searchText.isNotEmpty()) {
-            isLastItemReached = false
+            isLastItemLoading = false
             val options = mapOf(
                 "text" to searchText,
                 "page" to page.toString(),
