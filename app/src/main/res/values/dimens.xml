@@ -13,5 +13,6 @@
     <dimen name="search_field_height">56dp</dimen>
     <dimen name="small_icon_size">24dp</dimen>
     <dimen name="progress_bar_size">36dp</dimen>
+    <dimen name="radius_small">12dp</dimen>
 
 </resources>
