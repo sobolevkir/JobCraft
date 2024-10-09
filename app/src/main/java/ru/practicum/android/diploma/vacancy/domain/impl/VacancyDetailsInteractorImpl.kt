@@ -23,7 +23,7 @@ class VacancyDetailsInteractorImpl(
         }
     }
 
-    override fun sendVacancy(text: String) {
+    override fun shareVacancyUrl(text: String) {
         repository.sendVacancy(text)
     }
 

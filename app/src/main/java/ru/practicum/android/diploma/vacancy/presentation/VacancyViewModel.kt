@@ -33,12 +33,13 @@ class VacancyViewModel(
     private fun processingResult(vacancy: VacancyDetails?, errorType: ErrorType?) {
         if (vacancy != null) {
             vacancyLiveData.postValue(ScreenState(ScreenMode.RESULTS, vacancy))
-        } else
+        } else {
             vacancyLiveData.postValue(ScreenState(ScreenMode.ERROR, null))
+        }
     }
 
-    fun sendVacancy(text: String) {
-        interactor.sendVacancy(text)
+    fun shareVacancyUrl(text: String) {
+        interactor.shareVacancyUrl(text)
     }
 
     fun addToFavorites(vacancy: VacancyDetails) {

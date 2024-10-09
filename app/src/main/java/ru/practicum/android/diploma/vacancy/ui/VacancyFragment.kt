@@ -56,7 +56,7 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
 
     private fun sendVacancy() {
         if (vacancy != null) {
-            viewModel.sendVacancy(vacancy!!.alternateUrl)
+            viewModel.shareVacancyUrl(vacancy!!.alternateUrl)
         }
     }
 

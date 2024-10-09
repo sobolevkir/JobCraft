@@ -28,7 +28,7 @@ class VacancyDetailsRepositoryImpl(
     private val parametersConverter: ParametersConverter
 ) : VacancyDetailsRepository {
 
-    override fun sendVacancy(text: String) {
+    override fun shareVacancyUrl(text: String) {
         externalNavigator.shareText(text)
     }
 
@@ -60,7 +60,7 @@ class VacancyDetailsRepositoryImpl(
                 val vacancyDetailsResponse = response as VacancyDetailsResponse
                 val resultData = vacancyDetailsResponse.convertToVacancyDetails()
                 emit(Resource.Success(resultData))
-                if (isFavorite) { updateFavorite(resultData) }
+                if (isFavorite) updateFavorite(resultData)
             }
 
             ResultCode.CONNECTION_PROBLEM -> {
@@ -101,6 +101,4 @@ class VacancyDetailsRepositoryImpl(
             )
         }
     }
-
-
 }

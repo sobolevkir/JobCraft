@@ -6,7 +6,7 @@ import ru.practicum.android.diploma.common.domain.model.VacancyDetails
 
 interface VacancyDetailsInteractor {
     fun getVacancyDetails(vacancyId: Long): Flow<Pair<VacancyDetails?, ErrorType?>>
-    fun sendVacancy(text: String)
-    fun addToFavorites (vacancy: VacancyDetails)
-    fun removeFromFavorites (vacancyId: Long)
+    fun shareVacancyUrl(text: String)
+    fun addToFavorites(vacancy: VacancyDetails)
+    fun removeFromFavorites(vacancyId: Long)
 }

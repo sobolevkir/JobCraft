@@ -20,14 +20,14 @@ interface FavoriteVacancyDao {
     fun getFavoritesIds(): Flow<List<Long>>
 
     @Query("DELETE FROM favorite_vacancy_table WHERE id = :vacancyId")
-    fun deleteVacancyById (vacancyId: Long)
+    suspend fun deleteVacancyById(vacancyId: Long)
 
     @Update(entity = FavoriteVacancyEntity::class, onConflict = OnConflictStrategy.REPLACE)
-    fun updateVacancy(playlist: FavoriteVacancyEntity)
+    suspend fun updateVacancy(playlist: FavoriteVacancyEntity)
 
     @Query("SELECT id FROM favorite_vacancy_table")
-    fun getFavoritesIdsList(): List<Long>
+    suspend fun getFavoritesIdsList(): List<Long>
 
     @Query("SELECT * FROM favorite_vacancy_table WHERE id = :vacancyId")
-    fun getVacancy(vacancyId: Long): FavoriteVacancyEntity
+    suspend fun getVacancy(vacancyId: Long): FavoriteVacancyEntity
 }
