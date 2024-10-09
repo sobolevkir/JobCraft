@@ -2,10 +2,10 @@ package ru.practicum.android.diploma.favorites.data.impl
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import ru.practicum.android.diploma.common.data.converter.FavoriteVacancyDbConverter
 import ru.practicum.android.diploma.common.data.db.AppDatabase
 import ru.practicum.android.diploma.common.domain.model.VacancyDetails
 import ru.practicum.android.diploma.common.domain.model.VacancyFromList
-import ru.practicum.android.diploma.common.data.converter.FavoriteVacancyDbConverter
 import ru.practicum.android.diploma.favorites.domain.FavoritesRepository
 
 class FavoritesRepositoryImpl(
