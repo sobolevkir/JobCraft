@@ -11,15 +11,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.common.domain.model.VacancyFromList
 import ru.practicum.android.diploma.common.ext.viewBinding
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.search.domain.api.VacancyOnClicked
+import ru.practicum.android.diploma.search.presentation.SearchState
 import ru.practicum.android.diploma.search.presentation.SearchViewModel
 import ru.practicum.android.diploma.search.ui.adapter.SearchAdapter
 
 class SearchFragment : Fragment(R.layout.fragment_search) {
     private val binding by viewBinding(FragmentSearchBinding::bind)
     private val viewModel by viewModel<SearchViewModel>()
+
+    private lateinit var adapter: SearchAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -33,25 +37,11 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             }
         }
 
-        val adapter = SearchAdapter(vacancyOnClicked)
+        adapter = SearchAdapter(vacancyOnClicked)
         adapter.submitList(listOf())
         binding.rvFoundVacanciesList.adapter = adapter
 
-        viewModel.getSearchRes().observe(requireActivity()) {
-            if (it.code == ERROR_500) {
-                if (it.isSearch) {
-                    adapter.submitList(listOf())
-                    showError(true)
-                    binding.progressBar.isVisible = true
-                }
-            } else {
-                binding.progressBar.isVisible = false
-                binding.rvFoundVacanciesList.isVisible = true
-                binding.tvSearchResultMessage.text = getCountResource(it.count)
-                adapter.submitList(it.vacancies)
-                setError(it.code)
-            }
-        }
+        viewModel.getSearchRes().observe(viewLifecycleOwner) {setError(it)}
 
         binding.etSearchRequest.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
@@ -105,34 +95,61 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     }
 
-    private fun setError(code: Int) {
+    private fun setError(code: SearchState) {
         when (code) {
-            ERROR_200 -> {
-                showError(false)
-            }
-
-            ERROR_401 -> {
-                showError(true)
-                bindErrorImage(R.drawable.er_no_internet, R.string.no_internet)
-            }
-
-            ERROR_402 -> {
-                showError(true)
-                bindErrorImage(R.drawable.er_server_error, R.string.server_error)
-            }
+            is SearchState.InternetError -> setInternetError()
+            is SearchState.ServerError -> setServerError()
+            is SearchState.NothingFound -> setNothingFound()
+            is SearchState.SearchResult -> showResults(code.vacancies, code.found)
+            is SearchState.Loading -> setLoading()
         }
     }
 
-    private fun showError(visible: Boolean) {
-        binding.layoutError.isVisible = visible
+    private fun setInternetError(){
+        bindErrorImage(R.drawable.er_no_internet, R.string.no_internet)
     }
 
-    private fun bindErrorImage(image: Int, text: Int?) {
-        binding.ivSearchResult.setImageResource(image)
-        if (text == null) {
-            binding.tvError.text = ""
-        } else {
-            binding.tvError.setText(text)
+    private fun setServerError(){
+        bindErrorImage(R.drawable.er_server_error, R.string.server_error)
+    }
+
+    private fun setNothingFound(){
+        bindErrorImage(R.drawable.er_nothing_found, R.string.no_vacancies)
+    }
+
+    private fun setLoading(){
+        with(binding){
+            layoutError.isVisible = true
+            ivSearchResult.isVisible = false
+            progressBar.isVisible = true
+        }
+    }
+
+    private fun showResults(list: List<VacancyFromList>, found: Int){
+        adapter.submitList(list)
+        with(binding){
+            layoutError.isVisible = false
+            tvSearchResultMessage.isVisible = true
+            tvSearchResultMessage.text = binding.root.context.resources.getQuantityString(
+                R.plurals.vacancies_count,
+                found,
+                found
+            )
+        }
+    }
+
+    private fun bindErrorImage(image: Int, text: Int? = null, messageState: Boolean = false) {
+        with(binding){
+            layoutError.isVisible = true
+            ivSearchResult.setImageResource(image)
+            ivSearchResult.isVisible = true
+            tvSearchResultMessage.isVisible = messageState
+            tvSearchResultMessage.setText(R.string.no_found_vacancies)
+            if (text == null) {
+                tvError.text = ""
+            } else {
+                tvError.setText(text)
+            }
         }
     }
 
@@ -148,41 +165,12 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     }
 
-    private fun getCountResource(count: Int): String {
-        binding.tvSearchResultMessage.isVisible = true
-        val countLast = count % TEN
-        if (count == 0) {
-            showError(true)
-            bindErrorImage(R.drawable.er_nothing_found, null)
-            return "Таких вакансий нет"
-        }
-        return when {
-            count == CHECK_11 or CHECK_12 or CHECK_13 or CHECK_14 -> "Найдено $count вакансий"
-            countLast == CHECK_1 -> "Найдено $count вакансия"
-            countLast == CHECK_2 or CHECK_3 or CHECK_4 -> "Найдено $count вакансии"
-            else -> "Найдено $count вакансий"
-        }
-    }
-
     private fun openFilters() {
         val action = SearchFragmentDirections.actionSearchFragmentToFiltersFragment()
         findNavController().navigate(action)
     }
 
-    companion object {
-        const val ERROR_200 = 200
-        const val ERROR_401 = 401
-        const val ERROR_402 = 402
-        const val ERROR_500 = 500
-        const val CHECK_11 = 11
-        const val CHECK_12 = 12
-        const val CHECK_13 = 13
-        const val CHECK_14 = 14
-        const val CHECK_1 = 1
-        const val CHECK_2 = 2
-        const val CHECK_3 = 3
-        const val CHECK_4 = 4
+    companion object{
         const val ZERO = 0
-        const val TEN = 10
     }
 }

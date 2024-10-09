@@ -30,6 +30,7 @@
     <string name="no_internet">Нет интернета</string>
     <string name="no_vacancies">Не удалось получить\nсписок вакансий</string>
     <string name="server_error">Ошибка сервера</string>
+    <string name="no_found_vacancies">Таких вакансий нет</string>
 
     <!-- Указание зарплаты -->
     <string name="salary_range">От %1$s до %2$s %3$s</string>
@@ -52,5 +53,12 @@
     <string name="address_separator">, </string>
     <string name="address_building_prefix">д. %1$s</string>
     <string name="address_not_specified">Адрес не указан</string>
+    
+    <plurals name="vacancies_count">
+        <item quantity="one">Найдена %d вакансия</item>
+        <item quantity="few">Найдено %d вакансии</item>
+        <item quantity="many">Найдено %d вакансий</item>
+        <item quantity="other">Найдено %d вакансий</item>
+    </plurals>
 
 </resources>

@@ -6,13 +6,12 @@ import ru.practicum.android.diploma.common.domain.model.ErrorType
 import ru.practicum.android.diploma.common.util.Resource
 import ru.practicum.android.diploma.search.domain.VacanciesInteractor
 import ru.practicum.android.diploma.search.domain.VacanciesRepository
-import ru.practicum.android.diploma.search.domain.model.VacanciesRequestObject
 import ru.practicum.android.diploma.search.domain.model.VacanciesSearchResult
 
 class VacanciesInteractorImpl(private val repository: VacanciesRepository) : VacanciesInteractor {
 
-    override fun searchVacancies(options: VacanciesRequestObject): Flow<Pair<VacanciesSearchResult?, ErrorType?>> {
-        return repository.searchVacancies(mapOf(Pair(options.request, options.page.toString()))).map { result ->
+    override fun searchVacancies(options: Map<String, String>): Flow<Pair<VacanciesSearchResult?, ErrorType?>> {
+        return repository.searchVacancies(options).map { result ->
             when (result) {
                 is Resource.Success -> {
                     Pair(result.data, null)

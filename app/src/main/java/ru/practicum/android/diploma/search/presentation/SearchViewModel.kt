@@ -11,24 +11,22 @@ import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.common.domain.model.ErrorType
 import ru.practicum.android.diploma.common.domain.model.VacancyFromList
 import ru.practicum.android.diploma.search.domain.VacanciesInteractor
-import ru.practicum.android.diploma.search.domain.model.VacanciesRequestObject
 
 class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel() {
 
-    private val liveDataSearchRes = MutableLiveData<SearchLiveDataObject>()
+    private val liveDataSearchRes = MutableLiveData<SearchState>()
 
     private var lastRequest: String? = null
     private var searchJob: Job? = null
-    private var paddingPage = 1
+    private var paddingPage = 0
     private var maxPage = 0
     private var fullList = listOf<VacancyFromList>()
     private var isSearch = false
 
-    fun getSearchRes(): LiveData<SearchLiveDataObject> = liveDataSearchRes
+    fun getSearchRes(): LiveData<SearchState> = liveDataSearchRes
 
     fun setIsSearch(boolean: Boolean) {
         isSearch = boolean
-        bind(ERROR_500)
     }
 
     fun onLastItemReached() {
@@ -44,47 +42,52 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
         }
         lastRequest = request
         isSearch = false
-        paddingPage = 1
+        fullList = listOf()
+        paddingPage = 0
         maxPage = 0
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
             delay(SEARCH_DELAY)
-            searchRequest(request, paddingPage)
+            if(isSearch){
+                searchRequest(request, paddingPage)
+                bind(SearchState.Loading)
+            }
         }
     }
 
     private fun searchRequest(searchText: String, page: Int) {
         if (searchText.isNotEmpty()) {
+            val options = mapOf(
+                "text" to searchText,
+                "page" to page.toString(),
+                "per_page" to "20"
+            )
             viewModelScope.launch(Dispatchers.IO) {
-                interactor.searchVacancies(VacanciesRequestObject(searchText, page))
+                interactor.searchVacancies(options)
                     .collect { (searchResult, errorType) ->
                         when (errorType) {
                             null -> {
                                 fullList += searchResult!!.items
-                                bind(ERROR_200, searchResult.found)
+                                bind(SearchState.SearchResult(fullList, searchResult.found))
                                 maxPage = searchResult.pages
                             }
 
-                            ErrorType.CONNECTION_PROBLEM -> bind(ERROR_401)
-                            else -> {
-                                fullList = listOf()
-                                bind(ERROR_402)
-                            }
+                            ErrorType.CONNECTION_PROBLEM -> bind(SearchState.InternetError)
+
+                            ErrorType.NOTHING_FOUND -> bind(SearchState.NothingFound)
+
+                            else -> bind(SearchState.ServerError)
                         }
                     }
             }
         }
     }
 
-    private fun bind(error: Int, count: Int = 0) {
-        liveDataSearchRes.postValue(SearchLiveDataObject(fullList, error, count, isSearch))
+    private fun bind(state: SearchState) {
+        liveDataSearchRes.postValue(state)
     }
 
     companion object {
         const val SEARCH_DELAY = 2000L
-        const val ERROR_200 = 200
-        const val ERROR_401 = 401
-        const val ERROR_402 = 402
-        const val ERROR_500 = 500
     }
 }
