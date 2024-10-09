@@ -129,6 +129,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         adapter.submitList(list)
         with(binding) {
             layoutError.isVisible = false
+            rvFoundVacanciesList.isVisible = true
             tvSearchResultMessage.isVisible = true
             tvSearchResultMessage.text = binding.root.context.resources.getQuantityString(
                 R.plurals.vacancies_count,
@@ -155,6 +156,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private fun setStartOptions(isEmpty: Boolean) {
         // Показать начальную картинку
+        binding.layoutError.isVisible = isEmpty
         binding.ivSearchResult.isVisible = isEmpty
         bindErrorImage(R.drawable.vacancy_search_start, null)
 

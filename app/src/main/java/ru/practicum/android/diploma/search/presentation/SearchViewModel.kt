@@ -41,7 +41,6 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
             return
         }
         lastRequest = request
-        isSearch = false
         fullList = listOf()
         paddingPage = 0
         maxPage = 0
@@ -49,6 +48,7 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
         searchJob = viewModelScope.launch {
             delay(SEARCH_DELAY)
             if (isSearch) {
+                isSearch = false
                 searchRequest(request, paddingPage)
                 bind(SearchState.Loading)
             }
