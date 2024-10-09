@@ -12,9 +12,9 @@ import ru.practicum.android.diploma.common.data.network.dto.VacanciesSearchRespo
 import ru.practicum.android.diploma.common.data.network.dto.VacancyFromListDto
 import ru.practicum.android.diploma.common.domain.model.ErrorType
 import ru.practicum.android.diploma.common.domain.model.VacancyFromList
-import ru.practicum.android.diploma.vacancy.util.ResourceDetails
 import ru.practicum.android.diploma.search.domain.VacanciesRepository
 import ru.practicum.android.diploma.search.domain.model.VacanciesSearchResult
+import ru.practicum.android.diploma.vacancy.util.ResourceDetails
 
 class VacanciesRepositoryImpl(
     private val networkClient: NetworkClient,
