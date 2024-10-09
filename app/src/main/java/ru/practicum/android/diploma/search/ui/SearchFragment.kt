@@ -119,8 +119,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private fun setLoading() {
         with(binding) {
-            layoutError.isVisible = true
-            ivSearchResult.isVisible = false
             tvSearchResultMessage.isVisible = false
             progressBar.isVisible = true
         }
@@ -144,7 +142,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         with(binding) {
             layoutError.isVisible = true
             ivSearchResult.setImageResource(image)
-            ivSearchResult.isVisible = true
             tvSearchResultMessage.isVisible = messageState
             progressBar.isVisible = false
             tvSearchResultMessage.setText(R.string.no_found_vacancies)
@@ -159,7 +156,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private fun setStartOptions(isEmpty: Boolean) {
         // Показать начальную картинку
         if(isEmpty){
-            binding.layoutError.isVisible = true
+            binding.layoutError.isVisible = false
             binding.ivSearchResult.isVisible = true
             bindErrorImage(R.drawable.vacancy_search_start, null)
         }

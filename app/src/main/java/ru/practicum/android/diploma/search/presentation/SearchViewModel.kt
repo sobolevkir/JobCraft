@@ -4,9 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.common.domain.model.ErrorType
 import ru.practicum.android.diploma.common.domain.model.VacancyFromList
@@ -22,6 +23,7 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
     private var maxPage = 0
     private var fullList = listOf<VacancyFromList>()
     private var isSearch = false
+    private var isLastItemReached = false
 
     fun getSearchRes(): LiveData<SearchState> = liveDataSearchRes
 
@@ -30,9 +32,12 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
     }
 
     fun onLastItemReached() {
-        if (paddingPage != maxPage) {
-            paddingPage += 1
-            searchRequest(lastRequest!!, paddingPage)
+        if(!isLastItemReached){
+            if (paddingPage != maxPage) {
+                isLastItemReached = true
+                paddingPage += 1
+                searchRequest(lastRequest!!, paddingPage)
+            }
         }
     }
 
@@ -57,29 +62,29 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
 
     private fun searchRequest(searchText: String, page: Int) {
         if (searchText.isNotEmpty()) {
+            isLastItemReached = false
             val options = mapOf(
                 "text" to searchText,
                 "page" to page.toString(),
                 "per_page" to "20"
             )
-            viewModelScope.launch(Dispatchers.IO) {
-                interactor.searchVacancies(options)
-                    .collect { (searchResult, errorType) ->
-                        when (errorType) {
-                            null -> {
-                                fullList += searchResult!!.items
-                                bind(SearchState.SearchResult(fullList, searchResult.found))
-                                maxPage = searchResult.pages
-                            }
-
-                            ErrorType.CONNECTION_PROBLEM -> bind(SearchState.InternetError)
-
-                            ErrorType.NOTHING_FOUND -> bind(SearchState.NothingFound)
-
-                            else -> bind(SearchState.ServerError)
+            interactor.searchVacancies(options)
+                .onEach { (searchResult, errorType) ->
+                    when (errorType) {
+                        null -> {
+                            fullList += searchResult!!.items
+                            bind(SearchState.SearchResult(fullList, searchResult.found))
+                            maxPage = searchResult.pages
                         }
+
+                        ErrorType.CONNECTION_PROBLEM -> bind(SearchState.InternetError)
+
+                        ErrorType.NOTHING_FOUND -> bind(SearchState.NothingFound)
+
+                        else -> bind(SearchState.ServerError)
                     }
-            }
+                }
+                .launchIn(viewModelScope)
         }
     }
 

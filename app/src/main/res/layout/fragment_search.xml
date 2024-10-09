@@ -89,14 +89,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/no_internet" />
-
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            android:layout_width="@dimen/progress_bar_size"
-            android:layout_height="@dimen/progress_bar_size"
-            android:indeterminateTint="@color/blue"
-            android:visibility="gone"
-            tools:visibility="gone" />
     </LinearLayout>
 
     <FrameLayout
@@ -126,6 +118,14 @@
             android:textAppearance="@style/Regular_16_Style"
             android:textColor="@color/white" />
     </FrameLayout>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="@dimen/progress_bar_size"
+        android:layout_height="@dimen/progress_bar_size"
+        android:indeterminateTint="@color/blue"
+        android:visibility="gone"
+        tools:visibility="gone" />
 
     <Button
         android:id="@+id/btn_vacancy"
