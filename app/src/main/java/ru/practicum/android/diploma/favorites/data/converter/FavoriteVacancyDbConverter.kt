@@ -2,14 +2,11 @@ package ru.practicum.android.diploma.favorites.data.converter
 
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 import ru.practicum.android.diploma.common.domain.model.VacancyDetails
 import ru.practicum.android.diploma.common.domain.model.VacancyFromList
 import ru.practicum.android.diploma.favorites.data.entity.FavoriteVacancyEntity
 
-class FavoriteVacancyDbConverter : KoinComponent {
-    private val gson: Gson by inject()
+class FavoriteVacancyDbConverter(private val gson: Gson) {
 
     fun convert(vacancy: VacancyDetails): FavoriteVacancyEntity = FavoriteVacancyEntity(
         vacancy.id,

@@ -29,8 +29,7 @@ class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.testDb()
-        favoritesAdapter = VacancyListAdapter(onItemClick = { if (clickDebounce()) openVacancy(it) })
+        favoritesAdapter = VacancyListAdapter(onItemClick = { if (clickDebounce()) openVacancy(it.id) })
         binding.rvFoundVacanciesList.adapter = favoritesAdapter
         viewModel.fillData()
         viewModel.observeState().observe(viewLifecycleOwner) { render(it) }
@@ -95,8 +94,8 @@ class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
         return current
     }
 
-    private fun openVacancy(vacancy: VacancyFromList) {
-        val action = FavoritesFragmentDirections.actionFavoritesFragmentToVacancyFragment(vacancy.id)
+    private fun openVacancy(vacancyId: Long) {
+        val action = FavoritesFragmentDirections.actionFavoritesFragmentToVacancyFragment(vacancyId)
         findNavController().navigate(action)
     }
 }

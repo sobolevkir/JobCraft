@@ -36,7 +36,7 @@ val dataModule = module {
     }
 
     factory { ParametersConverter(context = get()) }
-    factory { FavoriteVacancyDbConverter() }
+    factory { FavoriteVacancyDbConverter(get()) }
 
     single<NetworkClient> {
         RetrofitNetworkClient(api = get(), context = androidContext(), ioDispatcher = get(named("ioDispatcher")))
