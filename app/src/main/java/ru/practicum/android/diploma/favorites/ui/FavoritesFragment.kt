@@ -58,26 +58,27 @@ class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
     private fun showEmpty() {
         binding.apply {
             rvFoundVacanciesList.visibility = View.GONE
-            ivEmptyList.visibility = View.VISIBLE
+            ivErrorImage.visibility = View.VISIBLE
+            ivErrorImage.setImageResource(R.drawable.empty_list)
             tvErrorText.visibility = View.VISIBLE
-            tvErrorText.text = "Список пуст"
+            tvErrorText.text = requireContext().getText(R.string.list_is_empty)
         }
     }
 
     private fun showNothingFound() {
         binding.apply {
             rvFoundVacanciesList.visibility = View.GONE
-            ivNoVacancies.visibility = View.VISIBLE
+            ivErrorImage.visibility = View.VISIBLE
+            ivErrorImage.setImageResource(R.drawable.er_nothing_found)
             tvErrorText.visibility = View.VISIBLE
-            tvErrorText.text = "Не удалось получить список вакансий"
+            tvErrorText.text = requireContext().getText(R.string.no_vacancies)
         }
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private fun showContent(vacancies: List<VacancyFromList>) {
         binding.rvFoundVacanciesList.visibility = View.VISIBLE
-        binding.ivNoVacancies.visibility = View.GONE
-        binding.ivEmptyList.visibility = View.GONE
+        binding.ivErrorImage.visibility = View.GONE
         binding.tvErrorText.visibility = View.GONE
         favoritesAdapter?.submitList(vacancies)
     }

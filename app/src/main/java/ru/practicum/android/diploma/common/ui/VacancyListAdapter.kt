@@ -18,7 +18,7 @@ class VacancyListAdapter(
         val item = getItem(position)
         holder.bind(item)
         holder.itemView.setOnClickListener {
-            onItemClick
+            onItemClick(item)
         }
     }
 }

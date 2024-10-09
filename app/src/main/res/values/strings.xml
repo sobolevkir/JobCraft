@@ -29,6 +29,7 @@
     <string name="employment">Место работы</string>
     <string name="no_internet">Нет интернета</string>
     <string name="no_vacancies">Не удалось получить\nсписок вакансий</string>
+    <string name="list_is_empty">Список пуст</string>
     <string name="server_error">Ошибка сервера</string>
 
     <!-- Указание зарплаты -->
@@ -52,6 +53,5 @@
     <string name="address_separator">, </string>
     <string name="address_building_prefix">д. %1$s</string>
     <string name="address_not_specified">Адрес не указан</string>
-    <string name="list_is_empty">Список пуст</string>
 
 </resources>
