@@ -168,7 +168,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         findNavController().navigate(action)
     }
 
-    fun startVacancy(vacancyId: Long) {
+    private fun startVacancy(vacancyId: Long) {
         val action = SearchFragmentDirections.actionSearchFragmentToVacancyFragment(vacancyId)
         findNavController().navigate(action)
     }
