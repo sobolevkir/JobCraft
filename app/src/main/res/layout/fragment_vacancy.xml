@@ -111,6 +111,8 @@
                         android:layout_height="wrap_content"
                         app:layout_constraintHorizontal_weight="1"
                         tools:text="Еда"
+                        android:ellipsize="end"
+                        android:maxLines="1"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="16dp"
                         app:layout_constraintTop_toTopOf="@+id/iv_logo"
@@ -125,6 +127,8 @@
                         android:layout_height="wrap_content"
                         app:layout_constraintHorizontal_weight="1"
                         tools:text="Москва"
+                        android:ellipsize="end"
+                        android:maxLines="1"
                         app:layout_constraintTop_toBottomOf="@+id/tv_employer_name"
                         app:layout_constraintStart_toStartOf="@+id/tv_employer_name"
                         app:layout_constraintEnd_toEndOf="@+id/tv_employer_name"/>
