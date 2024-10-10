@@ -10,7 +10,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.common.domain.VacancyOnClicked
 import ru.practicum.android.diploma.common.domain.model.VacancyFromList
 import ru.practicum.android.diploma.common.ext.viewBinding
 import ru.practicum.android.diploma.common.ui.VacancyListAdapter
@@ -21,16 +20,8 @@ import ru.practicum.android.diploma.favorites.presentation.FavoritesViewModel
 class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
     private val viewModel: FavoritesViewModel by viewModel()
     private val binding by viewBinding(FragmentFavoritesBinding::bind)
+    private var favoritesAdapter: VacancyListAdapter? = null
     private var isClickAllowed = true
-    private val vacancyOnClicked = object : VacancyOnClicked {
-        override fun startVacancy(vacancyId: Long) {
-            if (clickDebounce()) {
-                val action = FavoritesFragmentDirections.actionFavoritesFragmentToVacancyFragment(vacancyId)
-                findNavController().navigate(action)
-            }
-        }
-    }
-    private var favoritesAdapter = VacancyListAdapter(vacancyOnClicked)
 
     companion object {
         private const val CLICK_DEBOUNCE_DELAY_MILLIS = 100L
@@ -38,10 +29,16 @@ class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        favoritesAdapter = VacancyListAdapter(vacancyOnClicked)
+        favoritesAdapter = VacancyListAdapter(onItemClick = { if (clickDebounce()) openVacancy(it) })
         binding.rvFoundVacanciesList.adapter = favoritesAdapter
         viewModel.fillData()
         viewModel.observeState().observe(viewLifecycleOwner) { render(it) }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        favoritesAdapter = null
+        binding.rvFoundVacanciesList.adapter = null
     }
 
     override fun onResume() {
@@ -97,4 +94,8 @@ class FavoritesFragment : Fragment(R.layout.fragment_favorites) {
         return current
     }
 
+    private fun openVacancy(vacancy: VacancyFromList) {
+        val action = FavoritesFragmentDirections.actionFavoritesFragmentToVacancyFragment(vacancy.id)
+        findNavController().navigate(action)
+    }
 }
