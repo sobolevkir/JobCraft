@@ -56,7 +56,7 @@ class VacanciesRepositoryImpl(
             VacancyFromList(
                 id = it.id.toLongOrNull() ?: -1L,
                 name = it.name,
-                salary = it.salary?.let { salaryDto -> parametersConverter.convert(salaryDto) },
+                salary = parametersConverter.convert(it.salary),
                 areaName = it.area.name,
                 employerName = it.employer.name,
                 employerLogoUrl240 = it.employer.logoUrls?.logoUrl240

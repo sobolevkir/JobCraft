@@ -6,41 +6,39 @@ import android.text.TextWatcher
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.common.domain.model.VacancyFromList
 import ru.practicum.android.diploma.common.ext.viewBinding
+import ru.practicum.android.diploma.common.ui.VacancyListAdapter
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
-import ru.practicum.android.diploma.search.domain.api.VacancyOnClicked
 import ru.practicum.android.diploma.search.presentation.SearchState
 import ru.practicum.android.diploma.search.presentation.SearchViewModel
-import ru.practicum.android.diploma.search.ui.adapter.SearchAdapter
 
 class SearchFragment : Fragment(R.layout.fragment_search) {
     private val binding by viewBinding(FragmentSearchBinding::bind)
     private val viewModel by viewModel<SearchViewModel>()
 
-    private val vacancyOnClicked = object : VacancyOnClicked {
-        override fun startVacancy(vacancyId: Long) {
-            val action = SearchFragmentDirections.actionSearchFragmentToVacancyFragment(vacancyId)
-            findNavController().navigate(action)
-        }
+    // Инициализация адаптера при объявлении
+    private val adapter: VacancyListAdapter by lazy {
+        VacancyListAdapter(onItemClick = { if (clickDebounce()) startVacancy(it.id) })
     }
 
-    private var adapter = SearchAdapter(vacancyOnClicked)
+    private var isClickAllowed = true
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setStartOptions(true)
 
-        adapter = SearchAdapter(vacancyOnClicked)
-        adapter.submitList(listOf())
         binding.rvFoundVacanciesList.adapter = adapter
-
+        adapter.submitList(listOf())
         viewModel.getSearchRes().observe(viewLifecycleOwner) { setError(it) }
 
         binding.etSearchRequest.addTextChangedListener(object : TextWatcher {
@@ -173,7 +171,25 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         findNavController().navigate(action)
     }
 
+    fun startVacancy(vacancyId: Long) {
+        val action = SearchFragmentDirections.actionSearchFragmentToVacancyFragment(vacancyId)
+        findNavController().navigate(action)
+    }
+
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            viewLifecycleOwner.lifecycleScope.launch {
+                delay(CLICK_DEBOUNCE_DELAY_MILLIS)
+                isClickAllowed = true
+            }
+        }
+        return current
+    }
+
     companion object {
         const val ZERO = 0
+        private const val CLICK_DEBOUNCE_DELAY_MILLIS = 100L
     }
 }
