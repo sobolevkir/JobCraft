@@ -44,7 +44,6 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
         viewModel.setVacancyDetails()
         binding.btnSend.setOnClickListener { viewModel.shareVacancyUrl() }
         binding.btnFavorite.setOnClickListener { viewModel.changeFavorite() }
-
     }
 
     private fun showLoading() {
