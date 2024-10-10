@@ -47,16 +47,21 @@ class VacancyViewModel(
             vacancyLiveData.postValue(ScreenState(ScreenMode.RESULTS, vacancy))
             isFavoriteLiveData.postValue(isFavorite)
         } else {
-            if (errorType == ErrorType.NOTHING_FOUND) {
-                currentVacancy = null
-                vacancyLiveData.postValue(ScreenState(ScreenMode.NOTHING_FOUND, null))
-            } else {
-                currentVacancy = null
-                vacancyLiveData.postValue(ScreenState(ScreenMode.SERVER_ERROR, null))
+            currentVacancy = null
+            when (errorType) {
+                ErrorType.NOTHING_FOUND -> {
+                    vacancyLiveData.postValue(ScreenState(ScreenMode.NOTHING_FOUND, null))
+                }
+                ErrorType.CONNECTION_PROBLEM -> {
+                    vacancyLiveData.postValue(ScreenState(ScreenMode.CONNECTION_PROBLEM, null))
+                }
+                else -> {
+                    currentVacancy = null
+                    vacancyLiveData.postValue(ScreenState(ScreenMode.SERVER_ERROR, null))
+                }
             }
         }
     }
-
     fun shareVacancyUrl() {
         if (currentVacancy != null) {
             interactor.shareVacancyUrl(currentVacancy!!.alternateUrl)

@@ -11,5 +11,6 @@ enum class ScreenMode {
     LOADING,
     RESULTS,
     NOTHING_FOUND,
-    SERVER_ERROR
+    SERVER_ERROR,
+    CONNECTION_PROBLEM
 }
