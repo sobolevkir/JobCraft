@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.JobCraft"
         tools:targetApi="31"
-        android:windowSoftInputMode="stateHidden|adjustPan">
+        android:windowSoftInputMode="stateHidden|adjustResize">
         <activity
             android:name=".common.ui.RootActivity"
             android:screenOrientation="portrait"
