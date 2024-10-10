@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -66,6 +67,16 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 viewModel.search(s.toString())
             }
         })
+
+        binding.etSearchRequest.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                val query = binding.etSearchRequest.text.toString()
+                if (query.isNotEmpty()) {
+                    viewModel.searchOnEditorAction(query)
+                }
+            }
+            false
+        }
 
         binding.rvFoundVacanciesList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {

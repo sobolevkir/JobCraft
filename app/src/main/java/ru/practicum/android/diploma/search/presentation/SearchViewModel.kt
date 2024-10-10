@@ -57,6 +57,13 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
         }
     }
 
+    fun searchOnEditorAction(request: String) {
+        paddingPage = 0
+        searchJob = viewModelScope.launch {
+            searchRequest(request, paddingPage)
+        }
+    }
+
     private fun searchRequest(searchText: String, page: Int) {
         if (searchText.isNotEmpty()) {
             val options = mapOf(
@@ -91,6 +98,6 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
     }
 
     companion object {
-        const val SEARCH_DELAY = 2000L
+        const val SEARCH_DELAY = 1000L
     }
 }
