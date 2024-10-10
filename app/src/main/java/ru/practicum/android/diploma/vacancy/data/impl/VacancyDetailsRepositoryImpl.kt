@@ -13,10 +13,10 @@ import ru.practicum.android.diploma.common.data.network.NetworkClient
 import ru.practicum.android.diploma.common.data.network.dto.ResultCode
 import ru.practicum.android.diploma.common.data.network.dto.VacancyDetailsRequest
 import ru.practicum.android.diploma.common.data.network.dto.VacancyDetailsResponse
-import ru.practicum.android.diploma.vacancy.domain.api.VacancyDetailsRepository
 import ru.practicum.android.diploma.common.domain.model.ErrorType
 import ru.practicum.android.diploma.common.domain.model.VacancyDetails
 import ru.practicum.android.diploma.vacancy.domain.ExternalNavigator
+import ru.practicum.android.diploma.vacancy.domain.api.VacancyDetailsRepository
 import ru.practicum.android.diploma.vacancy.util.ResourceDetails
 
 class VacancyDetailsRepositoryImpl(
@@ -25,7 +25,7 @@ class VacancyDetailsRepositoryImpl(
     private val dbConverter: FavoriteVacancyDbConverter,
     private val networkClient: NetworkClient,
     private val ioDispatcher: CoroutineDispatcher,
-    private val parametersConverter: ParametersConverter
+    private val parametersConverter: ParametersConverter,
 ) : VacancyDetailsRepository {
 
     override fun shareVacancyUrl(text: String) {
@@ -56,6 +56,7 @@ class VacancyDetailsRepositoryImpl(
                 emit(ResourceDetails.Success(resultData))
                 if (isFavorite) appDatabase.favoriteVacaciesDao().updateVacancy(dbConverter.convert(resultData))
             }
+
             ResultCode.CONNECTION_PROBLEM -> {
                 if (isFavorite) {
                     val resultData = dbConverter.convert(appDatabase.favoriteVacaciesDao().getVacancy(vacancyId))
@@ -64,10 +65,12 @@ class VacancyDetailsRepositoryImpl(
                     emit(ResourceDetails.Error(ErrorType.CONNECTION_PROBLEM))
                 }
             }
+
             ResultCode.NOTHING_FOUND -> {
                 emit(ResourceDetails.Error(ErrorType.NOTHING_FOUND))
                 if (isFavorite) appDatabase.favoriteVacaciesDao().deleteVacancyById(vacancyId)
             }
+
             ResultCode.BAD_REQUEST -> emit(ResourceDetails.Error(ErrorType.BAD_REQUEST))
             ResultCode.SERVER_ERROR -> emit(ResourceDetails.Error(ErrorType.SERVER_ERROR))
             ResultCode.FORBIDDEN_ERROR -> emit(ResourceDetails.Error(ErrorType.FORBIDDEN_ERROR))
