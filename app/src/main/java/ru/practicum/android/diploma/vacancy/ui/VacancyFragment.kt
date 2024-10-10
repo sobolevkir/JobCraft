@@ -88,16 +88,11 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
         bindExperience(vacancy.experience)
         bindScheduleName(vacancy.scheduleName)
         binding.tvDescription.setText(Html.fromHtml(vacancy.description, Html.FROM_HTML_MODE_COMPACT))
-        bindkeySkills(vacancy.keySkills)
+        bindKeySkills(vacancy.keySkills)
     }
 
-    private fun bindSalary(salary: String?) {
-        if (salary == null) {
-            binding.salary.isVisible = false
-        } else {
-            binding.salary.isVisible = true
-            binding.salary.text = salary
-        }
+    private fun bindSalary(salary: String) {
+        binding.salary.text = salary
     }
 
     private fun bindExperience(experience: String?) {
@@ -120,7 +115,7 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
         }
     }
 
-    private fun bindkeySkills(keySkills: List<String>) {
+    private fun bindKeySkills(keySkills: List<String>) {
         if (keySkills.isEmpty()) {
             binding.tvKeySkillsTitle.isVisible = false
             binding.tvKeySkills.isVisible = false

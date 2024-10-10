@@ -34,18 +34,18 @@ class VacancyDetailsRepositoryImpl(
 
     override fun addToFavorites(vacancy: VacancyDetails) {
         CoroutineScope(ioDispatcher).launch {
-            appDatabase.favoriteVacaciesDao().insertVacancy(dbConverter.convert(vacancy))
+            appDatabase.favoriteVacanciesDao().insertVacancy(dbConverter.convert(vacancy))
         }
     }
 
     override fun removeFromFavorites(vacancyId: Long) {
         CoroutineScope(ioDispatcher).launch {
-            appDatabase.favoriteVacaciesDao().deleteVacancyById(vacancyId)
+            appDatabase.favoriteVacanciesDao().deleteVacancyById(vacancyId)
         }
     }
 
     override fun getVacancyDetails(vacancyId: Long): Flow<ResourceDetails<VacancyDetails>> = flow {
-        val favoritesIdsList = appDatabase.favoriteVacaciesDao().getFavoritesIdsList()
+        val favoritesIdsList = appDatabase.favoriteVacanciesDao().getFavoritesIdsList()
         val isFavorite = favoritesIdsList.any { it == vacancyId }
 
         val response = networkClient.doRequest(VacancyDetailsRequest(vacancyId))
@@ -54,12 +54,12 @@ class VacancyDetailsRepositoryImpl(
                 val vacancyDetailsResponse = response as VacancyDetailsResponse
                 val resultData = vacancyDetailsResponse.convertToVacancyDetails()
                 emit(ResourceDetails.Success(resultData))
-                if (isFavorite) appDatabase.favoriteVacaciesDao().updateVacancy(dbConverter.convert(resultData))
+                if (isFavorite) appDatabase.favoriteVacanciesDao().updateVacancy(dbConverter.convert(resultData))
             }
 
             ResultCode.CONNECTION_PROBLEM -> {
                 if (isFavorite) {
-                    val resultData = dbConverter.convert(appDatabase.favoriteVacaciesDao().getVacancy(vacancyId))
+                    val resultData = dbConverter.convert(appDatabase.favoriteVacanciesDao().getVacancy(vacancyId))
                     emit(ResourceDetails.Success(resultData))
                 } else {
                     emit(ResourceDetails.Error(ErrorType.CONNECTION_PROBLEM))
@@ -68,7 +68,7 @@ class VacancyDetailsRepositoryImpl(
 
             ResultCode.NOTHING_FOUND -> {
                 emit(ResourceDetails.Error(ErrorType.NOTHING_FOUND))
-                if (isFavorite) appDatabase.favoriteVacaciesDao().deleteVacancyById(vacancyId)
+                if (isFavorite) appDatabase.favoriteVacanciesDao().deleteVacancyById(vacancyId)
             }
 
             ResultCode.BAD_REQUEST -> emit(ResourceDetails.Error(ErrorType.BAD_REQUEST))
@@ -84,7 +84,7 @@ class VacancyDetailsRepositoryImpl(
             VacancyDetails(
                 id = id.toLongOrNull() ?: -1L,
                 name = name,
-                salary = salary?.let { salaryDto -> parametersConverter.convert(salaryDto) },
+                salary = parametersConverter.convert(this.salary),
                 areaName = area.name,
                 employerName = employer?.name,
                 employerLogoUrl240 = employer?.logoUrls?.logoUrl240,
