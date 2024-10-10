@@ -14,19 +14,19 @@ class FavoritesRepositoryImpl(
 ) : FavoritesRepository {
 
     override suspend fun addVacancyToFavorites(vacancy: VacancyDetails) {
-        appDatabase.favoriteVacaciesDao().insertVacancy(vacancyDbConverter.convert(vacancy))
+        appDatabase.favoriteVacanciesDao().insertVacancy(vacancyDbConverter.convert(vacancy))
     }
 
     override suspend fun updateVacancyInFavorites(vacancy: VacancyDetails) {
-        appDatabase.favoriteVacaciesDao().updateVacancy(vacancyDbConverter.convert(vacancy))
+        appDatabase.favoriteVacanciesDao().updateVacancy(vacancyDbConverter.convert(vacancy))
     }
 
     override suspend fun removeVacancyFromFavorites(vacancyId: Long) {
-        appDatabase.favoriteVacaciesDao().removeVacancy(vacancyId)
+        appDatabase.favoriteVacanciesDao().removeVacancy(vacancyId)
     }
 
     override fun getFavoriteVacancies(): Flow<List<VacancyFromList>> =
-        appDatabase.favoriteVacaciesDao().getVacancies()
+        appDatabase.favoriteVacanciesDao().getVacancies()
             .map { vacancies -> vacancies.map { vacancyDbConverter.convertToVacancyFromList(it) } }
 
 }

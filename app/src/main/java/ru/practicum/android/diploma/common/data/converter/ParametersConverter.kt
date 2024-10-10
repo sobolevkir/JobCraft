@@ -9,9 +9,11 @@ import java.util.Locale
 
 class ParametersConverter(private val context: Context) {
 
-    fun convert(salary: SalaryDto): String {
+    fun convert(salary: SalaryDto?): String {
+        if (salary == null) {
+            return context.getString(R.string.salary_not_specified)
+        }
         val numberFormat = NumberFormat.getInstance(Locale("ru", "RU"))
-
         val currencySymbol = when (salary.currency) {
             "RUR", "RUB" -> context.getString(R.string.currency_rub)
             "BYR" -> context.getString(R.string.currency_byr)

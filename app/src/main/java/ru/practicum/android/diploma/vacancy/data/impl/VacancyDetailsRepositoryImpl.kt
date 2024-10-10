@@ -13,10 +13,10 @@ import ru.practicum.android.diploma.common.data.network.NetworkClient
 import ru.practicum.android.diploma.common.data.network.dto.ResultCode
 import ru.practicum.android.diploma.common.data.network.dto.VacancyDetailsRequest
 import ru.practicum.android.diploma.common.data.network.dto.VacancyDetailsResponse
-import ru.practicum.android.diploma.vacancy.domain.api.VacancyDetailsRepository
 import ru.practicum.android.diploma.common.domain.model.ErrorType
 import ru.practicum.android.diploma.common.domain.model.VacancyDetails
 import ru.practicum.android.diploma.vacancy.domain.ExternalNavigator
+import ru.practicum.android.diploma.vacancy.domain.api.VacancyDetailsRepository
 import ru.practicum.android.diploma.vacancy.util.ResourceDetails
 
 class VacancyDetailsRepositoryImpl(
@@ -25,7 +25,7 @@ class VacancyDetailsRepositoryImpl(
     private val dbConverter: FavoriteVacancyDbConverter,
     private val networkClient: NetworkClient,
     private val ioDispatcher: CoroutineDispatcher,
-    private val parametersConverter: ParametersConverter
+    private val parametersConverter: ParametersConverter,
 ) : VacancyDetailsRepository {
 
     override fun shareVacancyUrl(text: String) {
@@ -34,18 +34,18 @@ class VacancyDetailsRepositoryImpl(
 
     override fun addToFavorites(vacancy: VacancyDetails) {
         CoroutineScope(ioDispatcher).launch {
-            appDatabase.favoriteVacaciesDao().insertVacancy(dbConverter.convert(vacancy))
+            appDatabase.favoriteVacanciesDao().insertVacancy(dbConverter.convert(vacancy))
         }
     }
 
     override fun removeFromFavorites(vacancyId: Long) {
         CoroutineScope(ioDispatcher).launch {
-            appDatabase.favoriteVacaciesDao().deleteVacancyById(vacancyId)
+            appDatabase.favoriteVacanciesDao().deleteVacancyById(vacancyId)
         }
     }
 
     override fun getVacancyDetails(vacancyId: Long): Flow<ResourceDetails<VacancyDetails>> = flow {
-        val favoritesIdsList = appDatabase.favoriteVacaciesDao().getFavoritesIdsList()
+        val favoritesIdsList = appDatabase.favoriteVacanciesDao().getFavoritesIdsList()
         val isFavorite = favoritesIdsList.any { it == vacancyId }
 
         val response = networkClient.doRequest(VacancyDetailsRequest(vacancyId))
@@ -54,20 +54,23 @@ class VacancyDetailsRepositoryImpl(
                 val vacancyDetailsResponse = response as VacancyDetailsResponse
                 val resultData = vacancyDetailsResponse.convertToVacancyDetails(isFavorite)
                 emit(ResourceDetails.Success(resultData))
-                if (isFavorite) appDatabase.favoriteVacaciesDao().updateVacancy(dbConverter.convert(resultData))
+                if (isFavorite) appDatabase.favoriteVacanciesDao().updateVacancy(dbConverter.convert(resultData))
             }
+
             ResultCode.CONNECTION_PROBLEM -> {
                 if (isFavorite) {
-                    val resultData = dbConverter.convert(appDatabase.favoriteVacaciesDao().getVacancy(vacancyId))
+                    val resultData = dbConverter.convert(appDatabase.favoriteVacanciesDao().getVacancy(vacancyId))
                     emit(ResourceDetails.Success(resultData))
                 } else {
                     emit(ResourceDetails.Error(ErrorType.CONNECTION_PROBLEM))
                 }
             }
+
             ResultCode.NOTHING_FOUND -> {
                 emit(ResourceDetails.Error(ErrorType.NOTHING_FOUND))
-                if (isFavorite) appDatabase.favoriteVacaciesDao().deleteVacancyById(vacancyId)
+                if (isFavorite) appDatabase.favoriteVacanciesDao().deleteVacancyById(vacancyId)
             }
+
             ResultCode.BAD_REQUEST -> emit(ResourceDetails.Error(ErrorType.BAD_REQUEST))
             ResultCode.SERVER_ERROR -> emit(ResourceDetails.Error(ErrorType.SERVER_ERROR))
             ResultCode.FORBIDDEN_ERROR -> emit(ResourceDetails.Error(ErrorType.FORBIDDEN_ERROR))
@@ -81,7 +84,7 @@ class VacancyDetailsRepositoryImpl(
             VacancyDetails(
                 id = id.toLongOrNull() ?: -1L,
                 name = name,
-                salary = salary?.let { salaryDto -> parametersConverter.convert(salaryDto) },
+                salary = parametersConverter.convert(this.salary),
                 areaName = area.name,
                 employerName = employer?.name,
                 employerLogoUrl240 = employer?.logoUrls?.logoUrl240,
