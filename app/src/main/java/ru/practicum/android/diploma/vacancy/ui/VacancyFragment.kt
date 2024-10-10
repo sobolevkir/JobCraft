@@ -64,7 +64,7 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
         binding.svVacancy.isVisible = false
         binding.llPlaceholder.isVisible = true
         binding.progressBar.isVisible = false
-        when(errorMode) {
+        when (errorMode) {
             ScreenMode.NOTHING_FOUND -> {
                 binding.ivVacancyPlaceholder.setImageResource(R.drawable.vacancy_not_found)
                 binding.tvVacancyPlaceholder.text = getString(R.string.vacancy_not_found)
