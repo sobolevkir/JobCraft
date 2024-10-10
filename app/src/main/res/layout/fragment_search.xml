@@ -126,6 +126,7 @@
         android:layout_width="@dimen/progress_bar_size"
         android:layout_height="@dimen/progress_bar_size"
         android:indeterminateTint="@color/blue"
+        android:layout_marginBottom="@dimen/margin_standard"
         android:visibility="gone"
         tools:visibility="gone" />
 </LinearLayout>
