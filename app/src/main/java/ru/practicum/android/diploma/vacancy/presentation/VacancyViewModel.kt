@@ -31,7 +31,6 @@ class VacancyViewModel(
             isFavoriteLiveData.postValue(isFavorite)
             if (isFavorite) addToFavorites(currentVacancy!!) else removeFromFavorites(currentVacancy!!.id)
         }
-
     }
 
     fun setVacancyDetails() {
@@ -49,10 +48,20 @@ class VacancyViewModel(
             isFavoriteLiveData.postValue(isFavorite)
         } else {
             currentVacancy = null
-            vacancyLiveData.postValue(ScreenState(ScreenMode.ERROR, null))
+            when (errorType) {
+                ErrorType.NOTHING_FOUND -> {
+                    vacancyLiveData.postValue(ScreenState(ScreenMode.NOTHING_FOUND, null))
+                }
+                ErrorType.CONNECTION_PROBLEM -> {
+                    vacancyLiveData.postValue(ScreenState(ScreenMode.CONNECTION_PROBLEM, null))
+                }
+                else -> {
+                    currentVacancy = null
+                    vacancyLiveData.postValue(ScreenState(ScreenMode.SERVER_ERROR, null))
+                }
+            }
         }
     }
-
     fun shareVacancyUrl() {
         if (currentVacancy != null) {
             interactor.shareVacancyUrl(currentVacancy!!.alternateUrl)
