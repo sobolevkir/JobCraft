@@ -15,9 +15,9 @@ import ru.practicum.android.diploma.common.data.network.dto.VacancyDetailsReques
 import ru.practicum.android.diploma.common.data.network.dto.VacancyDetailsResponse
 import ru.practicum.android.diploma.common.domain.model.ErrorType
 import ru.practicum.android.diploma.common.domain.model.VacancyDetails
+import ru.practicum.android.diploma.common.util.Resource
 import ru.practicum.android.diploma.vacancy.domain.ExternalNavigator
 import ru.practicum.android.diploma.vacancy.domain.api.VacancyDetailsRepository
-import ru.practicum.android.diploma.vacancy.util.ResourceDetails
 
 class VacancyDetailsRepositoryImpl(
     private val externalNavigator: ExternalNavigator,
@@ -44,7 +44,7 @@ class VacancyDetailsRepositoryImpl(
         }
     }
 
-    override fun getVacancyDetails(vacancyId: Long): Flow<ResourceDetails<VacancyDetails>> = flow {
+    override fun getVacancyDetails(vacancyId: Long): Flow<Resource<VacancyDetails>> = flow {
         val favoritesIdsList = appDatabase.favoriteVacanciesDao().getFavoritesIdsList()
         val isFavorite = favoritesIdsList.any { it == vacancyId }
 
@@ -53,28 +53,28 @@ class VacancyDetailsRepositoryImpl(
             ResultCode.SUCCESS -> {
                 val vacancyDetailsResponse = response as VacancyDetailsResponse
                 val resultData = vacancyDetailsResponse.convertToVacancyDetails(isFavorite)
-                emit(ResourceDetails.Success(resultData))
+                emit(Resource.Success(resultData))
                 if (isFavorite) appDatabase.favoriteVacanciesDao().updateVacancy(dbConverter.convert(resultData))
             }
 
             ResultCode.CONNECTION_PROBLEM -> {
                 if (isFavorite) {
                     val resultData = dbConverter.convert(appDatabase.favoriteVacanciesDao().getVacancy(vacancyId))
-                    emit(ResourceDetails.Success(resultData))
+                    emit(Resource.Success(resultData))
                 } else {
-                    emit(ResourceDetails.Error(ErrorType.CONNECTION_PROBLEM))
+                    emit(Resource.Error(ErrorType.CONNECTION_PROBLEM))
                 }
             }
 
             ResultCode.NOTHING_FOUND -> {
-                emit(ResourceDetails.Error(ErrorType.NOTHING_FOUND))
+                emit(Resource.Error(ErrorType.NOTHING_FOUND))
                 if (isFavorite) appDatabase.favoriteVacanciesDao().deleteVacancyById(vacancyId)
             }
 
-            ResultCode.BAD_REQUEST -> emit(ResourceDetails.Error(ErrorType.BAD_REQUEST))
-            ResultCode.SERVER_ERROR -> emit(ResourceDetails.Error(ErrorType.SERVER_ERROR))
-            ResultCode.FORBIDDEN_ERROR -> emit(ResourceDetails.Error(ErrorType.FORBIDDEN_ERROR))
-            else -> emit(ResourceDetails.Error(ErrorType.UNKNOWN_ERROR))
+            ResultCode.BAD_REQUEST -> emit(Resource.Error(ErrorType.BAD_REQUEST))
+            ResultCode.SERVER_ERROR -> emit(Resource.Error(ErrorType.SERVER_ERROR))
+            ResultCode.FORBIDDEN_ERROR -> emit(Resource.Error(ErrorType.FORBIDDEN_ERROR))
+            else -> emit(Resource.Error(ErrorType.UNKNOWN_ERROR))
         }
 
     }.flowOn(ioDispatcher)
