@@ -116,10 +116,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     }
 
     private fun setLoading() {
-        with(binding) {
-            tvSearchResultMessage.isVisible = false
-            progressBar.isVisible = true
-        }
+        binding.progressBar.isVisible = true
     }
 
     private fun showResults(list: List<VacancyFromList>, found: Int) {
