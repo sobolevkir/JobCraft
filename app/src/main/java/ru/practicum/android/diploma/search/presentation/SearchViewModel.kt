@@ -59,7 +59,9 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
 
     fun searchOnEditorAction(request: String) {
         paddingPage = 0
+        searchJob?.cancel()
         searchJob = viewModelScope.launch {
+            delay(SEARCH_DELAY)
             searchRequest(request, paddingPage)
         }
     }
