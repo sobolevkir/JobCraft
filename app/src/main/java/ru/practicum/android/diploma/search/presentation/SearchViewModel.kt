@@ -35,7 +35,7 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
         if (!isNextPageLoading && paddingPage != maxPage - 1) {
             isNextPageLoading = true
             paddingPage += 1
-            searchRequest(lastRequest!!, paddingPage)
+            searchRequest(lastRequest!!, paddingPage, isNew = false)
         }
     }
 
@@ -52,7 +52,7 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
             delay(SEARCH_DELAY)
             if (isSearch) {
                 isSearch = false
-                searchRequest(request, paddingPage)
+                searchRequest(request, paddingPage, isNew = true)
             }
         }
     }
@@ -62,18 +62,25 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
             delay(SEARCH_DELAY)
-            searchRequest(request, paddingPage)
+            searchRequest(request, paddingPage, isNew = true)
         }
     }
 
-    private fun searchRequest(searchText: String, page: Int) {
+    private fun searchRequest(searchText: String, page: Int, isNew: Boolean) {
         if (searchText.isNotEmpty()) {
             val options = mapOf(
                 "text" to searchText,
                 "page" to page.toString(),
                 "per_page" to "20"
             )
-            renderState(SearchState.Loading)
+
+            if (isNew) {
+                renderState(SearchState.Loading)
+            }
+            else {
+                renderState(SearchState.Updating)
+            }
+
             interactor.searchVacancies(options)
                 .onEach { (searchResult, errorType) ->
                     when (errorType) {

@@ -8,6 +8,7 @@ sealed interface SearchState {
     data object ServerError : SearchState
     data object NothingFound : SearchState
     data object Loading : SearchState
+    data object Updating : SearchState
 
     data class SearchResult(
         val vacancies: List<VacancyFromList>,

@@ -111,6 +111,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             is SearchState.NothingFound -> setNothingFound()
             is SearchState.SearchResult -> showResults(code.vacancies, code.found)
             is SearchState.Loading -> setLoading()
+            is SearchState.Updating -> setUpdating()
         }
     }
 
@@ -127,7 +128,21 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     }
 
     private fun setLoading() {
-        binding.progressBar.isVisible = true
+        with(binding){
+            progressBar.isVisible = true
+            tvSearchResultMessage.isVisible = false
+            rvFoundVacanciesList.isVisible = false
+            layoutError.isVisible = false
+        }
+    }
+
+    private fun setUpdating(){
+        with(binding){
+            progressBar.isVisible = true
+            tvSearchResultMessage.isVisible = true
+            rvFoundVacanciesList.isVisible = true
+            layoutError.isVisible = false
+        }
     }
 
     private fun showResults(list: List<VacancyFromList>, found: Int) {

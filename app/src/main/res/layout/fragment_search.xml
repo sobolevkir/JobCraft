@@ -48,8 +48,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:backgroundTint="@color/black"
             android:contentDescription="@string/clear_hint"
-            android:src="@drawable/ic_clear"
-            android:visibility="gone" />
+            android:src="@drawable/ic_clear" />
 
         <ImageButton
             android:id="@+id/iv_search"
@@ -60,8 +59,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:backgroundTint="@color/black"
             android:contentDescription="@string/clear_hint"
-            android:src="@drawable/ic_search"
-            android:visibility="visible" />
+            android:src="@drawable/ic_search" />
     </FrameLayout>
 
     <LinearLayout
@@ -126,7 +124,5 @@
         android:layout_width="@dimen/progress_bar_size"
         android:layout_height="@dimen/progress_bar_size"
         android:indeterminateTint="@color/blue"
-        android:layout_marginBottom="@dimen/margin_standard"
-        android:visibility="gone"
-        tools:visibility="gone" />
+        android:layout_marginBottom="@dimen/margin_standard" />
 </LinearLayout>
