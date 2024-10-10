@@ -14,9 +14,15 @@ class SelectPlaceFragment : Fragment(R.layout.fragment_select_place) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.btnBack.setOnClickListener { findNavController().popBackStack() }
-        binding.btnSelectCountry.setOnClickListener { openCountrySelection() }
-        binding.btnSelectRegion.setOnClickListener { openRegionSelection() }
+        binding.btnBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
+        binding.btnSelectCountry.setOnClickListener {
+            openCountrySelection()
+        }
+        binding.btnSelectRegion.setOnClickListener {
+            openRegionSelection()
+        }
 
     }
 

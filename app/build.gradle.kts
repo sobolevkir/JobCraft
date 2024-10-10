@@ -19,8 +19,6 @@ android {
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField(type = "String", name = "HH_ACCESS_TOKEN", value = "\"${developProperties.hhAccessToken}\"")
-        buildConfigField(type = "String", name = "USER_AGENT", value = "\"JobCraft (sobolevkir@bk.ru)\"")
-        buildConfigField(type = "String", name = "BASE_URL", value = "\"https://api.hh.ru/\"")
     }
 
     buildTypes {
@@ -58,13 +56,6 @@ dependencies {
     implementation(libs.ui.material)
     implementation(libs.ui.constraintLayout)
 
-    // Unit Tests
-    testImplementation(libs.unitTests.junit)
-
-    // UI Tests
-    androidTestImplementation(libs.uiTests.junitExt)
-    androidTestImplementation(libs.uiTests.espressoCore)
-
     // Network
     implementation(libs.network.retrofit)
     implementation(libs.network.converterGson)
@@ -85,4 +76,11 @@ dependencies {
     annotationProcessor(libs.db.roomCompiler)
     ksp(libs.db.roomCompiler)
     implementation(libs.db.roomKtx)
+
+    // Unit Tests
+    testImplementation(libs.unitTests.junit)
+
+    // UI Tests
+    androidTestImplementation(libs.uiTests.junitExt)
+    androidTestImplementation(libs.uiTests.espressoCore)
 }

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/margin_standard"
+    android:layout_marginVertical="@dimen/margin_small"
+    android:background="?attr/jcBackgroundColor"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="@dimen/vacancy_cover_size"
+        android:layout_height="@dimen/vacancy_cover_size"
+        android:layout_marginEnd="@dimen/margin_medium"
+        android:background="@drawable/cover_border">
+
+        <ImageView
+            android:id="@+id/iv_vacancy_cover"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/logo_hint"
+            android:padding="@dimen/margin_mini" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_vacancy_name"
+            style="@style/Medium_22_Style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="start"
+            android:maxLines="3"
+            android:textColor="?attr/jcMainTextColor"
+            tools:text="@string/vacancy_name" />
+
+        <TextView
+            android:id="@+id/tv_employment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="start"
+            android:maxLines="1"
+            android:textAppearance="@style/Regular_16_Style"
+            android:textColor="?attr/jcMainTextColor"
+            tools:text="@string/employment" />
+
+        <TextView
+            android:id="@+id/tv_salary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="start"
+            android:maxLines="1"
+            android:textAppearance="@style/Regular_16_Style"
+            android:textColor="?attr/jcMainTextColor"
+            tools:text="@string/no_salary" />
+
+    </LinearLayout>
+</LinearLayout>
