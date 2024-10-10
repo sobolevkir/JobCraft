@@ -11,13 +11,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.common.domain.VacancyOnClicked
 import ru.practicum.android.diploma.common.domain.model.VacancyFromList
 import ru.practicum.android.diploma.common.ext.viewBinding
+import ru.practicum.android.diploma.common.ui.VacancyListAdapter
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
-import ru.practicum.android.diploma.search.domain.api.VacancyOnClicked
 import ru.practicum.android.diploma.search.presentation.SearchState
 import ru.practicum.android.diploma.search.presentation.SearchViewModel
-import ru.practicum.android.diploma.search.ui.adapter.SearchAdapter
 
 class SearchFragment : Fragment(R.layout.fragment_search) {
     private val binding by viewBinding(FragmentSearchBinding::bind)
@@ -30,14 +30,14 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     }
 
-    private var adapter = SearchAdapter(vacancyOnClicked)
+    private var adapter = VacancyListAdapter(vacancyOnClicked)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setStartOptions(true)
 
-        adapter = SearchAdapter(vacancyOnClicked)
+        adapter = VacancyListAdapter(vacancyOnClicked)
         adapter.submitList(listOf())
         binding.rvFoundVacanciesList.adapter = adapter
 
