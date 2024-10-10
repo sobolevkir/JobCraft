@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import ru.practicum.android.diploma.common.domain.model.ErrorType
 import ru.practicum.android.diploma.common.domain.model.VacancyDetails
 import ru.practicum.android.diploma.vacancy.domain.api.VacancyDetailsInteractor
@@ -13,6 +13,7 @@ import ru.practicum.android.diploma.vacancy.ui.model.ScreenMode
 import ru.practicum.android.diploma.vacancy.ui.model.ScreenState
 
 class VacancyViewModel(
+    private val vacancyId: Long,
     private val interactor: VacancyDetailsInteractor,
 ) : ViewModel() {
 
@@ -33,14 +34,11 @@ class VacancyViewModel(
 
     }
 
-    fun getVacancyDetails(vacancyId: Long) {
-        viewModelScope.launch(Dispatchers.IO) {
-            interactor
-                .getVacancyDetails(vacancyId)
-                .collect { pair ->
-                    processingResult(pair.first, pair.second)
-                }
-        }
+    fun setVacancyDetails() {
+        interactor.getVacancyDetails(vacancyId)
+            .onEach { (data, error) ->
+                processingResult(data, error)
+            }.launchIn(viewModelScope)
     }
 
     private fun processingResult(vacancy: VacancyDetails?, errorType: ErrorType?) {
@@ -61,11 +59,11 @@ class VacancyViewModel(
         }
     }
 
-    fun addToFavorites(vacancy: VacancyDetails) {
+    private fun addToFavorites(vacancy: VacancyDetails) {
         interactor.addToFavorites(vacancy)
     }
 
-    fun removeFromFavorites(vacancyId: Long) {
+    private fun removeFromFavorites(vacancyId: Long) {
         interactor.removeFromFavorites(vacancyId)
     }
 

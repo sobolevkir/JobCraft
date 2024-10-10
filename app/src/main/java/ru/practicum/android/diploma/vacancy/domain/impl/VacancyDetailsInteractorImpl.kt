@@ -18,6 +18,7 @@ class VacancyDetailsInteractorImpl(
                 is ResourceDetails.Success -> {
                     Pair(result.data, null)
                 }
+
                 is ResourceDetails.Error -> Pair(null, result.errorType)
             }
         }

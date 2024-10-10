@@ -11,6 +11,7 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.common.domain.model.VacancyDetails
 import ru.practicum.android.diploma.common.ext.viewBinding
@@ -21,8 +22,8 @@ import ru.practicum.android.diploma.vacancy.ui.model.ScreenMode
 private const val CORNERRADIUS_DP = 12f
 
 class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
-    private val viewModel by viewModel<VacancyViewModel>()
     private val args: VacancyFragmentArgs by navArgs()
+    private val viewModel: VacancyViewModel by viewModel { parametersOf(args.vacancyId) }
     private val binding by viewBinding(FragmentVacancyBinding::bind)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -40,8 +41,7 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
         viewModel.getIsFavoriteLiveData().observe(viewLifecycleOwner) { newState ->
             changeFavoriteIcon(newState)
         }
-        viewModel.getVacancyDetails(args.vacancyId)
-        binding.btnBack.setOnClickListener { findNavController().popBackStack() }
+        viewModel.setVacancyDetails()
         binding.btnSend.setOnClickListener { viewModel.shareVacancyUrl() }
         binding.btnFavorite.setOnClickListener { viewModel.changeFavorite() }
 
@@ -84,7 +84,7 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
             )
             .into(binding.ivLogo)
         binding.tvEmployerName.text = vacancy.employerName
-        binding.tvAddress.text = if (vacancy.address != null) vacancy.address else vacancy.areaName
+        binding.tvAddress.text = vacancy.address ?: vacancy.areaName
         bindExperience(vacancy.experience)
         bindScheduleName(vacancy.scheduleName)
         binding.tvDescription.setText(Html.fromHtml(vacancy.description, Html.FROM_HTML_MODE_COMPACT))
@@ -133,11 +133,10 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
 
     private fun formattingKeySkills(keySkills: List<String>): String {
         val builder = StringBuilder()
-        for (s: String in keySkills) builder.append("<li>" + s + "</li>")
+        for (s: String in keySkills) builder.append("<li> $s</li>")
         return builder.toString()
     }
 
-    // Иконка Избранное
     private fun changeFavoriteIcon(isFavorite: Boolean) {
         if (isFavorite) {
             binding.btnFavorite.setImageResource(R.drawable.ic_favorite_on)
