@@ -52,7 +52,7 @@ class VacancyDetailsRepositoryImpl(
         when (response.resultCode) {
             ResultCode.SUCCESS -> {
                 val vacancyDetailsResponse = response as VacancyDetailsResponse
-                val resultData = vacancyDetailsResponse.convertToVacancyDetails()
+                val resultData = vacancyDetailsResponse.convertToVacancyDetails(isFavorite)
                 emit(ResourceDetails.Success(resultData))
                 if (isFavorite) appDatabase.favoriteVacaciesDao().updateVacancy(dbConverter.convert(resultData))
             }
@@ -76,7 +76,7 @@ class VacancyDetailsRepositoryImpl(
 
     }.flowOn(ioDispatcher)
 
-    private fun VacancyDetailsResponse.convertToVacancyDetails(): VacancyDetails {
+    private fun VacancyDetailsResponse.convertToVacancyDetails(isFavorite: Boolean): VacancyDetails {
         return with(this) {
             VacancyDetails(
                 id = id.toLongOrNull() ?: -1L,
@@ -90,7 +90,8 @@ class VacancyDetailsRepositoryImpl(
                 description = description,
                 keySkills = keySkills.map { it.name },
                 address = address?.let { addressDto -> parametersConverter.convert(addressDto) },
-                alternateUrl = alternateUrl
+                alternateUrl = alternateUrl,
+                isFavorite = isFavorite
             )
         }
     }
