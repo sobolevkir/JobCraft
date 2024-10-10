@@ -10,5 +10,6 @@ data class ScreenState(
 enum class ScreenMode {
     LOADING,
     RESULTS,
-    ERROR
+    NOTHING_FOUND,
+    SERVER_ERROR
 }

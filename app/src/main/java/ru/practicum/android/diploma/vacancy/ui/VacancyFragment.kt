@@ -35,7 +35,7 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
             when (newState.screenMode) {
                 ScreenMode.LOADING -> showLoading()
                 ScreenMode.RESULTS -> showVacancy(newState.vacancy!!)
-                ScreenMode.ERROR -> showPlaceholder()
+                else -> showPlaceholder(newState.screenMode)
             }
         }
         viewModel.getIsFavoriteLiveData().observe(viewLifecycleOwner) { newState ->
@@ -60,10 +60,17 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
         bind(vacancy)
     }
 
-    private fun showPlaceholder() {
+    private fun showPlaceholder(errorMode: ScreenMode) {
         binding.svVacancy.isVisible = false
         binding.llPlaceholder.isVisible = true
         binding.progressBar.isVisible = false
+        if (errorMode == ScreenMode.NOTHING_FOUND) {
+            binding.ivVacancyPlaceholder.setImageResource(R.drawable.vacancy_not_found)
+            binding.tvVacancyPlaceholder.text = getString(R.string.vacancy_not_found)
+        } else {
+            binding.ivVacancyPlaceholder.setImageResource(R.drawable.server_error)
+            binding.tvVacancyPlaceholder.text = getString(R.string.server_error)
+        }
     }
 
     private fun bind(vacancy: VacancyDetails) {
