@@ -77,11 +77,11 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private fun initQueryChangeListener() {
         binding.etSearchRequest.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
-                //Empty
+                // Empty
             }
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-                //Empty
+                // Empty
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
