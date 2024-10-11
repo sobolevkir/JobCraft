@@ -63,45 +63,48 @@
     </FrameLayout>
 
     <LinearLayout
+        android:id="@+id/ll_error"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/search_field_height"
         android:gravity="center|center_vertical"
         android:orientation="vertical"
-        android:id="@+id/ll_error">
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/iv_search_result"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scaleType="fitCenter"
-            android:adjustViewBounds="true"
             android:layout_marginHorizontal="@dimen/margin_standard"
+            android:adjustViewBounds="true"
             android:importantForAccessibility="no"
-            android:src="@drawable/vacancy_search_start"/>
+            android:scaleType="fitCenter"
+            android:src="@drawable/vacancy_search_start" />
 
         <TextView
             android:id="@+id/tv_error"
             style="@style/ErrorMessageStyle"
-            android:layout_marginTop="@dimen/margin_standard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_standard"
             android:text="@string/no_internet" />
     </LinearLayout>
 
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_search_result"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/fl_search_result">
+        android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_found_vacancies_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_small"
-            android:paddingTop="@dimen/margin_large"
             android:clipToPadding="false"
+            android:paddingTop="@dimen/margin_large"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@id/load_more_progress_bar"
+            app:layout_constraintTop_toTopOf="parent"
             tools:itemCount="4"
             tools:listitem="@layout/vacancy_list_item" />
 
@@ -109,15 +112,29 @@
             android:id="@+id/tv_search_result_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|top"
             android:layout_marginTop="@dimen/margin_micro"
             android:background="@drawable/bg_rounded_search_result_textview"
             android:paddingHorizontal="@dimen/margin_medium"
             android:paddingVertical="@dimen/margin_micro"
             android:text="@string/search_result_nothing_found_message"
             android:textAppearance="@style/Regular_16_Style"
-            android:textColor="@color/white" />
-    </FrameLayout>
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/load_more_progress_bar"
+            android:layout_width="@dimen/small_icon_size"
+            android:layout_height="@dimen/small_icon_size"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginBottom="@dimen/header_height"
+            android:indeterminateTint="@color/blue"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rv_found_vacancies_list" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ProgressBar
         android:id="@+id/progress_bar"
@@ -125,6 +142,6 @@
         android:layout_height="@dimen/progress_bar_size"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/margin_large"
-        android:indeterminateTint="@color/blue"
-        android:layout_marginBottom="@dimen/margin_standard" />
+        android:layout_marginBottom="@dimen/margin_standard"
+        android:indeterminateTint="@color/blue" />
 </LinearLayout>

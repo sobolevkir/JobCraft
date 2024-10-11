@@ -110,15 +110,18 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         with(binding) {
             llError.isVisible = false
             progressBar.isVisible = true
-            flSearchResult.isVisible = false
+            clSearchResult.isVisible = false
         }
     }
 
     private fun showUpdating() {
         with(binding) {
             llError.isVisible = false
-            progressBar.isVisible = true
-            flSearchResult.isVisible = true
+            progressBar.isVisible = false
+            clSearchResult.isVisible = true
+            rvFoundVacanciesList.isVisible = true
+            tvSearchResultMessage.isVisible = true
+            loadMoreProgressBar.isVisible = true
         }
     }
 
@@ -132,9 +135,10 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                     foundNumber,
                     foundNumber
                 )
-                flSearchResult.isVisible = true
+                clSearchResult.isVisible = true
                 rvFoundVacanciesList.isVisible = true
                 tvSearchResultMessage.isVisible = true
+                loadMoreProgressBar.isVisible = false
             }
         }
     }
@@ -143,9 +147,10 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         with(binding) {
             llError.isVisible = true
             progressBar.isVisible = false
-            flSearchResult.isVisible = true
+            clSearchResult.isVisible = true
             rvFoundVacanciesList.isVisible = false
             ivSearchResult.isVisible = true
+            loadMoreProgressBar.isVisible = false
             ivSearchResult.setImageResource(image)
             tvSearchResultMessage.isVisible = messageState
             tvSearchResultMessage.setText(R.string.no_found_vacancies)
