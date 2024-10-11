@@ -5,6 +5,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -52,6 +53,8 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             is SearchState.SearchResult -> showResults(state.vacancies, state.found)
             is SearchState.Loading -> showLoading()
             is SearchState.Updating -> showUpdating()
+            is SearchState.PaddingServerError -> showPaddingError(R.string.padding_server_error)
+            is SearchState.PaddingInternetError -> showPaddingError(R.string.padding_internet_error)
         }
     }
 
@@ -127,6 +130,11 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             tvSearchResultMessage.isVisible = true
             loadMoreProgressBar.isVisible = true
         }
+    }
+
+    private fun showPaddingError(text: Int){
+        Toast.makeText(requireContext(), text, Toast.LENGTH_LONG).show()
+        binding.loadMoreProgressBar.isVisible = false
     }
 
     private fun showResults(vacancies: List<VacancyFromList>, foundNumber: Int) {

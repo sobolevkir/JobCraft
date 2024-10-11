@@ -37,6 +37,8 @@
     <string name="server_error">Ошибка сервера</string>
     <string name="no_found_vacancies">Таких вакансий нет</string>
     <string name="select_send_service">Выберите почтовый сервис</string>
+    <string name="padding_server_error">Произошла ошибка</string>
+    <string name="padding_internet_error">Проверте подключение к интернету</string>
 
     <!-- Указание зарплаты -->
     <string name="salary_range">от %1$s до %2$s %3$s</string>

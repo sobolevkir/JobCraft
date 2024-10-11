@@ -86,11 +86,25 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
                             maxPage = searchResult.pages
                         }
 
-                        ErrorType.CONNECTION_PROBLEM -> renderState(SearchState.InternetError)
+                        ErrorType.CONNECTION_PROBLEM -> {
+                            if (isNew){
+                                renderState(SearchState.InternetError)
+                            }
+                            else {
+                                renderState(SearchState.PaddingInternetError)
+                            }
+                        }
 
                         ErrorType.NOTHING_FOUND -> renderState(SearchState.NothingFound)
 
-                        else -> renderState(SearchState.ServerError)
+                        else -> {
+                            if (isNew){
+                                renderState(SearchState.ServerError)
+                            }
+                            else {
+                                renderState(SearchState.PaddingServerError)
+                            }
+                        }
                     }
                     isNextPageLoading = false
                 }
