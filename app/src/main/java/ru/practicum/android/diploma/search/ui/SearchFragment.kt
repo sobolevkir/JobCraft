@@ -39,6 +39,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         initQueryChangeListener()
         initScrollListener()
         binding.rvFoundVacanciesList.adapter = adapter
+        binding.rvFoundVacanciesList.itemAnimator = null
         viewModel.getStateLiveData().observe(viewLifecycleOwner) { renderState(it) }
 
     }
@@ -119,7 +120,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         with(binding) {
             llError.isVisible = false
             progressBar.isVisible = true
-            flSearchResult.isVisible = false
+            flSearchResult.isVisible = true
         }
     }
 
