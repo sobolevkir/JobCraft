@@ -102,8 +102,9 @@
             android:layout_marginTop="@dimen/margin_small"
             android:clipToPadding="false"
             android:paddingTop="@dimen/margin_large"
+            android:paddingBottom="@dimen/header_height"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toTopOf="@id/load_more_progress_bar"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:itemCount="4"
             tools:listitem="@layout/vacancy_list_item" />
@@ -127,13 +128,10 @@
             android:id="@+id/load_more_progress_bar"
             android:layout_width="@dimen/small_icon_size"
             android:layout_height="@dimen/small_icon_size"
-            android:layout_marginTop="@dimen/margin_small"
-            android:layout_marginBottom="@dimen/header_height"
             android:indeterminateTint="@color/blue"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rv_found_vacancies_list" />
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ProgressBar

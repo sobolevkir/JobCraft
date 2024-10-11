@@ -76,9 +76,13 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private fun initQueryChangeListener() {
         binding.etSearchRequest.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable) {}
+            override fun afterTextChanged(s: Editable) {
+                //Empty
+            }
 
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+                //Empty
+            }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 setStartOptions(s.isEmpty())
@@ -128,6 +132,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     private fun showResults(vacancies: List<VacancyFromList>, foundNumber: Int) {
         adapter.submitList(vacancies) {
             with(binding) {
+                loadMoreProgressBar.isVisible = false
                 llError.isVisible = false
                 progressBar.isVisible = false
                 tvSearchResultMessage.text = binding.root.context.resources.getQuantityString(
@@ -138,7 +143,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 clSearchResult.isVisible = true
                 rvFoundVacanciesList.isVisible = true
                 tvSearchResultMessage.isVisible = true
-                loadMoreProgressBar.isVisible = false
             }
         }
     }
