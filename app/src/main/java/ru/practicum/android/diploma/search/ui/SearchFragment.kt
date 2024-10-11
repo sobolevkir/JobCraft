@@ -109,45 +109,46 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private fun showLoading() {
         with(binding) {
+            llError.isVisible = false
             progressBar.isVisible = true
-            tvSearchResultMessage.isVisible = false
-            rvFoundVacanciesList.isVisible = false
-            layoutError.isVisible = false
+            flSearchResult.isVisible = false
         }
     }
 
     private fun showUpdating() {
         with(binding) {
+            llError.isVisible = false
             progressBar.isVisible = true
-            tvSearchResultMessage.isVisible = true
-            rvFoundVacanciesList.isVisible = true
-            layoutError.isVisible = false
+            flSearchResult.isVisible = false
         }
     }
 
     private fun showResults(vacancies: List<VacancyFromList>, foundNumber: Int) {
         adapter.submitList(vacancies) {
             with(binding) {
-                layoutError.isVisible = false
-                rvFoundVacanciesList.isVisible = true
-                tvSearchResultMessage.isVisible = true
+                llError.isVisible = false
+                progressBar.isVisible = false
                 tvSearchResultMessage.text = binding.root.context.resources.getQuantityString(
                     R.plurals.vacancies_count,
                     foundNumber,
                     foundNumber
                 )
+                flSearchResult.isVisible = true
+                rvFoundVacanciesList.isVisible = true
+                tvSearchResultMessage.isVisible = true
             }
         }
     }
 
     private fun showError(image: Int, text: Int? = null, messageState: Boolean = false) {
         with(binding) {
+            llError.isVisible = true
+            progressBar.isVisible = false
+            flSearchResult.isVisible = true
             rvFoundVacanciesList.isVisible = false
-            layoutError.isVisible = true
             ivSearchResult.isVisible = true
             ivSearchResult.setImageResource(image)
             tvSearchResultMessage.isVisible = messageState
-            progressBar.isVisible = false
             tvSearchResultMessage.setText(R.string.no_found_vacancies)
             if (text == null) {
                 tvError.text = ""

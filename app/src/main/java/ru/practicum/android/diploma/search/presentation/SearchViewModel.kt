@@ -73,8 +73,7 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
 
             if (isNew) {
                 renderState(SearchState.Loading)
-            }
-            else {
+            } else {
                 renderState(SearchState.Updating)
             }
 
@@ -104,6 +103,6 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
     }
 
     companion object {
-        const val SEARCH_DELAY = 1000L
+        const val SEARCH_DELAY = 500L
     }
 }

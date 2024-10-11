@@ -68,7 +68,7 @@
         android:layout_marginBottom="@dimen/search_field_height"
         android:gravity="center|center_vertical"
         android:orientation="vertical"
-        android:id="@+id/layout_error">
+        android:id="@+id/ll_error">
 
         <ImageView
             android:id="@+id/iv_search_result"
@@ -91,7 +91,8 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/fl_search_result">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_found_vacancies_list"
@@ -100,7 +101,6 @@
             android:layout_marginTop="@dimen/margin_small"
             android:paddingTop="@dimen/margin_large"
             android:clipToPadding="false"
-            android:visibility="gone"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="4"
             tools:listitem="@layout/vacancy_list_item" />
@@ -123,6 +123,8 @@
         android:id="@+id/progress_bar"
         android:layout_width="@dimen/progress_bar_size"
         android:layout_height="@dimen/progress_bar_size"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/margin_large"
         android:indeterminateTint="@color/blue"
         android:layout_marginBottom="@dimen/margin_standard" />
 </LinearLayout>
