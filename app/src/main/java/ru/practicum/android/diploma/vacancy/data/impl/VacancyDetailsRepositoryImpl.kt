@@ -54,7 +54,9 @@ class VacancyDetailsRepositoryImpl(
                 val vacancyDetailsResponse = response as VacancyDetailsResponse
                 val resultData = vacancyDetailsResponse.convertToVacancyDetails(isFavorite)
                 emit(Resource.Success(resultData))
-                if (isFavorite) appDatabase.favoriteVacanciesDao().updateVacancy(dbConverter.convert(resultData))
+                if (isFavorite) {
+                    appDatabase.favoriteVacanciesDao().updateVacancy(dbConverter.convert(resultData))
+                }
             }
 
             ResultCode.CONNECTION_PROBLEM -> {
