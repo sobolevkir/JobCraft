@@ -55,12 +55,12 @@
 
     <!-- Стиль для контейнера фильтра -->
     <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="boxBackgroundMode">none</item> <!-- Отключить рамку -->
-        <item name="boxStrokeColor">@null</item> <!-- Убрать цвет обводки -->
+        <item name="boxBackgroundMode">none</item>
+        <item name="boxStrokeColor">@null</item>
         <item name="android:editable">true</item>
         <item name="endIconMode">custom</item>
         <item name="endIconDrawable">@drawable/btn_forward</item>
-        <item name="hintTextColor">?attr/jcMainTextColor</item>  <!-- Цвет подсказки над полем  -->
+        <item name="hintTextColor">?attr/jcMainTextColor</item>
     </style>
 
     <!-- Стиль для текста фильтра -->
@@ -70,9 +70,42 @@
         <item name="android:focusable">false</item>
         <item name="android:clickable">true</item>
         <item name="android:textAppearance">@style/Regular_16_Style</item>
+        <item name="hintTextAppearance">@style/Regular_12_Style</item>
         <item name="android:inputType">textMultiLine|textCapSentences</item>
     </style>
 
+
+
+
     <!-- Стиль для контейнера фильтра зарплаты -->
-    <style name="SalaryInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox"></style>
+    <style name="SalaryTextInputLayoutStyle" >
+        <item name="expandedHintEnabled">false</item>
+        <item name="android:editable">true</item>
+        <item name="hintTextAppearance">@style/Regular_12_Style</item>
+        <item name="placeholderTextAppearance">@style/Regular_16_Style</item>
+        <item name="cursorColor">@color/blue</item>
+        <item name="hintTextColor">?attr/jcEditTextColorHint</item> <!-- Цвет подсказки, когда она плавает над полем (при фокусе или вводе текста) -->
+        <item name="placeholderTextColor">?attr/jcHintTextColor</item>  <!-- Цвет нижней подсказки -->
+
+
+    </style>
+
+    <!-- Стиль для текста фильтра зарплаты-->
+    <style name="SalaryTextInputEditTextStyle">
+
+        <item name="android:paddingTop">100dp</item>
+        <item name="android:paddingBottom">4dp</item>
+
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:textAppearance">@style/Regular_16_Style</item>
+        <item name="hintTextAppearance">@style/Regular_12_Style</item>
+        <item name="android:inputType">number</item>
+        <item name="android:imeOptions">actionDone</item>
+        <item name="android:background">@drawable/bg_rounded_edit_text</item>
+        <item name="android:maxLength">50</item>
+        <item name="android:textColor">@color/black</item>  <!-- Цвет текста внутри поля -->
+        <item name="android:textColorHint">?attr/jcHintTextColor</item>  <!-- Цвет подсказки, когда она находится внутри поля (при отсутствии фокуса) -->
+
+    </style>
 </resources>
