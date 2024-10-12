@@ -7,13 +7,16 @@ import androidx.navigation.fragment.findNavController
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.common.ext.viewBinding
 import ru.practicum.android.diploma.databinding.FragmentSelectIndustryBinding
+import ru.practicum.android.diploma.filters.presentation.IndustryViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
     private val binding by viewBinding(FragmentSelectIndustryBinding::bind)
+    private val viewModel: IndustryViewModel by viewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+viewModel.test()
         binding.btnBack.setOnClickListener {
             findNavController().popBackStack()
         }

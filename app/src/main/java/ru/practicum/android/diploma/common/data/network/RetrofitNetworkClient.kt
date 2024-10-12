@@ -4,6 +4,7 @@ import android.content.Context
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
+import ru.practicum.android.diploma.common.data.network.dto.FilterSearchRequest
 import ru.practicum.android.diploma.common.data.network.dto.Response
 import ru.practicum.android.diploma.common.data.network.dto.ResultCode
 import ru.practicum.android.diploma.common.data.network.dto.VacanciesSearchRequest
@@ -13,7 +14,7 @@ import ru.practicum.android.diploma.common.ext.isNetworkConnected
 class RetrofitNetworkClient(
     private val api: HHApi,
     private val context: Context,
-    private val ioDispatcher: CoroutineDispatcher
+    private val ioDispatcher: CoroutineDispatcher,
 ) : NetworkClient {
 
     override suspend fun doRequest(dto: Any): Response {
@@ -21,16 +22,18 @@ class RetrofitNetworkClient(
 
         if (!context.isNetworkConnected) {
             response.resultCode = ResultCode.CONNECTION_PROBLEM
-        } else if (dto !is VacanciesSearchRequest && dto !is VacancyDetailsRequest) {
+        } else if (dto !is VacanciesSearchRequest && dto !is VacancyDetailsRequest && dto !is FilterSearchRequest) {
             response.resultCode = ResultCode.BAD_REQUEST
         } else {
             return withContext(ioDispatcher) {
                 try {
                     val apiResponse =
-                        if (dto is VacanciesSearchRequest) {
-                            api.searchVacancies(dto.options)
-                        } else {
-                            api.getVacancyDetails((dto as VacancyDetailsRequest).vacancyId.toString())
+                        when (dto) {
+                            is VacanciesSearchRequest -> api.searchVacancies(dto.options)
+                            is FilterSearchRequest -> handleFilterType(dto)
+                            else -> {
+                                api.getVacancyDetails((dto as VacancyDetailsRequest).vacancyId.toString())
+                            }
                         }
                     apiResponse.apply { resultCode = ResultCode.SUCCESS }
                 } catch (ex: HttpException) {
@@ -43,11 +46,22 @@ class RetrofitNetworkClient(
         return response
     }
 
+    private suspend fun handleFilterType(dto: Any): Response {
+        return withContext(ioDispatcher) {
+            when (dto) {
+                FilterSearchRequest.INDUSTRIES -> api.getIndustries()
+                FilterSearchRequest.COUNTRIES -> api.getIndustries() /*здесь должен быть метод аналогичный getIndustries() только для стран*/
+                else -> api.getIndustries()/*десь должен быть метод аналогичный getIndustries() только для региона*/
+            }
+        }
+    }
+
     private fun handleHttpException(ex: HttpException): Int {
         return when (ex.code()) {
             ResultCode.NOTHING_FOUND,
             ResultCode.SERVER_ERROR,
-            ResultCode.FORBIDDEN_ERROR -> ex.code()
+            ResultCode.FORBIDDEN_ERROR,
+            -> ex.code()
 
             else -> ResultCode.UNKNOWN_ERROR
         }
