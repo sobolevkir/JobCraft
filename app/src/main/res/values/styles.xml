@@ -52,4 +52,27 @@
         <item name="android:textAppearance">@style/Medium_22_Style</item>
         <item name="android:textColor">?attr/jcMainTextColor</item>
     </style>
+
+    <!-- Стиль для контейнера фильтра -->
+    <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxBackgroundMode">none</item> <!-- Отключить рамку -->
+        <item name="boxStrokeColor">@null</item> <!-- Убрать цвет обводки -->
+        <item name="android:editable">true</item>
+        <item name="endIconMode">custom</item>
+        <item name="endIconDrawable">@drawable/btn_forward</item>
+        <item name="hintTextColor">?attr/jcMainTextColor</item>  <!-- Цвет подсказки над полем  -->
+    </style>
+
+    <!-- Стиль для текста фильтра -->
+    <style name="TextInputEditTextStyle">
+        <item name="android:textColorHint">@color/gray</item>
+        <item name="android:textColor">?attr/jcMainTextColor</item>
+        <item name="android:focusable">false</item>
+        <item name="android:clickable">true</item>
+        <item name="android:textAppearance">@style/Regular_16_Style</item>
+        <item name="android:inputType">textMultiLine|textCapSentences</item>
+    </style>
+
+    <!-- Стиль для контейнера фильтра зарплаты -->
+    <style name="SalaryInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox"></style>
 </resources>
