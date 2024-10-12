@@ -78,7 +78,7 @@
 
 
     <!-- Стиль для контейнера фильтра зарплаты -->
-    <style name="SalaryTextInputLayoutStyle" >
+    <style name="SalaryTextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
         <item name="expandedHintEnabled">false</item>
         <item name="android:editable">true</item>
         <item name="hintTextAppearance">@style/Regular_12_Style</item>
@@ -86,16 +86,11 @@
         <item name="cursorColor">@color/blue</item>
         <item name="hintTextColor">?attr/jcEditTextColorHint</item> <!-- Цвет подсказки, когда она плавает над полем (при фокусе или вводе текста) -->
         <item name="placeholderTextColor">?attr/jcHintTextColor</item>  <!-- Цвет нижней подсказки -->
-
-
+        <item name="boxStrokeWidth">0dp</item>
     </style>
 
     <!-- Стиль для текста фильтра зарплаты-->
     <style name="SalaryTextInputEditTextStyle">
-
-        <item name="android:paddingTop">100dp</item>
-        <item name="android:paddingBottom">4dp</item>
-
         <item name="android:focusable">true</item>
         <item name="android:clickable">true</item>
         <item name="android:textAppearance">@style/Regular_16_Style</item>
@@ -106,6 +101,5 @@
         <item name="android:maxLength">50</item>
         <item name="android:textColor">@color/black</item>  <!-- Цвет текста внутри поля -->
         <item name="android:textColorHint">?attr/jcHintTextColor</item>  <!-- Цвет подсказки, когда она находится внутри поля (при отсутствии фокуса) -->
-
     </style>
 </resources>
