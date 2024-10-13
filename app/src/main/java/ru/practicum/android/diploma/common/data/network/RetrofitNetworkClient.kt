@@ -51,8 +51,12 @@ class RetrofitNetworkClient(
         return withContext(ioDispatcher) {
             when (dto) {
                 FilterSearchRequest.INDUSTRIES -> IndustrySearchResponse(api.getIndustries()) as Response
-                FilterSearchRequest.COUNTRIES -> IndustrySearchResponse(api.getIndustries()) as Response /*здесь должен быть метод аналогичный getIndustries() только для стран*/
-                else -> IndustrySearchResponse(api.getIndustries()) as Response/*десь должен быть метод аналогичный getIndustries() только для региона*/
+                FilterSearchRequest.COUNTRIES -> IndustrySearchResponse(
+                    api.getIndustries()
+                ) as Response /*здесь должен быть метод аналогичный getIndustries() только для стран*/
+                else -> IndustrySearchResponse(
+                    api.getIndustries()
+                ) as Response/*десь должен быть метод аналогичный getIndustries() только для региона*/
             }
         }
     }

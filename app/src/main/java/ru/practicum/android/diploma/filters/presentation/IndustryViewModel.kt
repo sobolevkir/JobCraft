@@ -11,19 +11,18 @@ import ru.practicum.android.diploma.filters.domain.model.Industry
 
 class IndustryViewModel(private val interactor: IndustryInteractor) : ViewModel() {
 
-fun test() {
-    interactor.getIndustries()
-        .onEach { (data, error) ->
-            processingResult(data, error)
-        }.launchIn(viewModelScope)
+    fun test() {
+        interactor.getIndustries()
+            .onEach { (data, error) ->
+                processingResult(data, error)
+            }.launchIn(viewModelScope)
 
-}
+    }
 
     private fun processingResult(industry: List<Industry>?, errorType: ErrorType?) {
         if (industry != null) {
-industry.forEach{ Log.d("testList", it.name.toString())}
+            industry.forEach { Log.d("testList", it.name.toString()) }
         } else {
-
             when (errorType) {
                 ErrorType.NOTHING_FOUND -> {
                 }
