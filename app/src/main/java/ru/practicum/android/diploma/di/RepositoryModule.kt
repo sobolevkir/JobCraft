@@ -11,12 +11,14 @@ import ru.practicum.android.diploma.search.domain.VacanciesRepository
 import ru.practicum.android.diploma.vacancy.data.impl.VacancyDetailsRepositoryImpl
 import ru.practicum.android.diploma.vacancy.domain.api.VacancyDetailsRepository
 
+private const val IO_DISPATCHER = "ioDispatcher"
+
 val repositoryModule = module {
 
     single<VacanciesRepository> {
         VacanciesRepositoryImpl(
             networkClient = get(),
-            ioDispatcher = get(named("ioDispatcher")),
+            ioDispatcher = get(named(IO_DISPATCHER)),
             parametersConverter = get()
         )
     }
@@ -33,7 +35,7 @@ val repositoryModule = module {
             appDatabase = get(),
             dbConverter = get(),
             networkClient = get(),
-            ioDispatcher = get(named("ioDispatcher")),
+            ioDispatcher = get(named(IO_DISPATCHER)),
             parametersConverter = get()
         )
     }
@@ -41,7 +43,7 @@ val repositoryModule = module {
     single<IndustryRepository> {
         IndustryRepositoryImpl(
             networkClient = get(),
-            ioDispatcher = get(named("ioDispatcher")),
+            ioDispatcher = get(named(IO_DISPATCHER)),
         )
     }
 
