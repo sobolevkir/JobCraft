@@ -58,10 +58,9 @@
         android:layout_height="@dimen/salary_height"
         android:layout_marginHorizontal="@dimen/margin_standard"
         android:layout_marginTop="@dimen/margin_large"
-        android:paddingTop="@dimen/margin_small"
         android:background="@drawable/bg_rounded_edit_text"
         android:hint="@string/expected_salary"
-        app:placeholderText="@string/enter_salary_hint"
+        android:paddingTop="@dimen/margin_small"
         app:boxBackgroundMode="none"
         app:endIconDrawable="@drawable/ic_clear_padding_buttom"
         app:endIconMode="clear_text"
@@ -69,7 +68,8 @@
         app:expandedHintEnabled="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tl_select_industry">
+        app:layout_constraintTop_toBottomOf="@id/tl_select_industry"
+        app:placeholderText="@string/enter_salary_hint">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_salary"
@@ -85,21 +85,23 @@
         style="@style/Regular_16_Style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
         android:layout_marginStart="@dimen/margin_standard"
+        android:layout_marginTop="44dp"
         android:text="@string/no_show_without_salary"
         android:textColor="?attr/jcMainTextColor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tl_salary"/>
+        app:layout_constraintTop_toBottomOf="@id/tl_salary" />
 
     <CheckBox
         android:id="@+id/cb_salary_checkbox"
         style="@style/CheckBox_Style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_micro"
         android:layout_marginTop="30dp"
-        android:layout_marginHorizontal="4dp"
+        android:focusable="true"
+        android:clickable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tl_salary" />
 
@@ -110,22 +112,22 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_small"
         android:text="@string/apply"
+        app:layout_constraintBottom_toTopOf="@id/btn_cancel"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btn_cancel"/>
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_cancel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_large"
         android:layout_marginHorizontal="@dimen/margin_standard"
-        android:paddingVertical="@dimen/button_padding"
+        android:layout_marginBottom="@dimen/margin_large"
         android:background="@null"
+        android:paddingVertical="@dimen/button_padding"
         android:text="@string/cancel"
         android:textAppearance="@style/Medium_16_Style"
         android:textColor="@color/red"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
