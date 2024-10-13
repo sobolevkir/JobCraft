@@ -1,9 +1,11 @@
-package ru.practicum.android.diploma.filters.domain
+package ru.practicum.android.diploma.filters.domain.impl
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import ru.practicum.android.diploma.common.domain.model.ErrorType
 import ru.practicum.android.diploma.common.util.Resource
+import ru.practicum.android.diploma.filters.domain.IndustryInteractor
+import ru.practicum.android.diploma.filters.domain.IndustryRepository
 import ru.practicum.android.diploma.filters.domain.model.Industry
 
 class IndustryInteractorImpl(private val repository: IndustryRepository) : IndustryInteractor {

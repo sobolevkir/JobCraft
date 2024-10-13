@@ -24,10 +24,10 @@ class IndustryViewModel(private val interactor: IndustryInteractor) : ViewModel(
             industry.forEach { Log.d("testList", "${it.id} ${it.name}") }
         } else {
             when (errorType) {
-                ErrorType.NOTHING_FOUND -> {
+                ErrorType.NOTHING_FOUND -> {Log.d("testList", "error")
                 }
 
-                else -> {}
+                else -> {Log.d("testList", "error")}
             }
         }
     }

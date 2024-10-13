@@ -4,6 +4,7 @@ import android.content.Context
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
+import ru.practicum.android.diploma.common.data.network.dto.AreaSearchResponse
 import ru.practicum.android.diploma.common.data.network.dto.FilterSearchRequest
 import ru.practicum.android.diploma.common.data.network.dto.IndustrySearchResponse
 import ru.practicum.android.diploma.common.data.network.dto.Response
@@ -50,10 +51,10 @@ class RetrofitNetworkClient(
     private suspend fun handleFilterType(dto: Any): Response {
         return withContext(ioDispatcher) {
             when (dto) {
-                FilterSearchRequest.INDUSTRIES -> IndustrySearchResponse(api.getIndustries()) as Response
-                FilterSearchRequest.COUNTRIES -> IndustrySearchResponse(
-                    api.getIndustries()
-                ) as Response /*здесь должен быть метод аналогичный getIndustries() только для стран*/
+                FilterSearchRequest.INDUSTRIES -> IndustrySearchResponse(api.getIndustries())
+                FilterSearchRequest.AREAS -> AreaSearchResponse(
+                    api.getAreas()
+                ) as Response /*здесь должен быть метод аналогичный getIndustries() только для странl,l,l,l;km';*/
                 else -> IndustrySearchResponse(
                     api.getIndustries()
                 ) as Response/*десь должен быть метод аналогичный getIndustries() только для региона*/
