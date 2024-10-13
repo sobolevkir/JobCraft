@@ -41,8 +41,9 @@
         android:layout_height="60dp"
         android:orientation="horizontal"
         android:layout_marginTop="16dp"
-        android:paddingHorizontal="16dp"
-        android:gravity="center_vertical">
+        android:paddingStart="16dp"
+        android:gravity="center_vertical"
+        android:foreground="?attr/selectableItemBackground">
 
         <TextView
             android:id="@+id/tv_country_empty"
@@ -83,9 +84,12 @@
             android:id="@+id/iv_country"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:layout_marginEnd="4dp"
             android:src="@drawable/ic_arrow_forward"
             app:tint="?attr/jcMainTextColor"
-            tools:ignore="contentDescription"/>
+            tools:ignore="contentDescription"
+            android:foreground="?attr/selectableItemBackground"/>
 
     </LinearLayout>
 
@@ -94,8 +98,9 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:orientation="horizontal"
-        android:paddingHorizontal="16dp"
-        android:gravity="center_vertical">
+        android:paddingStart="16dp"
+        android:gravity="center_vertical"
+        android:foreground="?attr/selectableItemBackground">
 
         <TextView
             android:id="@+id/tv_region_empty"
@@ -138,9 +143,12 @@
             android:id="@+id/iv_region"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:layout_marginEnd="4dp"
             android:src="@drawable/ic_arrow_forward"
             app:tint="?attr/jcMainTextColor"
-            tools:ignore="contentDescription"/>
+            tools:ignore="contentDescription"
+            android:foreground="?attr/selectableItemBackground"/>
 
     </LinearLayout>
     
@@ -160,6 +168,7 @@
         android:layout_marginBottom="24dp"
         android:text="@string/choose"
         android:textColor="@color/white"
+        android:foreground="?attr/selectableItemBackground"
         android:visibility="gone"/>
 
 </LinearLayout>
