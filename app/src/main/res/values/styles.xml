@@ -10,6 +10,15 @@
         <item name="buttonTint">@color/blue</item>
     </style>
 
+    <!-- Стиль для кнопок-->
+    <style name="ButtonStyle">
+        <item name="android:layout_marginHorizontal">@dimen/margin_standard</item>
+        <item name="android:paddingVertical">@dimen/button_padding</item>
+        <item name="android:textAppearance">@style/Medium_16_Style</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/bg_rounded_button</item>
+    </style>
+
     <!-- Стиль для EditText -->
     <style name="EditText_Style">
         <item name="android:textColor">@color/black</item>
@@ -74,19 +83,17 @@
         <item name="android:inputType">textMultiLine|textCapSentences</item>
     </style>
 
-
-
-
     <!-- Стиль для контейнера фильтра зарплаты -->
-    <style name="SalaryTextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+    <style name="SalaryTextInputLayoutStyle">
         <item name="expandedHintEnabled">false</item>
         <item name="android:editable">true</item>
         <item name="hintTextAppearance">@style/Regular_12_Style</item>
         <item name="placeholderTextAppearance">@style/Regular_16_Style</item>
         <item name="cursorColor">@color/blue</item>
-        <item name="hintTextColor">?attr/jcEditTextColorHint</item> <!-- Цвет подсказки, когда она плавает над полем (при фокусе или вводе текста) -->
+        <item name="hintTextColor">?attr/jcEditTextColorHint
+        </item> <!-- Цвет подсказки, когда она плавает над полем (при фокусе или вводе текста) -->
         <item name="placeholderTextColor">?attr/jcHintTextColor</item>  <!-- Цвет нижней подсказки -->
-        <item name="boxStrokeWidth">0dp</item>
+        <item name="android:textColorHint">?attr/jcHintTextColor</item>
     </style>
 
     <!-- Стиль для текста фильтра зарплаты-->
@@ -97,9 +104,9 @@
         <item name="hintTextAppearance">@style/Regular_12_Style</item>
         <item name="android:inputType">number</item>
         <item name="android:imeOptions">actionDone</item>
-        <item name="android:background">@drawable/bg_rounded_edit_text</item>
         <item name="android:maxLength">50</item>
         <item name="android:textColor">@color/black</item>  <!-- Цвет текста внутри поля -->
-        <item name="android:textColorHint">?attr/jcHintTextColor</item>  <!-- Цвет подсказки, когда она находится внутри поля (при отсутствии фокуса) -->
+        <item name="android:textColorHint">@color/white
+        </item>  <!-- Цвет подсказки, когда она находится внутри поля (при отсутствии фокуса) -->
     </style>
 </resources>
