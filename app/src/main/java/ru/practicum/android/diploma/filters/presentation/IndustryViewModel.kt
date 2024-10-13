@@ -21,7 +21,7 @@ class IndustryViewModel(private val interactor: IndustryInteractor) : ViewModel(
 
     private fun processingResult(industry: List<Industry>?, errorType: ErrorType?) {
         if (industry != null) {
-            industry.forEach { Log.d("testList", it.name.toString()) }
+            industry.forEach { Log.d("testList", "${it.id.toString()} ${it.name}") }
         } else {
             when (errorType) {
                 ErrorType.NOTHING_FOUND -> {
