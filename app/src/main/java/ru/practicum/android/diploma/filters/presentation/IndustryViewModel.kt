@@ -14,7 +14,6 @@ class IndustryViewModel(private val interactor: IndustryInteractor) : ViewModel(
 fun test() {
     interactor.getIndustries()
         .onEach { (data, error) ->
-            Log.d("testik", data.toString())
             processingResult(data, error)
         }.launchIn(viewModelScope)
 
@@ -22,7 +21,7 @@ fun test() {
 
     private fun processingResult(industry: List<Industry>?, errorType: ErrorType?) {
         if (industry != null) {
-
+industry.forEach{ Log.d("testList", it.name.toString())}
         } else {
 
             when (errorType) {
