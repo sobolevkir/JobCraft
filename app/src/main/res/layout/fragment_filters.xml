@@ -1,37 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="?attr/jcBackgroundColor"
     tools:context=".filters.ui.FiltersFragment">
 
-    <!-- Нужно будет использовать Toolbar, это упрощает код -->
-    <Button
-        android:id="@+id/btn_back"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:background="@drawable/ic_back_arrow" />
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        style="@style/Toolbar_Style"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_back_arrow"
+        app:title="@string/filter_settings" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tl_select_place"
+        style="@style/TextInputLayoutStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_standard"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_select_place"
+            style="@style/TextInputEditTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/employment" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tl_select_industry"
+        style="@style/TextInputLayoutStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tl_select_place">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_select_industry"
+            style="@style/TextInputEditTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/industry_but_sign" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tl_salary"
+        style="@style/SalaryTextInputLayoutStyle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/salary_height"
+        android:layout_marginHorizontal="@dimen/margin_standard"
+        android:layout_marginTop="@dimen/margin_large"
+        android:background="@drawable/bg_rounded_edit_text"
+        android:hint="@string/expected_salary"
+        android:paddingTop="@dimen/margin_small"
+        app:boxBackgroundMode="none"
+        app:endIconDrawable="@drawable/ic_clear_padding_buttom"
+        app:endIconMode="clear_text"
+        app:endIconTint="@color/black"
+        app:expandedHintEnabled="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tl_select_industry"
+        app:placeholderText="@string/enter_salary_hint">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_salary"
+            style="@style/SalaryTextInputEditTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="@dimen/margin_micro"
+            android:paddingBottom="@dimen/margin_small" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
+        android:id="@+id/tv_no_show_without_salary"
+        style="@style/Regular_16_Style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_standard"
+        android:layout_marginTop="44dp"
+        android:text="@string/no_show_without_salary"
+        android:textColor="?attr/jcMainTextColor"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tl_salary" />
+
+    <CheckBox
+        android:id="@+id/cb_salary_checkbox"
+        style="@style/CheckBox_Style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/filters_sign" />
+        android:layout_marginHorizontal="@dimen/margin_micro"
+        android:layout_marginTop="30dp"
+        android:focusable="true"
+        android:clickable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tl_salary" />
 
-    <Button
-        android:id="@+id/btn_select_place"
-        android:layout_width="wrap_content"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_apply"
+        style="@style/ButtonStyle"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/place_but_sign" />
+        android:layout_marginBottom="@dimen/margin_small"
+        android:text="@string/apply"
+        app:layout_constraintBottom_toTopOf="@id/btn_cancel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/btn_select_industry"
-        android:layout_width="wrap_content"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_cancel"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/industry_but_sign" />
-
-</LinearLayout>
+        android:layout_marginHorizontal="@dimen/margin_standard"
+        android:layout_marginBottom="@dimen/margin_large"
+        android:background="@null"
+        android:paddingVertical="@dimen/button_padding"
+        android:text="@string/cancel"
+        android:textAppearance="@style/Medium_16_Style"
+        android:textColor="@color/red"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

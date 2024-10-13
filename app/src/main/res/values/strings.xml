@@ -16,7 +16,7 @@
     <string name="filters_sign">Здесь будет экран фильров</string>
     <string name="place_but_sign">Выбрать место</string>
     <string name="vacancy_but_sign">Выбрать вакансию</string>
-    <string name="industry_but_sign">Выбрать отрасль</string>
+    <string name="industry_but_sign">Отрасль</string>
     <string name="place_filter_sign">Здесь можно будет установить страну и регион</string>
     <string name="country_but_sign">Выбрать страну</string>
     <string name="region_but_sign">Выбрать регион</string>
@@ -37,6 +37,13 @@
     <string name="server_error">Ошибка сервера</string>
     <string name="no_found_vacancies">Таких вакансий нет</string>
     <string name="select_send_service">Выберите почтовый сервис</string>
+    <string name="filter_settings">Настройки фильтрации</string>
+    <string name="back_but">Назад</string>
+    <string name="enter_salary_hint">Введите сумму</string>
+    <string name="expected_salary">Ожидаемая зарплата</string>
+    <string name="no_show_without_salary">Не показывать без зарплаты</string>
+    <string name="apply">Применить</string>
+    <string name="cancel">Сбросить</string>
 
     <!-- Указание зарплаты -->
     <string name="salary_range">от %1$s до %2$s %3$s</string>

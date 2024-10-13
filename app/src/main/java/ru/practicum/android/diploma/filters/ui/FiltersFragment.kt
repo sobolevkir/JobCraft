@@ -14,13 +14,13 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.btnBack.setOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
-        binding.btnSelectPlace.setOnClickListener {
+        binding.etSelectPlace.setOnClickListener {
             openPlaceSelection()
         }
-        binding.btnSelectIndustry.setOnClickListener {
+        binding.etSelectIndustry.setOnClickListener {
             openIndustrySelection()
         }
 
