@@ -51,7 +51,7 @@ class AreaRepositoryImpl(
     fun getAllNestedAreas(areaDtoList: List<AreaFilterDto>, parentId: String? = null): List<Area> {
         val areaList = mutableListOf<Area>()
         areaDtoList.forEach { areaDto ->
-            areaList.add(Area(areaDto.id, parentId, areaDto.name))
+            areaList.add(Area(parentId, areaDto.id, areaDto.name))
             areaDto.areas?.let { nestedAreas ->
                 areaList.addAll(getAllNestedAreas(nestedAreas, areaDto.id))
             }
@@ -63,7 +63,7 @@ class AreaRepositoryImpl(
         val areaList = mutableListOf<Area>()
         areaDtoList.forEach {
             if (it.parentId == null) {
-                areaList.add(Area(it.id, it.parentId, it.name))
+                areaList.add(Area(it.parentId, it.id, it.name))
             }
         }
         return areaList
