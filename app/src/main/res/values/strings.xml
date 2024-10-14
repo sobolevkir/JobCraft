@@ -42,11 +42,16 @@
     <string name="region">Регион</string>
     <string name="choose">Выбрать</string>
     <string name="filter_settings">Настройки фильтрации</string>
-    <string name="expected_salary">Ожидаемая зарплата</string>
+    <string name="back_but">Назад</string>
     <string name="enter_salary_hint">Введите сумму</string>
+    <string name="expected_salary">Ожидаемая зарплата</string>
     <string name="no_show_without_salary">Не показывать без зарплаты</string>
     <string name="apply">Применить</string>
     <string name="cancel">Сбросить</string>
+    <string name="select_country">Выбор страны</string>
+    <string name="failed_to_get_list">Не удалось получить список</string>
+    <string name="enter_region">Введите регион</string>
+
     <!-- Указание зарплаты -->
     <string name="salary_range">от %1$s до %2$s %3$s</string>
     <string name="salary_from">от %1$s %2$s</string>
