@@ -24,6 +24,10 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <argument
+            android:name="filterParametersChanged"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/teamFragment"
@@ -89,6 +93,9 @@
             app:argType="ru.practicum.android.diploma.filters.domain.model.Area"
             app:nullable="true"
             android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_filtersFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
     </fragment>
     <fragment
         android:id="@+id/selectPlaceFragment"
