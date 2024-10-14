@@ -10,6 +10,7 @@ import ru.practicum.android.diploma.filters.domain.IndustryInteractor
 import ru.practicum.android.diploma.filters.domain.model.Industry
 
 class IndustryViewModel(private val interactor: IndustryInteractor) : ViewModel() {
+    // функции в этом классе тестовые //
 
     fun test() {
         interactor.getIndustries()
@@ -25,9 +26,12 @@ class IndustryViewModel(private val interactor: IndustryInteractor) : ViewModel(
         } else {
             when (errorType) {
                 ErrorType.NOTHING_FOUND -> {
+                    Log.d("testList", "error")
                 }
 
-                else -> {}
+                else -> {
+//                    Log.d("testList", "error")
+                }
             }
         }
     }
