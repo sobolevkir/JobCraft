@@ -21,6 +21,4 @@ interface HHApi {
     @GET("/industries")
     suspend fun getIndustries(): List<IndustryDto>
 
-//    @GET("/areas/countries")
-//    suspend fun getIndustries(): List<IndustryDto>
 }

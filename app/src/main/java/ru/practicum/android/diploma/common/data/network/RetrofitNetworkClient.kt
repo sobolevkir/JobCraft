@@ -54,10 +54,8 @@ class RetrofitNetworkClient(
                 FilterSearchRequest.INDUSTRIES -> IndustrySearchResponse(api.getIndustries())
                 FilterSearchRequest.AREAS -> AreaSearchResponse(
                     api.getAreas()
-                ) as Response /*здесь должен быть метод аналогичный getIndustries() только для странl,l,l,l;km';*/
-                else -> IndustrySearchResponse(
-                    api.getIndustries()
-                ) as Response/*десь должен быть метод аналогичный getIndustries() только для региона*/
+                )
+                else -> Response()
             }
         }
     }
