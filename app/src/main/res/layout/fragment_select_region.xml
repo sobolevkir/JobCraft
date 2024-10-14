@@ -48,7 +48,7 @@
             android:id="@+id/et_search"
             style="@style/EditText_Style"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="@dimen/search_field_height"
             android:hint="@string/enter_region"
             android:importantForAutofill="no"/>
 
