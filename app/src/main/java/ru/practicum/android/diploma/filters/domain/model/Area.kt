@@ -1,7 +1,7 @@
 package ru.practicum.android.diploma.filters.domain.model
 
-class Region(
-    val parentId: String,
+class Area(
+    val parentId: String? = null,
     val id: String,
     val name: String
 )
