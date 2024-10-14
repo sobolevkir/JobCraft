@@ -4,5 +4,6 @@
     <attr name="jcMainTextColor"/>
     <attr name="jcHintTextColor"/>
     <attr name="jcEditTextBackgroundColor"/>
+    <attr name="jcEditTextColorHint"/>
 </resources>
 

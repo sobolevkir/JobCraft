@@ -17,10 +17,10 @@ class SelectPlaceFragment : Fragment(R.layout.fragment_select_place) {
         binding.btnBack.setOnClickListener {
             findNavController().popBackStack()
         }
-        binding.btnSelectCountry.setOnClickListener {
+        binding.llCountry.setOnClickListener {
             openCountrySelection()
         }
-        binding.btnSelectRegion.setOnClickListener {
+        binding.llRegion.setOnClickListener {
             openRegionSelection()
         }
 
