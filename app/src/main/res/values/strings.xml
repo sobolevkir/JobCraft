@@ -37,7 +37,10 @@
     <string name="server_error">Ошибка сервера</string>
     <string name="no_found_vacancies">Таких вакансий нет</string>
     <string name="select_send_service">Выберите почтовый сервис</string>
-
+    <string name="place_of_work">Выбор места работы</string>
+    <string name="country">Страна</string>
+    <string name="region">Регион</string>
+    <string name="choose">Выбрать</string>
     <!-- Указание зарплаты -->
     <string name="salary_range">от %1$s до %2$s %3$s</string>
     <string name="salary_from">от %1$s %2$s</string>
