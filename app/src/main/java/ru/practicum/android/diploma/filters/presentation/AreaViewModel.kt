@@ -1,13 +1,19 @@
 package ru.practicum.android.diploma.filters.presentation
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.common.domain.model.ErrorType
 import ru.practicum.android.diploma.filters.domain.AreaInteractor
 import ru.practicum.android.diploma.filters.domain.model.Area
+import ru.practicum.android.diploma.search.presentation.SearchState
+import ru.practicum.android.diploma.search.presentation.SearchViewModel.Companion.SEARCH_DELAY
 
 class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
     // функции в этом классе тестовые //
@@ -51,6 +57,25 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
             }
         }
         return stringBuilder.toString()
+    }
+
+
+
+
+
+    private val stateLiveData = MutableLiveData<AreaState>()
+    fun getStateLiveData(): LiveData<SearchState> = stateLiveData
+
+    fun searchOnEditorAction(request: String) {
+        //отфильтровать первоначальный список
+    }
+
+    private fun renderState(state: AreaState) {
+        stateLiveData.postValue(state)
+    }
+
+    companion object {
+        const val SEARCH_DELAY = 500L
     }
 
 }
