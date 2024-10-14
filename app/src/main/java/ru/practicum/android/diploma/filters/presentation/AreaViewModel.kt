@@ -8,9 +8,7 @@ import kotlinx.coroutines.flow.onEach
 import ru.practicum.android.diploma.common.data.network.dto.AreaFilterDto
 import ru.practicum.android.diploma.common.domain.model.ErrorType
 import ru.practicum.android.diploma.filters.domain.AreaInteractor
-import ru.practicum.android.diploma.filters.domain.IndustryInteractor
-import ru.practicum.android.diploma.filters.domain.model.AreaFilter
-import ru.practicum.android.diploma.filters.domain.model.Industry
+import ru.practicum.android.diploma.filters.domain.model.Area
 
 class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
 
@@ -22,9 +20,9 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
 
     }
 
-    private fun processingResult(area: List<AreaFilter>?, errorType: ErrorType?) {
+    private fun processingResult(area: List<Area>?, errorType: ErrorType?) {
         if (area != null) {
-            area.forEach { Log.d("testList", "${it.id} ${it.name} ${showAreas(area)}") }
+            area.forEach { Log.d("testList", " ${showRegions(area)} ") }
         } else {
             when (errorType) {
                 ErrorType.NOTHING_FOUND -> {
@@ -36,28 +34,24 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
             }
         }
     }
-    private fun showAreas(area: List<AreaFilter>): String {
+    private fun showCountries(area: List<Area>): String {
         val stringBuilder = StringBuilder()
         area.forEach {
             if (it.parentId == null) {
                 stringBuilder.append(it.name).append("\n")
-                appendAreas(stringBuilder, convertArea(it.areas))
             }
         }
         return stringBuilder.toString()
     }
+    private fun showRegions(area: List<Area>): String {
+        val stringBuilder = StringBuilder()
+        area.forEach {
 
-    private fun appendAreas(string: StringBuilder, areas: List<AreaFilter>?) {
-        areas?.forEach {
-            string.append(it.name + "\n")
-            appendAreas(string, convertArea(it.areas))
+                stringBuilder.append(it.name).append("\n")
+
         }
+        return stringBuilder.toString()
     }
-    fun convertArea(areaList: List<AreaFilterDto>?): List<AreaFilter> {
-        if (areaList != null) {
-            return areaList.map {
-                AreaFilter(it.id, it.parentId, it.name, it.areas)
-            }
-        }else return emptyList()
-    }
+
+
 }
