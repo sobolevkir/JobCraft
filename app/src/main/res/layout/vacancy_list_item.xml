@@ -58,7 +58,7 @@
             android:maxLines="1"
             android:textAppearance="@style/Regular_16_Style"
             android:textColor="?attr/jcMainTextColor"
-            tools:text="@string/no_salary" />
+            tools:text="@string/salary_not_specified" />
 
     </LinearLayout>
 </LinearLayout>
