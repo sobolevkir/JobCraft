@@ -48,7 +48,7 @@ class AreaRepositoryImpl(
         }
     }.flowOn(ioDispatcher)
 
-    fun getAllNestedAreas(areaDtoList: List<AreaFilterDto>, parentId: String? = null): List<Area> {
+    private fun getAllNestedAreas(areaDtoList: List<AreaFilterDto>, parentId: String? = null): List<Area> {
         val areaList = mutableListOf<Area>()
         areaDtoList.forEach { areaDto ->
             areaList.add(Area(parentId, areaDto.id, areaDto.name))
@@ -59,7 +59,7 @@ class AreaRepositoryImpl(
         return areaList
     }
 
-    fun getCountriesFromAreas(areaDtoList: List<AreaFilterDto>): List<Area> {
+    private fun getCountriesFromAreas(areaDtoList: List<AreaFilterDto>): List<Area> {
         val areaList = mutableListOf<Area>()
         areaDtoList.forEach {
             if (it.parentId == null) {

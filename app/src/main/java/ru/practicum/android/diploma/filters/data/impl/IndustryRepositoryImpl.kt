@@ -33,7 +33,7 @@ class IndustryRepositoryImpl(
         }
     }.flowOn(ioDispatcher)
 
-    fun convertIndustry(industryList: List<IndustryDto>): List<Industry> {
+    private fun convertIndustry(industryList: List<IndustryDto>): List<Industry> {
         return industryList.map {
             Industry(it.id, it.name)
         }
