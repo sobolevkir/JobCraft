@@ -7,5 +7,3 @@ data class FilterParameters(
     val expectedSalary: Int?,
     val onlyWithSalary: Boolean = false
 )
-
-
