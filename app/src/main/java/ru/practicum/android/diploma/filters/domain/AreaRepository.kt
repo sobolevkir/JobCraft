@@ -6,4 +6,6 @@ import ru.practicum.android.diploma.filters.domain.model.Area
 
 interface AreaRepository {
     fun getAreas(): Flow<Resource<List<Area>>>
+
+    fun getCountries(): Flow<Resource<List<Area>>>
 }

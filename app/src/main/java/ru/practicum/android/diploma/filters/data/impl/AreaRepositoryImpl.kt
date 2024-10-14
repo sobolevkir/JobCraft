@@ -33,22 +33,39 @@ class AreaRepositoryImpl(
         }
     }.flowOn(ioDispatcher)
 
-    fun convertToAreas(areaDtoList: List<AreaFilterDto>?): List<Area> {
-        return if (areaDtoList != null) {
-            areaDtoList.map {
-                Area(it.id, it.parentId, it.name)
+    override fun getCountries(): Flow<Resource<List<Area>>> = flow {
+        val response = networkClient.doRequest(FilterSearchRequest.AREAS)
+        when (response.resultCode) {
+            ResultCode.SUCCESS -> {
+                val areaSearchResponse = response as AreaSearchResponse
+                val areaFilterDto = areaSearchResponse.items
+                if (areaFilterDto.isEmpty()) {
+                    emit(Resource.Error(ErrorType.NOTHING_FOUND))
+                } else {
+                    emit(Resource.Success(getCountriesFromAreas(areaFilterDto)))
+                }
             }
-        } else emptyList()
-    }
+        }
+    }.flowOn(ioDispatcher)
 
     fun getAllNestedAreas(areaDtoList: List<AreaFilterDto>, parentId: String? = null): List<Area> {
         val areaList = mutableListOf<Area>()
         areaDtoList.forEach { areaDto ->
             areaList.add(Area(areaDto.id, parentId, areaDto.name))
             areaDto.areas?.let { nestedAreas ->
-            areaList.addAll(getAllNestedAreas(nestedAreas, areaDto.id))
+                areaList.addAll(getAllNestedAreas(nestedAreas, areaDto.id))
+            }
         }
+        return areaList
     }
-    return areaList
-}
+
+    fun getCountriesFromAreas(areaDtoList: List<AreaFilterDto>): List<Area> {
+        val areaList = mutableListOf<Area>()
+        areaDtoList.forEach {
+            if (it.parentId == null) {
+                areaList.add(Area(it.id, it.parentId, it.name))
+            }
+        }
+        return areaList
+    }
 }
