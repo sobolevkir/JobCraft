@@ -6,4 +6,4 @@ class Area(
     val parentId: String? = null,
     val id: String,
     val name: String
-): Serializable
+) : Serializable
