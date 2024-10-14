@@ -10,9 +10,10 @@ import ru.practicum.android.diploma.filters.domain.AreaInteractor
 import ru.practicum.android.diploma.filters.domain.model.Area
 
 class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
+    // функции в этом классе тестовые //
 
     fun test() {
-        interactor.getAreas()
+        interactor.getRegions()
             .onEach { (data, error) ->
                 processingResult(data, error)
             }.launchIn(viewModelScope)

@@ -18,7 +18,7 @@ class AreaRepositoryImpl(
     private val networkClient: NetworkClient,
     private val ioDispatcher: CoroutineDispatcher,
 ) : AreaRepository {
-    override fun getAreas(): Flow<Resource<List<Area>>> = flow {
+    override fun getRegions(): Flow<Resource<List<Area>>> = flow {
         val response = networkClient.doRequest(FilterSearchRequest.AREAS)
         when (response.resultCode) {
             ResultCode.SUCCESS -> {

@@ -10,6 +10,7 @@ import ru.practicum.android.diploma.filters.domain.IndustryInteractor
 import ru.practicum.android.diploma.filters.domain.model.Industry
 
 class IndustryViewModel(private val interactor: IndustryInteractor) : ViewModel() {
+    // функции в этом классе тестовые //
 
     fun test() {
         interactor.getIndustries()

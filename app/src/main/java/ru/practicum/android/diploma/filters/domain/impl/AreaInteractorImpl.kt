@@ -9,8 +9,8 @@ import ru.practicum.android.diploma.filters.domain.AreaRepository
 import ru.practicum.android.diploma.filters.domain.model.Area
 
 class AreaInteractorImpl(private val repository: AreaRepository) : AreaInteractor {
-    override fun getAreas(): Flow<Pair<List<Area>?, ErrorType?>> {
-        return repository.getAreas().map { result ->
+    override fun getRegions(): Flow<Pair<List<Area>?, ErrorType?>> {
+        return repository.getRegions().map { result ->
             when (result) {
                 is Resource.Success -> {
                     Pair(result.data, null)
