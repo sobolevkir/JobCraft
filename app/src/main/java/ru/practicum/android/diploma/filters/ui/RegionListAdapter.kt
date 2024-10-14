@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import ru.practicum.android.diploma.common.domain.model.VacancyFromList
+import ru.practicum.android.diploma.databinding.RegionListItemBinding
 import ru.practicum.android.diploma.databinding.VacancyListItemBinding
 import ru.practicum.android.diploma.filters.domain.model.Area
 
@@ -12,7 +13,7 @@ class RegionListAdapter(
 ) : ListAdapter<Area, RegionListViewHolder>(RegionItemComparator()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RegionListViewHolder {
         val layoutInspector = LayoutInflater.from(parent.context)
-        return RegionListViewHolder(RegionsListItemBinding.inflate(layoutInspector, parent, false))
+        return RegionListViewHolder(RegionListItemBinding.inflate(layoutInspector, parent, false))
     }
 
     override fun onBindViewHolder(holder: RegionListViewHolder, position: Int) {
