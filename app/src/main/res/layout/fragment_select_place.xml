@@ -132,7 +132,6 @@
             <TextView
                 android:id="@+id/tv_region_filled"
                 style="@style/Regular_16_Style"
-                android:textSize="50sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="?attr/jcMainTextColor"
@@ -162,7 +161,7 @@
         style="@style/Medium_16_Style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/blue_rectangle"
+        android:background="@drawable/bg_rounded_button"
         android:gravity="center"
         android:paddingVertical="20dp"
         android:layout_marginHorizontal="16dp"
@@ -170,6 +169,6 @@
         android:text="@string/choose"
         android:textColor="@color/white"
         android:foreground="?attr/selectableItemBackground"
-        android:visibility="gone"/>
+        android:visibility="visible"/>
 
 </LinearLayout>
