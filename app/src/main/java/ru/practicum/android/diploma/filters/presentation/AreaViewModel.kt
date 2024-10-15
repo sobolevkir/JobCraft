@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.filters.presentation
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -57,12 +56,11 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
                 when (errorType) {
                     null -> {
                         if (searchResult.isNullOrEmpty()) {
-                            renderState(AreaState.NoList) // ??
+                            renderState(AreaState.NoList)
                         } else {
                             val regionsOnly = excludeCountries(searchResult)
 
                             val sortedRegions = sortArea(regionsOnly)
-                            sortedRegions.forEach { Log.d("region", "Area: ${it.name}, ParentId: ${it.parentId}") }
                             if (countryId != null) filterAreasByParentId(searchResult ?: emptyList(), countryId)
                             renderState(AreaState.Success(sortedRegions))
                         }
@@ -70,16 +68,13 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
 
                     ErrorType.CONNECTION_PROBLEM -> {
                         renderState(AreaState.InternetError)
-                        Log.d("region", "AreaState.InternetError")
                     }
 
                     ErrorType.NOTHING_FOUND -> {
-                        Log.d("region", "AreaState.NothingFound")
                         renderState(AreaState.NothingFound)
                     }
 
                     else -> {
-                        Log.d("region", "AreaState.ServerError")
                         renderState(AreaState.ServerError)
                     }
                 }
@@ -96,23 +91,19 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
                             renderState(AreaState.NoList) // ??
                         } else {
                             val sortedCountries = sortCountries(searchResult)
-                            searchResult.forEach { Log.d("region", "Area: ${it.name}, ParentId: ${it.parentId}") }
                             renderState(AreaState.Success(sortedCountries))
                         }
                     }
 
                     ErrorType.CONNECTION_PROBLEM -> {
                         renderState(AreaState.InternetError)
-                        Log.d("region", "AreaState.InternetError")
                     }
 
                     ErrorType.NOTHING_FOUND -> {
-                        Log.d("region", "AreaState.NothingFound")
                         renderState(AreaState.NothingFound)
                     }
 
                     else -> {
-                        Log.d("region", "AreaState.ServerError")
                         renderState(AreaState.ServerError)
                     }
                 }

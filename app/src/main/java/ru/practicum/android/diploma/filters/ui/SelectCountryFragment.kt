@@ -35,7 +35,7 @@ class SelectCountryFragment : Fragment(R.layout.fragment_select_region) {
         binding.rvAreaList.adapter = adapter
         binding.rvAreaList.itemAnimator = null
         viewModel.getStateLiveData().observe(viewLifecycleOwner) { renderState(it) }
-}
+    }
 
     private fun renderState(state: AreaState) {
         when (state) {
