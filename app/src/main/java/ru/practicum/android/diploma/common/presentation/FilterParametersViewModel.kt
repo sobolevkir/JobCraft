@@ -23,7 +23,7 @@ class FilterParametersViewModel : ViewModel() {
         filterParametersLiveData.postValue(parameters)
     }
 
-    fun setRegion(region: Area) {
+    fun setRegion(region: Area?) {
         with(filterParametersLiveData) {
             this.postValue(
                 this.value?.copy(region = region)
@@ -31,7 +31,7 @@ class FilterParametersViewModel : ViewModel() {
         }
     }
 
-    fun setCountry(country: Area) {
+    fun setCountry(country: Area?) {
         with(filterParametersLiveData) {
             this.postValue(
                 this.value?.copy(country = country)
@@ -39,7 +39,7 @@ class FilterParametersViewModel : ViewModel() {
         }
     }
 
-    fun setIndustry(industry: Industry) {
+    fun setIndustry(industry: Industry?) {
         with(filterParametersLiveData) {
             this.postValue(
                 this.value?.copy(industry = industry)
@@ -47,7 +47,7 @@ class FilterParametersViewModel : ViewModel() {
         }
     }
 
-    fun setExpectedSalary(salary: Int) {
+    fun setExpectedSalary(salary: Int?) {
         with(filterParametersLiveData) {
             this.postValue(
                 this.value?.copy(expectedSalary = salary)
