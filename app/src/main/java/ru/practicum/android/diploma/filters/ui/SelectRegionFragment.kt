@@ -33,7 +33,7 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
     private val filterParametersViewModel: FilterParametersViewModel by navGraphViewModels(R.id.root_navigation_graph)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setStartOptions(true)
+        setStartOptions()
         initClickListeners()
         initQueryChangeListener()
         binding.rvAreaList.adapter = adapter
@@ -89,7 +89,7 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
         }
     }
 
-    private fun setStartOptions(isQueryEmpty: Boolean) {
+    private fun setStartOptions() {
         with(binding) {
             tvFragmentTitle.text = getString(R.string.region_but_sign)
             flSearch.isVisible = true
@@ -121,7 +121,6 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 viewModel.searchRequest(s.toString(), countryId)
                 if (s.isEmpty()) {
-                    setStartOptions(s.isEmpty())
                     binding.ivSearch.setImageResource(R.drawable.ic_search)
                 } else {
                     binding.ivSearch.setImageResource(R.drawable.ic_clear)
@@ -132,8 +131,9 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
 
     private fun passArgument(region: Area) {
         filterParametersViewModel.setRegion(region)
-        val action = SelectRegionFragmentDirections.actionSelectRegionFragmentToSelectPlaceFragment()
-        findNavController().navigate(action)
+//        val action = SelectRegionFragmentDirections.actionSelectRegionFragmentToSelectPlaceFragment()
+//        findNavController().navigate(action)
+        findNavController().popBackStack()
     }
 
     private fun clickDebounce(): Boolean {

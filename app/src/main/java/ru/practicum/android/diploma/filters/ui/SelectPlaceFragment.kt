@@ -27,7 +27,7 @@ class SelectPlaceFragment : Fragment(R.layout.fragment_select_place) {
     }
 
     private fun openCountrySelection() {
-        val action = SelectPlaceFragmentDirections.actionSelectPlaceFragmentToSelectRegionFragment()
+        val action = SelectPlaceFragmentDirections.actionSelectPlaceFragmentToSelectCountryFragment()
         findNavController().navigate(action)
     }
 

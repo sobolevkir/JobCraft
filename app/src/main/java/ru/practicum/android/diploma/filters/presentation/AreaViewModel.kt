@@ -32,7 +32,6 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
                             }
                             if (countryId != null) filterAreasByParentId(regions ?: emptyList(), countryId)
 
-                            Log.d("region", "AreaState.Success $filteredRegions")
                             if (filteredRegions.isEmpty()) {
                                 renderState(AreaState.NothingFound)
                             } else {
@@ -54,19 +53,12 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
                 when (errorType) {
                     null -> {
                         if (searchResult.isNullOrEmpty()) {
-                            Log.d("region", "AreaState.NoList")
                             renderState(AreaState.NoList) // ??
                         } else {
                             val regionsOnly = excludeCountries(searchResult)
 
                             val sortedRegions = sortArea(regionsOnly)
-                            sortedRegions.filter {
-                                it.name.contains("Австралия", ignoreCase = true) || it.name.contains(
-                                    "Австрия",
-                                    ignoreCase = true
-                                )
-                            }
-                                .forEach { Log.d("region", "Area: ${it.name}, ParentId: ${it.parentId}") }
+                            sortedRegions.forEach { Log.d("region", "Area: ${it.name}, ParentId: ${it.parentId}") }
                             if (countryId != null) filterAreasByParentId(searchResult ?: emptyList(), countryId)
                             renderState(AreaState.Success(sortedRegions))
                         }
@@ -89,6 +81,10 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
                 }
             }
             .launchIn(viewModelScope)
+    }
+
+    fun showCountries() {
+
     }
 
     private fun excludeCountries(area: List<Area>): List<Area> {
