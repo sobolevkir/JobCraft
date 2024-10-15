@@ -131,8 +131,6 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
 
     private fun passArgument(region: Area) {
         filterParametersViewModel.setRegion(region)
-//        val action = SelectRegionFragmentDirections.actionSelectRegionFragmentToSelectPlaceFragment()
-//        findNavController().navigate(action)
         findNavController().popBackStack()
     }
 

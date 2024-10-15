@@ -34,7 +34,7 @@ class SelectCountryFragment : Fragment(R.layout.fragment_select_region) {
         initClickListeners()
         binding.rvAreaList.adapter = adapter
         binding.rvAreaList.itemAnimator = null
-
+        viewModel.getStateLiveData().observe(viewLifecycleOwner) { renderState(it) }
 }
 
     private fun renderState(state: AreaState) {
@@ -86,6 +86,7 @@ class SelectCountryFragment : Fragment(R.layout.fragment_select_region) {
         with(binding) {
             flSearch.isVisible = false
             progressBar.isVisible = false
+            rvAreaList.isVisible = true
             viewModel.showCountries()
         }
     }
@@ -102,8 +103,6 @@ class SelectCountryFragment : Fragment(R.layout.fragment_select_region) {
 
     private fun passArgument(country: Area) {
         filterParametersViewModel.setRegion(country)
-//        val action = SelectCountryFragmentDirections.actionSelectRegionFragmentToSelectPlaceFragment()
-//        findNavController().navigate(action)
         findNavController().popBackStack()
     }
 

@@ -20,6 +20,10 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
         search(countryId)
     }
 
+    fun showCountries() {
+        searchCountry()
+    }
+
     fun searchRequest(searchText: String, countryId: String?) {
         if (searchText.isNotEmpty()) {
             renderState(AreaState.Loading)
@@ -83,8 +87,37 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
             .launchIn(viewModelScope)
     }
 
-    fun showCountries() {
+    private fun searchCountry() {
+        interactor.getCountries()
+            .onEach { (searchResult, errorType) ->
+                when (errorType) {
+                    null -> {
+                        if (searchResult.isNullOrEmpty()) {
+                            renderState(AreaState.NoList) // ??
+                        } else {
+                            val sortedCountries = sortCountries(searchResult)
+                            searchResult.forEach { Log.d("region", "Area: ${it.name}, ParentId: ${it.parentId}") }
+                            renderState(AreaState.Success(sortedCountries))
+                        }
+                    }
 
+                    ErrorType.CONNECTION_PROBLEM -> {
+                        renderState(AreaState.InternetError)
+                        Log.d("region", "AreaState.InternetError")
+                    }
+
+                    ErrorType.NOTHING_FOUND -> {
+                        Log.d("region", "AreaState.NothingFound")
+                        renderState(AreaState.NothingFound)
+                    }
+
+                    else -> {
+                        Log.d("region", "AreaState.ServerError")
+                        renderState(AreaState.ServerError)
+                    }
+                }
+            }
+            .launchIn(viewModelScope)
     }
 
     private fun excludeCountries(area: List<Area>): List<Area> {
@@ -114,6 +147,10 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
         val areasWithoutDigits = sortedListByName.filter { !it.name.any { char -> char.isDigit() } }
         val areasWithDigits = sortedListByName.filter { it.name.any { char -> char.isDigit() } }
         return areasWithoutDigits + areasWithDigits // Сначала без цифр, затем с цифрами
+    }
+
+    private fun sortCountries(area: List<Area>): List<Area> {
+        return area.sortedBy { if (it.name == "Другие регионы") 1 else 0 }
     }
 
 }
