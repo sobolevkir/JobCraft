@@ -27,7 +27,7 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
     private val adapter: RegionListAdapter by lazy {
         RegionListAdapter(onItemClick = { if (clickDebounce()) passArgument(it) })
     }
-    private var countryId:String?=null
+    private var countryId: String? = null
 
     private val viewModel: AreaViewModel by viewModel()
     private val filterParametersViewModel: FilterParametersViewModel by navGraphViewModels(R.id.root_navigation_graph)
@@ -39,9 +39,9 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
         binding.rvAreaList.adapter = adapter
         binding.rvAreaList.itemAnimator = null
         viewModel.getStateLiveData().observe(viewLifecycleOwner) { renderState(it) }
-        filterParametersViewModel.getFilterParametersLiveData().observe(viewLifecycleOwner){
-            countryId= it.country?.id
-        }
+//        filterParametersViewModel.getFilterParametersLiveData().observe(viewLifecycleOwner) {
+//            countryId = it.country?.id
+//        } это вызывает ошибку мол FilterParametr null объект, возможно просто не успевает программа сработать
     }
 
     private fun renderState(state: AreaState) {
@@ -99,15 +99,6 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
     }
 
     private fun initClickListeners() {
-        binding.etSearch.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                val query = binding.etSearch.text.toString()
-                if (query.isNotEmpty()) {
-                    viewModel.searchOnEditorAction(query)
-                }
-            }
-            false
-        }
         binding.ivSearch.setOnClickListener {
             binding.etSearch.setText("")
         }
@@ -128,7 +119,6 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-
                 viewModel.searchRequest(s.toString(), countryId)
                 if (s.isEmpty()) {
                     setStartOptions(s.isEmpty())

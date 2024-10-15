@@ -3,9 +3,7 @@ package ru.practicum.android.diploma.filters.ui
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import ru.practicum.android.diploma.common.domain.model.VacancyFromList
 import ru.practicum.android.diploma.databinding.RegionListItemBinding
-import ru.practicum.android.diploma.databinding.VacancyListItemBinding
 import ru.practicum.android.diploma.filters.domain.model.Area
 
 class RegionListAdapter(

@@ -16,10 +16,6 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
     private val stateLiveData = MutableLiveData<AreaState>()
     fun getStateLiveData(): LiveData<AreaState> = stateLiveData
 
-    fun searchOnEditorAction(request: String) {
-        //отфильтровать первоначальный список
-    }
-
     fun showAllRegions(countryId: String?) {
         search(countryId)
     }
@@ -34,9 +30,9 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
                             val filteredRegions = excludeCountries(regions ?: emptyList()).filter {
                                 it.name.contains(searchText, ignoreCase = true)
                             }
-                            if (countryId != null) filterAreasByParentId(regions?: emptyList(), countryId)
+                            if (countryId != null) filterAreasByParentId(regions ?: emptyList(), countryId)
 
-                                Log.d("region", "AreaState.Success $filteredRegions")
+                            Log.d("region", "AreaState.Success $filteredRegions")
                             if (filteredRegions.isEmpty()) {
                                 renderState(AreaState.NothingFound)
                             } else {
@@ -59,7 +55,7 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
                     null -> {
                         if (searchResult.isNullOrEmpty()) {
                             Log.d("region", "AreaState.NoList")
-                            renderState(AreaState.NoList)  //??
+                            renderState(AreaState.NoList) // ??
                         } else {
                             val regionsOnly = excludeCountries(searchResult)
 
@@ -71,7 +67,7 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
                                 )
                             }
                                 .forEach { Log.d("region", "Area: ${it.name}, ParentId: ${it.parentId}") }
-                            if (countryId != null) filterAreasByParentId(searchResult?: emptyList(), countryId)
+                            if (countryId != null) filterAreasByParentId(searchResult ?: emptyList(), countryId)
                             renderState(AreaState.Success(sortedRegions))
                         }
                     }
