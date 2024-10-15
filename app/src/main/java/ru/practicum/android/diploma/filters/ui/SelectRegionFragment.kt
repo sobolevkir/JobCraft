@@ -9,11 +9,13 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.common.ext.viewBinding
+import ru.practicum.android.diploma.common.presentation.FilterParametersViewModel
 import ru.practicum.android.diploma.databinding.FragmentSelectRegionBinding
 import ru.practicum.android.diploma.filters.domain.model.Area
 import ru.practicum.android.diploma.filters.presentation.AreaState
@@ -27,6 +29,7 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
     }
 
     private val viewModel: AreaViewModel by viewModel()
+    private val filterParametersViewModel: FilterParametersViewModel by navGraphViewModels(R.id.root_navigation_graph)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setStartOptions(true)
@@ -136,7 +139,8 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
     }
 
     private fun passArgument(region: Area) {
-        val action = SelectRegionFragmentDirections.actionSelectRegionFragmentToSelectPlaceFragment(region)
+        filterParametersViewModel.setRegion(region)
+        val action = SelectRegionFragmentDirections.actionSelectRegionFragmentToSelectPlaceFragment()
         findNavController().navigate(action)
     }
 

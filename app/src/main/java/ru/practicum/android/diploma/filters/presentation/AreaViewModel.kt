@@ -12,51 +12,6 @@ import ru.practicum.android.diploma.filters.domain.AreaInteractor
 import ru.practicum.android.diploma.filters.domain.model.Area
 
 class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
-    // функции в этом классе тестовые //
-
-    fun test() {
-        interactor.getRegions()
-            .onEach { (data, error) ->
-                processingResult(data, error)
-            }.launchIn(viewModelScope)
-
-    }
-
-    private fun processingResult(area: List<Area>?, errorType: ErrorType?) {
-        if (area != null) {
-            area.forEach { Log.d("testList", " ${showCountries(area)} ${showRegions(area)} ") }
-        } else {
-            when (errorType) {
-                ErrorType.NOTHING_FOUND -> {
-//                    Log.d("testList", "error")
-                }
-
-                else -> {
-//                    Log.d("testList", "error")
-                }
-            }
-        }
-    }
-
-    private fun showCountries(area: List<Area>): String {
-        val stringBuilder = StringBuilder()
-        area.forEach {
-            stringBuilder.append(it.name).append("\n")
-
-        }
-        return stringBuilder.toString()
-    }
-
-    private fun showRegions(area: List<Area>): String {
-        val stringBuilder = StringBuilder()
-        area.forEach {
-            if (it.parentId != null) {
-                stringBuilder.append(it.name).append("\n")
-            }
-        }
-        return stringBuilder.toString()
-    }
-
 
     private val stateLiveData = MutableLiveData<AreaState>()
     fun getStateLiveData(): LiveData<AreaState> = stateLiveData
@@ -76,7 +31,7 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
                 .onEach { (regions, errorType) ->
                     when (errorType) {
                         null -> {
-                            val filteredRegions = excludeCountries(regions?: emptyList()).filter {
+                            val filteredRegions = excludeCountries(regions ?: emptyList()).filter {
                                 it.name.contains(searchText, ignoreCase = true)
                             }
 
@@ -105,14 +60,16 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
                             Log.d("region", "AreaState.NoList")
                             renderState(AreaState.NoList)  //??
                         } else {
-                          //  Log.d("region", "AreaState.Success $searchResult")
                             val regionsOnly = excludeCountries(searchResult)
 //
                             val sortedRegions = sortArea(regionsOnly)
-//                            sortedRegions.forEach { Log.d("region", "Area:  ${it.name}, ParentId: ${it.parentId}") }
-                            sortedRegions.filter { it.name.contains("Австралия", ignoreCase = true)||it.name.contains("Австрия", ignoreCase = true)   }
+                            sortedRegions.filter {
+                                it.name.contains("Австралия", ignoreCase = true) || it.name.contains(
+                                    "Австрия",
+                                    ignoreCase = true
+                                )
+                            }
                                 .forEach { Log.d("region", "Area: ${it.name}, ParentId: ${it.parentId}") }
-                          //  Log.d("region", "AreaState.Success $regionsOnly")
                             renderState(AreaState.Success(sortedRegions))
                         }
                     }
@@ -137,7 +94,7 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
     }
 
     private fun excludeCountries(area: List<Area>): List<Area> {
-        return area.filter { it.parentId != null && it.parentId != 1001.toString()  }
+        return area.filter { it.parentId != null && it.parentId != 1001.toString() }
     }
 
     private fun renderState(state: AreaState) {
