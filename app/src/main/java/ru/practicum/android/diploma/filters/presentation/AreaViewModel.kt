@@ -70,10 +70,29 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
     }
 
     fun searchRequest(searchText: String) {
-        if (searchText.isNotEmpty()) {
-            renderState(AreaState.Loading)
-            search()
-        }
+//        if (searchText.isNotEmpty()) {
+//            renderState(AreaState.Loading)
+//            interactor.getRegions()
+//                .onEach { (regions, errorType) ->
+//                    when (errorType) {
+//                        null -> {
+//                            val filteredRegions = regions?.filter {
+//                                it.name.contains(searchText, ignoreCase = true)
+//                            }
+//                            Log.d("region", "AreaState.Success $filteredRegions")
+//                            if (filteredRegions.isNullOrEmpty()) {
+//                                renderState(AreaState.NothingFound)
+//                            } else {
+//                                renderState(AreaState.Success(filteredRegions))
+//                            }
+//                        }
+//
+//                        ErrorType.CONNECTION_PROBLEM -> renderState(AreaState.InternetError)
+//                        else -> renderState(AreaState.ServerError)
+//                    }
+//                }
+//                .launchIn(viewModelScope)
+//        }
     }
 
     private fun search() {
@@ -85,8 +104,15 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
                             Log.d("region", "AreaState.NoList")
                             renderState(AreaState.NoList)  //??
                         } else {
-                            Log.d("region", "AreaState.Success $searchResult")
-                            renderState(AreaState.Success(searchResult))
+                          //  Log.d("region", "AreaState.Success $searchResult")
+                            val regionsOnly = excludeCountries(searchResult)
+//
+                            val sortedRegions = sortArea(regionsOnly)
+//                            sortedRegions.forEach { Log.d("region", "Area:  ${it.name}, ParentId: ${it.parentId}") }
+                            sortedRegions.filter { it.name.contains("Австралия", ignoreCase = true)||it.name.contains("Австрия", ignoreCase = true)   }
+                                .forEach { Log.d("region", "Area: ${it.name}, ParentId: ${it.parentId}") }
+                          //  Log.d("region", "AreaState.Success $regionsOnly")
+                            renderState(AreaState.Success(sortedRegions))
                         }
                     }
 
@@ -109,12 +135,23 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
             .launchIn(viewModelScope)
     }
 
+    private fun excludeCountries(area: List<Area>): List<Area> {
+        return area.filter { it.parentId != null && it.parentId != 1001.toString()  }
+    }
+
     private fun renderState(state: AreaState) {
         stateLiveData.postValue(state)
     }
 
     companion object {
         const val SEARCH_DELAY = 500L
+    }
+
+    private fun sortArea(area: List<Area>): List<Area> {
+        val sortedListByName = area.sortedBy { it.name.replace('Ё', 'Е').replace('ё', 'е') }
+        val areasWithoutDigits = sortedListByName.filter { !it.name.any { char -> char.isDigit() } }
+        val areasWithDigits = sortedListByName.filter { it.name.any { char -> char.isDigit() } }
+        return areasWithoutDigits + areasWithDigits // Сначала без цифр, затем с цифрами
     }
 
 }

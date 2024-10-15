@@ -75,7 +75,7 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
             rvAreaList.isVisible = false
             ivError.setImageResource(image)
             tvError.isVisible = messageState
-         //   tvError.setText(R.string.no_found_vacancies)
+            //   tvError.setText(R.string.no_found_vacancies)
             if (text == null) {
                 tvError.text = ""
             } else {
@@ -124,14 +124,12 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 setStartOptions(s.isEmpty())
+                viewModel.searchRequest(s.toString())
                 if (s.isEmpty()) {
-                    // Если текст пустой, показываем иконку поиска
                     binding.ivSearch.setImageResource(R.drawable.ic_search)
                 } else {
-                    // Если текст не пустой, показываем иконку очистки
                     binding.ivSearch.setImageResource(R.drawable.ic_clear)
                 }
-               // viewModel.search(s.toString())
             }
         })
     }
