@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -48,9 +49,10 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
             if (state.industry != null) {
                 etSelectIndustry.setText(state.industry.name)
             }
-            if (state.industry != null || state.country != null || state.expectedSalary != null || !state.onlyWithSalary) {
-
-            }
+            btnCancel.isVisible = state.industry != null ||
+                state.country != null ||
+                state.expectedSalary != null ||
+                !state.onlyWithSalary
         }
 
     }
