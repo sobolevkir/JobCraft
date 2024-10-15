@@ -39,4 +39,5 @@ val viewModelModule = module {
     viewModel {
         FiltersViewModel(interactor = get())
     }
+
 }
