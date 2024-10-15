@@ -25,56 +25,42 @@ class FilterParametersViewModel : ViewModel() {
 
     fun setRegion(region: Area) {
         with(filterParametersLiveData) {
-            val currentValue = this.value
-            if (currentValue != null) {
-                this.postValue(FilterParameters(null,region,null,null,false))
-            } else {
-                this.postValue(this.value?.copy(region = region))
-            }
+            this.postValue(
+                this.value?.copy(region = region)
+            )
         }
     }
 
     fun setCountry(country: Area) {
         with(filterParametersLiveData) {
-            val currentValue = this.value
-            if (currentValue != null) {
-                this.postValue(FilterParameters(country,null,null,null,false))
-            } else {
-                this.postValue(this.value?.copy(country = country))
-            }
+            this.postValue(
+                this.value?.copy(country = country)
+            )
         }
     }
 
     fun setIndustry(industry: Industry) {
         with(filterParametersLiveData) {
-            val currentValue = this.value
-            if (currentValue != null) {
-                this.postValue(FilterParameters(null,null,industry,null,false))
-            } else {
-                this.postValue(this.value?.copy(industry = industry))
-            }
+            this.postValue(
+                this.value?.copy(industry = industry)
+            )
         }
     }
 
     fun setExpectedSalary(salary: Int) {
         with(filterParametersLiveData) {
-            val currentValue = this.value
-            if (currentValue != null) {
-                this.postValue(FilterParameters(null,null,null,salary,false))
-            } else {
-                this.postValue(this.value?.copy(expectedSalary = salary))
-            }
+            this.postValue(
+                this.value?.copy(expectedSalary = salary)
+            )
         }
     }
 
     fun setOnlyWithSalary(onlyWithSalary: Boolean) {
         with(filterParametersLiveData) {
-            val currentValue = this.value
-            if (currentValue != null) {
-                this.postValue(FilterParameters(null,null,null,null,onlyWithSalary))
-            } else {
-                this.postValue(this.value?.copy(onlyWithSalary = onlyWithSalary))
-            }
+            this.postValue(
+                this.value?.copy(onlyWithSalary = onlyWithSalary)
+            )
         }
     }
+
 }
