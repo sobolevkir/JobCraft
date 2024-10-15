@@ -13,9 +13,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.common.domain.model.VacancyFromList
 import ru.practicum.android.diploma.common.ext.viewBinding
 import ru.practicum.android.diploma.databinding.FragmentSelectRegionBinding
 import ru.practicum.android.diploma.filters.domain.model.Area
+import ru.practicum.android.diploma.filters.presentation.AreaState
 import ru.practicum.android.diploma.filters.presentation.AreaViewModel
 import ru.practicum.android.diploma.search.presentation.SearchState
 
@@ -38,21 +40,57 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
         //   viewModel.test()
     }
 
-    private fun renderState(state: SearchState) {
+    private fun renderState(state: AreaState) {
         when (state) {
-            is SearchState.InternetError -> showError(R.drawable.er_no_internet, R.string.no_internet)
-            is SearchState.ServerError -> showError(R.drawable.er_server_error, R.string.server_error)
-            is SearchState.NothingFound -> showError(R.drawable.er_nothing_found, R.string.no_vacancies)
-            is SearchState.SearchResult -> showResults(state.vacancies, state.found)
-            is SearchState.Loading -> showLoading()
-            is SearchState.Updating -> showUpdating()
+            is AreaState.InternetError -> showError(R.drawable.er_no_internet, R.string.no_internet)
+            is AreaState.ServerError -> showError(R.drawable.er_server_error, R.string.server_error)
+            is AreaState.NothingFound -> showError(R.drawable.er_nothing_found, R.string.no_regions)
+            is AreaState.NoList -> showError(R.drawable.er_failed_to_get_list, R.string.failed_to_get_list)
+            is AreaState.SearchResult -> showResults(state.regions, state.found)
+            is AreaState.Loading -> showLoading()
+            else -> {}
+        }
+    }
+
+    private fun showLoading() {
+        with(binding) {
+            llError.isVisible = false
+            progressBar.isVisible = true
+            rvAreaList.isVisible = false
+        }
+    }
+
+    private fun showResults(regions: List<Area>, foundNumber: Int) {
+        adapter.submitList(regions) {
+            with(binding) {
+                llError.isVisible = false
+                progressBar.isVisible = false
+                rvAreaList.isVisible = true
+            }
+        }
+    }
+
+    private fun showError(image: Int, text: Int? = null, messageState: Boolean = false) {
+        with(binding) {
+            llError.isVisible = true
+            progressBar.isVisible = false
+            rvAreaList.isVisible = false
+            ivError.setImageResource(image)
+            tvError.isVisible = messageState
+         //   tvError.setText(R.string.no_found_vacancies)
+            if (text == null) {
+                tvError.text = ""
+            } else {
+                tvError.setText(text)
+            }
         }
     }
 
     private fun setStartOptions(isQueryEmpty: Boolean) {
         with(binding) {
             tvFragmentTitle.text = getString(R.string.region_but_sign)
-            binding.flSearch.isVisible = true
+            flSearch.isVisible = true
+            progressBar.isVisible = false
         }
     }
 

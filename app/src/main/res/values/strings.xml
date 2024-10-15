@@ -51,6 +51,7 @@
     <string name="select_country">Выбор страны</string>
     <string name="failed_to_get_list">Не удалось получить\nсписок</string>
     <string name="enter_region">Введите регион</string>
+    <string name="no_regions">Такого региона нет</string>
 
     <!-- Указание зарплаты -->
     <string name="salary_range">от %1$s до %2$s %3$s</string>

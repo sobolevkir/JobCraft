@@ -64,7 +64,7 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
 
 
     private val stateLiveData = MutableLiveData<AreaState>()
-    fun getStateLiveData(): LiveData<SearchState> = stateLiveData
+    fun getStateLiveData(): LiveData<AreaState> = stateLiveData
 
     fun searchOnEditorAction(request: String) {
         //отфильтровать первоначальный список
