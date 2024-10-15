@@ -5,8 +5,10 @@ import org.koin.dsl.module
 import ru.practicum.android.diploma.favorites.data.impl.FavoritesRepositoryImpl
 import ru.practicum.android.diploma.favorites.domain.FavoritesRepository
 import ru.practicum.android.diploma.filters.data.impl.AreaRepositoryImpl
+import ru.practicum.android.diploma.filters.data.impl.FiltersLocalRepositoryImpl
 import ru.practicum.android.diploma.filters.data.impl.IndustryRepositoryImpl
 import ru.practicum.android.diploma.filters.domain.AreaRepository
+import ru.practicum.android.diploma.filters.domain.FiltersLocalRepository
 import ru.practicum.android.diploma.filters.domain.IndustryRepository
 import ru.practicum.android.diploma.search.data.impl.VacanciesRepositoryImpl
 import ru.practicum.android.diploma.search.domain.VacanciesRepository
@@ -54,6 +56,10 @@ val repositoryModule = module {
             networkClient = get(),
             ioDispatcher = get(named(IO_DISPATCHER)),
         )
+    }
+
+    single<FiltersLocalRepository> {
+        FiltersLocalRepositoryImpl(gson = get(), sharedPreferences = get())
     }
 
 }

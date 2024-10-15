@@ -52,9 +52,11 @@ class VacancyViewModel(
                 ErrorType.NOTHING_FOUND -> {
                     vacancyLiveData.postValue(ScreenState(ScreenMode.NOTHING_FOUND, null))
                 }
+
                 ErrorType.CONNECTION_PROBLEM -> {
                     vacancyLiveData.postValue(ScreenState(ScreenMode.CONNECTION_PROBLEM, null))
                 }
+
                 else -> {
                     currentVacancy = null
                     vacancyLiveData.postValue(ScreenState(ScreenMode.SERVER_ERROR, null))
@@ -62,6 +64,7 @@ class VacancyViewModel(
             }
         }
     }
+
     fun shareVacancyUrl() {
         if (currentVacancy != null) {
             interactor.shareVacancyUrl(currentVacancy!!.alternateUrl)

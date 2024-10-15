@@ -20,6 +20,7 @@ class AreaInteractorImpl(private val repository: AreaRepository) : AreaInteracto
             }
         }
     }
+
     override fun getCountries(): Flow<Pair<List<Area>?, ErrorType?>> {
         return repository.getCountries().map { result ->
             when (result) {

@@ -55,6 +55,7 @@ class RetrofitNetworkClient(
                 FilterSearchRequest.AREAS -> AreaSearchResponse(
                     api.getAreas()
                 )
+
                 else -> Response()
             }
         }
