@@ -35,6 +35,7 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
             }
         }
     }
+
     private fun showCountries(area: List<Area>): String {
         val stringBuilder = StringBuilder()
         area.forEach {
@@ -43,6 +44,7 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
         }
         return stringBuilder.toString()
     }
+
     private fun showRegions(area: List<Area>): String {
         val stringBuilder = StringBuilder()
         area.forEach {
