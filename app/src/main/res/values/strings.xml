@@ -19,7 +19,7 @@
     <string name="industry_but_sign">Отрасль</string>
     <string name="place_filter_sign">Здесь можно будет установить страну и регион</string>
     <string name="country_but_sign">Выбрать страну</string>
-    <string name="region_but_sign">Выбрать регион</string>
+    <string name="region_but_sign">Выбор региона</string>
     <string name="select_industry_sign">Здесь можно будет выбрать отрасль</string>
     <string name="select_region_sign">Здесь можно будет выбрать место работы</string>
     <string name="vacancy_title">Вакансия</string>
@@ -52,6 +52,7 @@
     <string name="failed_to_get_list">Не удалось получить\nсписок</string>
     <string name="enter_region">Введите регион</string>
     <string name="select_industry">Выбор отрасли</string>
+    <string name="no_regions">Такого региона нет</string>
 
     <!-- Указание зарплаты -->
     <string name="salary_range">от %1$s до %2$s %3$s</string>
@@ -75,7 +76,6 @@
     <string name="address_building_prefix">д. %1$s</string>
     <string name="address_not_specified">Адрес не указан</string>
     <string name="enter_industry">Введите отрасль</string>
-    <string name="no_regions">Таких регионов нет</string>
     <string name="full_place">%1$s, %2$s</string>
 
     <plurals name="vacancies_count">

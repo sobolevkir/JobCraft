@@ -9,9 +9,9 @@ class PlaceViewModel : ViewModel() {
 
     private var currentCountry: Area? = null
     private var currentRegion: Area? = null
-    private var areaLiveData = MutableLiveData(AreaState(null, null))
+    private var areaLiveData = MutableLiveData(PlaceState(null, null))
 
-    fun getAreaLiveData(): LiveData<AreaState> = areaLiveData
+    fun getAreaLiveData(): LiveData<PlaceState> = areaLiveData
 
     fun passNewParameters(country: Area?, region: Area?) {
         var strCountry: String? = null
@@ -24,25 +24,25 @@ class PlaceViewModel : ViewModel() {
             currentRegion = region
             strRegion = region?.name
         }
-        areaLiveData.postValue(AreaState(strCountry, strRegion))
+        areaLiveData.postValue(PlaceState(strCountry, strRegion))
     }
 
     fun resetCountry() {
         if (currentCountry != null) {
             currentCountry = null
-            areaLiveData.postValue(AreaState(null, currentRegion?.name))
+            areaLiveData.postValue(PlaceState(null, currentRegion?.name))
         }
     }
 
     fun resetRegion() {
         if (currentRegion != null) {
             currentRegion = null
-            areaLiveData.postValue(AreaState(currentCountry?.name, null))
+            areaLiveData.postValue(PlaceState(currentCountry?.name, null))
         }
     }
 }
 
-data class AreaState(
+data class PlaceState(
     val country: String?,
     val region: String?
 )
