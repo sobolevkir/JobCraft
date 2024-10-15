@@ -58,7 +58,7 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
         }
     }
 
-    private fun showNothingFound(){
+    private fun showNothingFound() {
         with(binding) {
             llPlaceholderEmpty.isVisible = true
             llPlaceholderUnknown.isVisible = false

@@ -1,24 +1,30 @@
 package ru.practicum.android.diploma.filters.ui
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 import androidx.navigation.navGraphViewModels
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.common.ext.viewBinding
 import ru.practicum.android.diploma.common.presentation.FilterParametersViewModel
 import ru.practicum.android.diploma.databinding.FragmentFiltersBinding
-import ru.practicum.android.diploma.filters.presentation.states.FiltersState
+import ru.practicum.android.diploma.filters.domain.model.FilterParameters
 import ru.practicum.android.diploma.filters.presentation.FiltersViewModel
+import kotlin.math.ceil
 
 class FiltersFragment : Fragment(R.layout.fragment_filters) {
     private val binding by viewBinding(FragmentFiltersBinding::bind)
     private val viewModel: FiltersViewModel by viewModel()
+
+    private var isClickAllowed = true
 
     init {
         viewModel.getFilters()
@@ -30,36 +36,55 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initListeners()
-        viewModel.getStateLiveData().observe(viewLifecycleOwner) { renderState(it) }
-    }
-
-    private fun renderState(state: FiltersState){
-        if (!state.isEmpty){
-            with(binding){
-                etSelectPlace.setText("${state.country}, ${state.region}")
-                etSelectIndustry.setText(state.industry)
-                etSalary.setText(state.minSalary)
-                cbSalary.isChecked = state.isOnlyWithSalary
-                binding.btnCancel.isVisible = false
-                btnCancel.isVisible = true
+        viewModel.getStateLiveData().observe(viewLifecycleOwner) {
+            with(it) {
+                renderState(
+                    country,
+                    region,
+                    industry,
+                    minSalary,
+                    isOnlyWithSalary,
+                    isEmpty
+                )
             }
         }
     }
 
-    private fun setFilters(place: String, industry: String, salary: String){
+    private fun renderState(
+        country: String,
+        region: String,
+        industry: String,
+        minSalary: String,
+        isOnlyWithSalary: Boolean,
+        isEmpty: Boolean
+    ) {
+        with(binding) {
+            etSelectPlace.setText("${country}, ${region}")
+            etSelectIndustry.setText(industry)
+            etSalary.setText(minSalary)
+            cbSalary.isChecked = isOnlyWithSalary
+            btnCancel.isVisible = !isEmpty
+        }
 
     }
 
-    private fun initListeners(){
-        binding.cbSalary.setOnCheckedChangeListener{_, isChecked ->
-            viewModel.setCheckbox(isChecked)
+    private fun initListeners() {
+        binding.cbSalary.setOnCheckedChangeListener { _, isChecked ->
+            filterParametersViewModel.setOnlyWithSalary(isChecked)
         }
-        binding.btnCancel.setOnClickListener{
+        binding.btnCancel.setOnClickListener {
             setEmptyFilters()
-            viewModel.clear()
+            filterParametersViewModel.setFilterParametersLiveData(
+                FilterParameters(
+                    null,
+                    null,
+                    null,
+                    null
+                )
+            )
         }
-        binding.btnApply.setOnClickListener{
-            viewModel.saveFilters()
+        binding.btnApply.setOnClickListener {
+            applyFilters()
         }
         binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
@@ -70,16 +95,29 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
         binding.etSelectIndustry.setOnClickListener {
             openIndustrySelection()
         }
+        binding.etSalary.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable) {
+                // Empty
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+                // Empty
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                if (searchDebounce()) {
+                    if (s.toString().isNotEmpty()) {
+                        filterParametersViewModel.setExpectedSalary(ceil(s.toString().toDouble()).toInt())
+                    } else {
+                        filterParametersViewModel.setExpectedSalary(null)
+                    }
+                }
+            }
+        })
     }
 
-    private fun setEmptyFilters(){
-        setFilters("","", "")
-        binding.cbSalary.isChecked = false
-        binding.btnCancel.isVisible = false
-        binding.btnApply.setOnClickListener {
-            applyFilters()
-        }
-
+    private fun setEmptyFilters() {
+        renderState("", "", "", "", isOnlyWithSalary = false, isEmpty = true)
     }
 
     private fun openPlaceSelection() {
@@ -98,6 +136,22 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
         // filterParametersViewMode.setFilterParameters(parameters)
         // это обновит лайвдату для всего графа навигации, где используется FilterParametersViewModel
         findNavController().popBackStack()
+    }
+
+    private fun searchDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            viewLifecycleOwner.lifecycleScope.launch {
+                delay(SEARCH_DEBOUNCE_DELAY_MILLIS)
+                isClickAllowed = true
+            }
+        }
+        return current
+    }
+
+    companion object {
+        const val SEARCH_DEBOUNCE_DELAY_MILLIS = 2000L
     }
 
 }

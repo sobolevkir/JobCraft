@@ -5,12 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.databinding.IndustryListItemBinding
-import ru.practicum.android.diploma.databinding.VacancyListItemBinding
 import ru.practicum.android.diploma.filters.domain.model.Industry
 
 class IndustriesAdapter(
     private val onItemSelect: (Industry) -> Unit
-): ListAdapter<Industry, IndustriesViewHolder>(IndustryItemComparator()) {
+) : ListAdapter<Industry, IndustriesViewHolder>(IndustryItemComparator()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IndustriesViewHolder {
         val layoutInspector = LayoutInflater.from(parent.context)
         return IndustriesViewHolder(IndustryListItemBinding.inflate(layoutInspector, parent, false))
@@ -19,16 +18,16 @@ class IndustriesAdapter(
     override fun onBindViewHolder(holder: IndustriesViewHolder, position: Int) {
         val item = getItem(position)
         holder.bind(item.name)
-        holder.itemView.setOnClickListener{
+        holder.itemView.setOnClickListener {
             onItemSelect(item)
         }
     }
 }
 
-class IndustriesViewHolder(private val binding: IndustryListItemBinding):
-    RecyclerView.ViewHolder(binding.root){
+class IndustriesViewHolder(private val binding: IndustryListItemBinding) :
+    RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(name: String){
-            binding.tvIndustry.text = name
-        }
+    fun bind(name: String) {
+        binding.tvIndustry.text = name
     }
+}
