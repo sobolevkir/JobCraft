@@ -23,7 +23,7 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
     private val binding by viewBinding(FragmentFiltersBinding::bind)
     private val viewModel: FiltersViewModel by viewModel()
 
-    private var isClickAllowed = true
+    private var isClickAllowed = false
 
     // добавляем общую для всего графа навигации ViewModel
     private val filterParametersViewModel: FilterParametersViewModel by navGraphViewModels(R.id.root_navigation_graph)
