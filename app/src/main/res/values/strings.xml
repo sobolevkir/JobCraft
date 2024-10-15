@@ -1,9 +1,15 @@
 <resources>
+
     <string name="app_name">JobCraft</string>
     <string name="main_title">Главная</string>
+    <string name="search_title">Поиск вакансий</string>
     <string name="favorites_title">Избранное</string>
     <string name="team_title">Команда</string>
+    <string name="enter_request_hint">Введите запрос</string>
+    <string name="clear_hint">Очистить</string>
+    <string name="logo_hint">Логотип компании</string>
     <string name="search_sign">Здесь будет экран поиска вакансий</string>
+    <string name="search_result_nothing_found_message">Таких вакансий нет</string>
     <string name="filter_but_sign">К фильтрам</string>
     <string name="favorites_sign">Здесь будет экран избранных вакансий</string>
     <string name="team_sign">Здесь будет экран команды</string>
@@ -16,7 +22,49 @@
     <string name="region_but_sign">Выбрать регион</string>
     <string name="select_industry_sign">Здесь можно будет выбрать отрасль</string>
     <string name="select_region_sign">Здесь можно будет выбрать место работы</string>
-    <string name="vacancy_info_sign">Здесь будет информация о конкретной вакансии</string>
+    <string name="vacancy_title">Вакансия</string>
     <string name="who_worked_on_the_application">Над приложением работали</string>
     <string name="authors">Кирилл Соболев\nЮлия Сычёва\nАндрей Трофимов\nДанил Цыганов\nМарат Галимов</string>
+    <string name="vacancy_name">Название вакансии</string>
+    <string name="vacancy_not_found">Вакансия не найдена или удалена</string>
+    <string name="employment">Место работы</string>
+    <string name="experience">Требуемый опыт</string>
+    <string name="description">Описание вакансии</string>
+    <string name="key_skills">Ключевые навыки</string>
+    <string name="no_internet">Нет интернета</string>
+    <string name="no_vacancies">Не удалось получить\nсписок вакансий</string>
+    <string name="list_is_empty">Список пуст</string>
+    <string name="server_error">Ошибка сервера</string>
+    <string name="no_found_vacancies">Таких вакансий нет</string>
+    <string name="select_send_service">Выберите почтовый сервис</string>
+
+    <!-- Указание зарплаты -->
+    <string name="salary_range">от %1$s до %2$s %3$s</string>
+    <string name="salary_from">от %1$s %2$s</string>
+    <string name="salary_to">до %1$s %2$s</string>
+    <string name="salary_not_specified">Зарплата не указана</string>
+    <string name="currency_rub">₽</string>
+    <string name="currency_byr">Br</string>
+    <string name="currency_usd">$</string>
+    <string name="currency_eur">€</string>
+    <string name="currency_kzt">₸</string>
+    <string name="currency_uah">₴</string>
+    <string name="currency_azn">₼</string>
+    <string name="currency_uzs">сум</string>
+    <string name="currency_gel">₾</string>
+    <string name="currency_kgt">сом</string>
+    <string name="currency_default"> </string>
+
+    <!-- Форматы адреса -->
+    <string name="address_separator">, </string>
+    <string name="address_building_prefix">д. %1$s</string>
+    <string name="address_not_specified">Адрес не указан</string>
+
+    <plurals name="vacancies_count">
+        <item quantity="one">Найдена %d вакансия</item>
+        <item quantity="few">Найдено %d вакансии</item>
+        <item quantity="many">Найдено %d вакансий</item>
+        <item quantity="other">Найдено %d вакансий</item>
+    </plurals>
+
 </resources>

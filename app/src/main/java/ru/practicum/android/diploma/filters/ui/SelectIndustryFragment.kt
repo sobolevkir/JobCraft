@@ -14,7 +14,9 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.btnBack.setOnClickListener { findNavController().popBackStack() }
+        binding.btnBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
 
     }
 

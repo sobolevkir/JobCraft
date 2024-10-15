@@ -10,10 +10,3 @@ fun FragmentActivity.hideKeyboard() {
         imm?.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }
-
-fun FragmentActivity.showKeyboard() {
-    this.currentFocus?.let { view ->
-        val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-        imm?.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
-    }
-}

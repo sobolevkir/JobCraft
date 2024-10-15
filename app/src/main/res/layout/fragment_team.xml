@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/jcBackgroundColor"
     android:orientation="vertical">
 
-    <TextView
-        style="@style/Header_Style"
-        android:text="@string/team_title" />
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        style="@style/Toolbar_Style"
+        app:title="@string/team_title" />
 
     <TextView
         style="@style/Bold_32_Style"
