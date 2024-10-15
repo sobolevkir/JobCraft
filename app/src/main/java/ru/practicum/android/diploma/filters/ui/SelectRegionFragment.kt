@@ -13,13 +13,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.common.domain.model.VacancyFromList
 import ru.practicum.android.diploma.common.ext.viewBinding
 import ru.practicum.android.diploma.databinding.FragmentSelectRegionBinding
 import ru.practicum.android.diploma.filters.domain.model.Area
 import ru.practicum.android.diploma.filters.presentation.AreaState
 import ru.practicum.android.diploma.filters.presentation.AreaViewModel
-import ru.practicum.android.diploma.search.presentation.SearchState
 
 class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
     private val binding by viewBinding(FragmentSelectRegionBinding::bind)
@@ -46,7 +44,7 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
             is AreaState.ServerError -> showError(R.drawable.er_server_error, R.string.server_error)
             is AreaState.NothingFound -> showError(R.drawable.er_nothing_found, R.string.no_regions)
             is AreaState.NoList -> showError(R.drawable.er_failed_to_get_list, R.string.failed_to_get_list)
-            is AreaState.SearchResult -> showResults(state.regions, state.found)
+            is AreaState.Success -> showResults(state.regions)
             is AreaState.Loading -> showLoading()
             else -> {}
         }
@@ -60,7 +58,7 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
         }
     }
 
-    private fun showResults(regions: List<Area>, foundNumber: Int) {
+    private fun showResults(regions: List<Area>) {
         adapter.submitList(regions) {
             with(binding) {
                 llError.isVisible = false
@@ -91,6 +89,7 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
             tvFragmentTitle.text = getString(R.string.region_but_sign)
             flSearch.isVisible = true
             progressBar.isVisible = false
+            viewModel.showAllRegions()
         }
     }
 

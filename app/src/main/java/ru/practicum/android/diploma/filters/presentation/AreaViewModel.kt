@@ -5,15 +5,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.common.domain.model.ErrorType
 import ru.practicum.android.diploma.filters.domain.AreaInteractor
 import ru.practicum.android.diploma.filters.domain.model.Area
-import ru.practicum.android.diploma.search.presentation.SearchState
-import ru.practicum.android.diploma.search.presentation.SearchViewModel.Companion.SEARCH_DELAY
 
 class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
     // функции в этом классе тестовые //
@@ -41,6 +37,7 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
             }
         }
     }
+
     private fun showCountries(area: List<Area>): String {
         val stringBuilder = StringBuilder()
         area.forEach {
@@ -49,6 +46,7 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
         }
         return stringBuilder.toString()
     }
+
     private fun showRegions(area: List<Area>): String {
         val stringBuilder = StringBuilder()
         area.forEach {
@@ -60,14 +58,55 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
     }
 
 
-
-
-
     private val stateLiveData = MutableLiveData<AreaState>()
     fun getStateLiveData(): LiveData<AreaState> = stateLiveData
 
     fun searchOnEditorAction(request: String) {
         //отфильтровать первоначальный список
+    }
+
+    fun showAllRegions() {
+        search()
+    }
+
+    fun searchRequest(searchText: String) {
+        if (searchText.isNotEmpty()) {
+            renderState(AreaState.Loading)
+            search()
+        }
+    }
+
+    private fun search() {
+        interactor.getRegions()
+            .onEach { (searchResult, errorType) ->
+                when (errorType) {
+                    null -> {
+                        if (searchResult.isNullOrEmpty()) {
+                            Log.d("region", "AreaState.NoList")
+                            renderState(AreaState.NoList)  //??
+                        } else {
+                            Log.d("region", "AreaState.Success $searchResult")
+                            renderState(AreaState.Success(searchResult))
+                        }
+                    }
+
+                    ErrorType.CONNECTION_PROBLEM -> {
+                        renderState(AreaState.InternetError)
+                        Log.d("region", "AreaState.InternetError")
+                    }
+
+                    ErrorType.NOTHING_FOUND -> {
+                        Log.d("region", "AreaState.NothingFound")
+                        renderState(AreaState.NothingFound)
+                    }
+
+                    else -> {
+                        Log.d("region", "AreaState.ServerError")
+                        renderState(AreaState.ServerError)
+                    }
+                }
+            }
+            .launchIn(viewModelScope)
     }
 
     private fun renderState(state: AreaState) {
