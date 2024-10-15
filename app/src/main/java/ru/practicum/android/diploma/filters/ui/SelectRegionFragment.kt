@@ -123,9 +123,10 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                setStartOptions(s.isEmpty())
+
                 viewModel.searchRequest(s.toString())
                 if (s.isEmpty()) {
+                    setStartOptions(s.isEmpty())
                     binding.ivSearch.setImageResource(R.drawable.ic_search)
                 } else {
                     binding.ivSearch.setImageResource(R.drawable.ic_clear)

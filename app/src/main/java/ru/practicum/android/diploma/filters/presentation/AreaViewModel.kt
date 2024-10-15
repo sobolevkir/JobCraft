@@ -70,29 +70,29 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
     }
 
     fun searchRequest(searchText: String) {
-//        if (searchText.isNotEmpty()) {
-//            renderState(AreaState.Loading)
-//            interactor.getRegions()
-//                .onEach { (regions, errorType) ->
-//                    when (errorType) {
-//                        null -> {
-//                            val filteredRegions = regions?.filter {
-//                                it.name.contains(searchText, ignoreCase = true)
-//                            }
-//                            Log.d("region", "AreaState.Success $filteredRegions")
-//                            if (filteredRegions.isNullOrEmpty()) {
-//                                renderState(AreaState.NothingFound)
-//                            } else {
-//                                renderState(AreaState.Success(filteredRegions))
-//                            }
-//                        }
-//
-//                        ErrorType.CONNECTION_PROBLEM -> renderState(AreaState.InternetError)
-//                        else -> renderState(AreaState.ServerError)
-//                    }
-//                }
-//                .launchIn(viewModelScope)
-//        }
+        if (searchText.isNotEmpty()) {
+            renderState(AreaState.Loading)
+            interactor.getRegions()
+                .onEach { (regions, errorType) ->
+                    when (errorType) {
+                        null -> {
+                            val filteredRegions = regions?.filter {
+                                it.name.contains(searchText, ignoreCase = true)
+                            }
+                            Log.d("region", "AreaState.Success $filteredRegions")
+                            if (filteredRegions.isNullOrEmpty()) {
+                                renderState(AreaState.NothingFound)
+                            } else {
+                                renderState(AreaState.Success(filteredRegions))
+                            }
+                        }
+
+                        ErrorType.CONNECTION_PROBLEM -> renderState(AreaState.InternetError)
+                        else -> renderState(AreaState.ServerError)
+                    }
+                }
+                .launchIn(viewModelScope)
+        }
     }
 
     private fun search() {
