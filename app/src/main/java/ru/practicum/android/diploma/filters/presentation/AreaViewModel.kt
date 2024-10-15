@@ -76,11 +76,12 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
                 .onEach { (regions, errorType) ->
                     when (errorType) {
                         null -> {
-                            val filteredRegions = regions?.filter {
+                            val filteredRegions = excludeCountries(regions?: emptyList()).filter {
                                 it.name.contains(searchText, ignoreCase = true)
                             }
+
                             Log.d("region", "AreaState.Success $filteredRegions")
-                            if (filteredRegions.isNullOrEmpty()) {
+                            if (filteredRegions.isEmpty()) {
                                 renderState(AreaState.NothingFound)
                             } else {
                                 renderState(AreaState.Success(filteredRegions))
