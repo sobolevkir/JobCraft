@@ -27,6 +27,7 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
     private val adapter: RegionListAdapter by lazy {
         RegionListAdapter(onItemClick = { if (clickDebounce()) passArgument(it) })
     }
+    private var countryId:String?=null
 
     private val viewModel: AreaViewModel by viewModel()
     private val filterParametersViewModel: FilterParametersViewModel by navGraphViewModels(R.id.root_navigation_graph)
@@ -38,7 +39,9 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
         binding.rvAreaList.adapter = adapter
         binding.rvAreaList.itemAnimator = null
         viewModel.getStateLiveData().observe(viewLifecycleOwner) { renderState(it) }
-        //   viewModel.test()
+        filterParametersViewModel.getFilterParametersLiveData().observe(viewLifecycleOwner){
+            countryId= it.country?.id
+        }
     }
 
     private fun renderState(state: AreaState) {
@@ -78,7 +81,6 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
             rvAreaList.isVisible = false
             ivError.setImageResource(image)
             tvError.isVisible = messageState
-            //   tvError.setText(R.string.no_found_vacancies)
             if (text == null) {
                 tvError.text = ""
             } else {
@@ -92,7 +94,7 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
             tvFragmentTitle.text = getString(R.string.region_but_sign)
             flSearch.isVisible = true
             progressBar.isVisible = false
-            viewModel.showAllRegions()
+            viewModel.showAllRegions(countryId)
         }
     }
 
@@ -127,7 +129,7 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
 
-                viewModel.searchRequest(s.toString())
+                viewModel.searchRequest(s.toString(), countryId)
                 if (s.isEmpty()) {
                     setStartOptions(s.isEmpty())
                     binding.ivSearch.setImageResource(R.drawable.ic_search)

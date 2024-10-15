@@ -20,11 +20,11 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
         //отфильтровать первоначальный список
     }
 
-    fun showAllRegions() {
-        search()
+    fun showAllRegions(countryId: String?) {
+        search(countryId)
     }
 
-    fun searchRequest(searchText: String) {
+    fun searchRequest(searchText: String, countryId: String?) {
         if (searchText.isNotEmpty()) {
             renderState(AreaState.Loading)
             interactor.getRegions()
@@ -34,8 +34,9 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
                             val filteredRegions = excludeCountries(regions ?: emptyList()).filter {
                                 it.name.contains(searchText, ignoreCase = true)
                             }
+                            if (countryId != null) filterAreasByParentId(regions?: emptyList(), countryId)
 
-                            Log.d("region", "AreaState.Success $filteredRegions")
+                                Log.d("region", "AreaState.Success $filteredRegions")
                             if (filteredRegions.isEmpty()) {
                                 renderState(AreaState.NothingFound)
                             } else {
@@ -51,7 +52,7 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
         }
     }
 
-    private fun search() {
+    private fun search(countryId: String?) {
         interactor.getRegions()
             .onEach { (searchResult, errorType) ->
                 when (errorType) {
@@ -61,7 +62,7 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
                             renderState(AreaState.NoList)  //??
                         } else {
                             val regionsOnly = excludeCountries(searchResult)
-//
+
                             val sortedRegions = sortArea(regionsOnly)
                             sortedRegions.filter {
                                 it.name.contains("Австралия", ignoreCase = true) || it.name.contains(
@@ -70,6 +71,7 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
                                 )
                             }
                                 .forEach { Log.d("region", "Area: ${it.name}, ParentId: ${it.parentId}") }
+                            if (countryId != null) filterAreasByParentId(searchResult?: emptyList(), countryId)
                             renderState(AreaState.Success(sortedRegions))
                         }
                     }
@@ -99,6 +101,16 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
 
     private fun renderState(state: AreaState) {
         stateLiveData.postValue(state)
+    }
+
+    fun filterAreasByParentId(areas: List<Area>, parentId: String?): List<Area> {
+        val filteredAreas = areas.filter { it.parentId == parentId }
+        val descendantAreas = filteredAreas.flatMap { getDescendants(it, areas) }
+        return filteredAreas + descendantAreas
+    }
+
+    fun getDescendants(area: Area, areas: List<Area>): List<Area> {
+        return areas.filter { it.parentId == area.id }
     }
 
     companion object {
