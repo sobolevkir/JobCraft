@@ -69,19 +69,19 @@ class SelectPlaceFragment : Fragment(R.layout.fragment_select_place) {
         binding.ivRegion.setOnClickListener {
             if (binding.tvRegionFilled.text.isNullOrEmpty()) resetRegion()
         }
-        binding.btnSelect.setOnClickListener{
+        binding.btnSelect.setOnClickListener {
             processingBtnSelect()
         }
         filterParametersViewModel.getFilterParametersLiveData().observe(viewLifecycleOwner) { filterParameters ->
             viewModel.passNewParameters(filterParameters.country, filterParameters.region)
         }
         viewModel.getAreaLiveData().observe(viewLifecycleOwner) { newState ->
-            if(newState.country.isNullOrEmpty()) {
+            if (newState.country.isNullOrEmpty()) {
                 binding.tvCountryFilled.text = ""
             } else {
                 binding.tvCountryFilled.text = newState.country
             }
-            if(newState.region.isNullOrEmpty()) {
+            if (newState.region.isNullOrEmpty()) {
                 binding.tvRegionFilled.text = ""
             } else {
                 binding.tvRegionFilled.text = newState.region
@@ -89,7 +89,7 @@ class SelectPlaceFragment : Fragment(R.layout.fragment_select_place) {
         }
     }
 
-    private fun visibilityBtnSelect () {
+    private fun visibilityBtnSelect() {
         binding.btnSelect.isVisible =
             !(binding.tvCountryFilled.text.isNullOrEmpty() && binding.tvRegionFilled.text.isNullOrEmpty())
     }

@@ -42,7 +42,7 @@ class PlaceViewModel : ViewModel() {
     }
 }
 
-data class AreaState (
-    var country: String?,
-    var region: String?
+data class AreaState(
+    val country: String?,
+    val region: String?
 )
