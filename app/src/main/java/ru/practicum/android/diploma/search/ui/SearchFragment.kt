@@ -3,7 +3,6 @@ package ru.practicum.android.diploma.search.ui
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.core.view.isVisible
@@ -37,8 +36,8 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        filterParametersViewModel.getFiltersAppliedLiveEvent().observe(viewLifecycleOwner) { result ->
-            Log.d("ARG!!!", result.toString())
+        filterParametersViewModel.getFiltersAppliedLiveEvent().observe(viewLifecycleOwner) { isFiltersApplied ->
+            viewModel.applyFilters(isFiltersApplied)
         }
         setStartOptions(true)
         initClickListeners()
@@ -102,7 +101,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 val query = binding.etSearchRequest.text.toString()
                 if (query.isNotEmpty()) {
-                    viewModel.searchOnEditorAction(query)
+                    viewModel.newSearch(query)
                 }
             }
             false

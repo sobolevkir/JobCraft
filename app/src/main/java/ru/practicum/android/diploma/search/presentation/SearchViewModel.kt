@@ -11,9 +11,13 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.common.domain.model.ErrorType
 import ru.practicum.android.diploma.common.domain.model.VacancyFromList
+import ru.practicum.android.diploma.filters.domain.FiltersLocalInteractor
 import ru.practicum.android.diploma.search.domain.VacanciesInteractor
 
-class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel() {
+class SearchViewModel(
+    private val vacanciesInteractor: VacanciesInteractor,
+    private val filtersLocalInteractor: FiltersLocalInteractor
+) : ViewModel() {
 
     private val stateLiveData = MutableLiveData<SearchState>()
 
@@ -54,7 +58,7 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
         }
     }
 
-    fun searchOnEditorAction(request: String) {
+    fun newSearch(request: String) {
         paddingPage = 0
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
@@ -65,19 +69,27 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
 
     private fun searchRequest(searchText: String, page: Int, isNew: Boolean) {
         if (searchText.isNotEmpty()) {
-            val options = mapOf(
+            val filters = filtersLocalInteractor.getFilters()
+            val areaId = (filters?.region?.id ?: filters?.country?.id).orEmpty()
+            val industry = filters?.industry?.id.orEmpty()
+            val salary = filters?.expectedSalary?.toString().orEmpty()
+            val onlyWithSalary = if (filters?.onlyWithSalary == true) "true" else "false"
+            val options = mutableMapOf(
                 "text" to searchText,
                 "page" to page.toString(),
                 "per_page" to "20"
             )
-
+            if (areaId.isNotEmpty()) options["area"] = areaId
+            if (industry.isNotEmpty()) options["industry"] = industry
+            if (salary.isNotEmpty()) options["salary"] = salary
+            if (onlyWithSalary == "true") options["only_with_salary"] = onlyWithSalary
             if (isNew) {
                 renderState(SearchState.Loading)
             } else {
                 renderState(SearchState.Updating)
             }
 
-            interactor.searchVacancies(options)
+            vacanciesInteractor.searchVacancies(options)
                 .onEach { (searchResult, errorType) ->
                     when (errorType) {
                         null -> {
@@ -100,6 +112,13 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
 
     private fun renderState(state: SearchState) {
         stateLiveData.postValue(state)
+    }
+
+    fun applyFilters(isFiltersApplied: Boolean) {
+        val request = lastRequest
+        if (isFiltersApplied && !request.isNullOrEmpty()) {
+            newSearch(request)
+        }
     }
 
     companion object {
