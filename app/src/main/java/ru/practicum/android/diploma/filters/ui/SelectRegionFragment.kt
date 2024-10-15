@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.filters.ui
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -24,7 +25,7 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
     private val binding by viewBinding(FragmentSelectRegionBinding::bind)
     private var isClickAllowed = true
     private val adapter: RegionListAdapter by lazy {
-        RegionListAdapter(onItemClick = { if (clickDebounce()) passArgument(it) })
+        RegionListAdapter(onItemClick = { if (clickDebounce()) applyChanges(it) })
     }
     private var countryId: String? = null
 
@@ -32,15 +33,13 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
     private val filterParametersViewModel: FilterParametersViewModel by navGraphViewModels(R.id.root_navigation_graph)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        countryId = filterParametersViewModel.getFilterParametersLiveData().value?.country?.id
+        viewModel.getStateLiveData().observe(viewLifecycleOwner) { renderState(it) }
         setStartOptions()
         initClickListeners()
         initQueryChangeListener()
         binding.rvAreaList.adapter = adapter
         binding.rvAreaList.itemAnimator = null
-        viewModel.getStateLiveData().observe(viewLifecycleOwner) { renderState(it) }
-//        filterParametersViewModel.getFilterParametersLiveData().observe(viewLifecycleOwner) {
-//            countryId = it.country?.id
-//        } это вызывает ошибку мол FilterParametr null объект, возможно просто не успевает программа сработать
     }
 
     private fun renderState(state: AreaState) {
@@ -93,7 +92,7 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
             tvFragmentTitle.text = getString(R.string.region_but_sign)
             flSearch.isVisible = true
             progressBar.isVisible = false
-            viewModel.showAllRegions(countryId)
+            viewModel.getRegions(countryId)
         }
     }
 
@@ -118,7 +117,7 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                viewModel.searchRequest(s.toString(), countryId)
+                viewModel.searchRequest(s.toString())
                 if (s.isEmpty()) {
                     binding.ivSearch.setImageResource(R.drawable.ic_search)
                 } else {
@@ -128,7 +127,7 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
         })
     }
 
-    private fun passArgument(region: Area) {
+    private fun applyChanges(region: Area) {
         filterParametersViewModel.setRegion(region)
         findNavController().popBackStack()
     }

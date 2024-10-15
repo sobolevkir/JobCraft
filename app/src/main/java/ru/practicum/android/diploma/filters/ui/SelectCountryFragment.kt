@@ -22,7 +22,7 @@ class SelectCountryFragment : Fragment(R.layout.fragment_select_region) {
     private val binding by viewBinding(FragmentSelectRegionBinding::bind)
     private var isClickAllowed = true
     private val adapter: RegionListAdapter by lazy {
-        RegionListAdapter(onItemClick = { if (clickDebounce()) passArgument(it) })
+        RegionListAdapter(onItemClick = { if (clickDebounce()) applyChanges(it) })
     }
     private var countryId: String? = null
 
@@ -101,8 +101,8 @@ class SelectCountryFragment : Fragment(R.layout.fragment_select_region) {
         }
     }
 
-    private fun passArgument(country: Area) {
-        filterParametersViewModel.setRegion(country)
+    private fun applyChanges(country: Area) {
+        filterParametersViewModel.setCountry(country)
         findNavController().popBackStack()
     }
 
