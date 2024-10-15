@@ -3,12 +3,14 @@ package ru.practicum.android.diploma.search.ui
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.delay
@@ -18,15 +20,16 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.common.domain.model.VacancyFromList
 import ru.practicum.android.diploma.common.ext.hideKeyboard
 import ru.practicum.android.diploma.common.ext.viewBinding
+import ru.practicum.android.diploma.common.presentation.FilterParametersViewModel
 import ru.practicum.android.diploma.common.ui.VacancyListAdapter
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.search.presentation.SearchState
 import ru.practicum.android.diploma.search.presentation.SearchViewModel
 
 class SearchFragment : Fragment(R.layout.fragment_search) {
-
     private val binding by viewBinding(FragmentSearchBinding::bind)
     private val viewModel by viewModel<SearchViewModel>()
+    private val filterParametersViewModel: FilterParametersViewModel by navGraphViewModels(R.id.root_navigation_graph)
     private var isClickAllowed = true
     private val adapter: VacancyListAdapter by lazy {
         VacancyListAdapter(onItemClick = { if (clickDebounce()) openVacancy(it.id) })
@@ -34,6 +37,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        filterParametersViewModel.getFiltersAppliedLiveEvent().observe(viewLifecycleOwner) { result ->
+            Log.d("ARG!!!", result.toString())
+        }
         setStartOptions(true)
         initClickListeners()
         initQueryChangeListener()
