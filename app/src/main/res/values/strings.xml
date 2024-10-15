@@ -76,6 +76,7 @@
     <string name="address_not_specified">Адрес не указан</string>
     <string name="enter_industry">Введите отрасль</string>
     <string name="no_regions">Таких регионов нет</string>
+    <string name="full_place">%1$s, %2$s</string>
 
     <plurals name="vacancies_count">
         <item quantity="one">Найдена %d вакансия</item>

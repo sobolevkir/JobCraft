@@ -18,6 +18,7 @@ import ru.practicum.android.diploma.common.presentation.FilterParametersViewMode
 import ru.practicum.android.diploma.databinding.FragmentFiltersBinding
 import ru.practicum.android.diploma.filters.domain.model.FilterParameters
 import ru.practicum.android.diploma.filters.presentation.FiltersViewModel
+import ru.practicum.android.diploma.filters.presentation.states.FiltersState
 import kotlin.math.ceil
 
 class FiltersFragment : Fragment(R.layout.fragment_filters) {
@@ -37,33 +38,17 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
         super.onViewCreated(view, savedInstanceState)
         initListeners()
         viewModel.getStateLiveData().observe(viewLifecycleOwner) {
-            with(it) {
-                renderState(
-                    country,
-                    region,
-                    industry,
-                    minSalary,
-                    isOnlyWithSalary,
-                    isEmpty
-                )
-            }
+            renderState(it)
         }
     }
 
-    private fun renderState(
-        country: String,
-        region: String,
-        industry: String,
-        minSalary: String,
-        isOnlyWithSalary: Boolean,
-        isEmpty: Boolean
-    ) {
+    private fun renderState(state: FiltersState) {
         with(binding) {
-            etSelectPlace.setText("${country}, ${region}")
-            etSelectIndustry.setText(industry)
-            etSalary.setText(minSalary)
-            cbSalary.isChecked = isOnlyWithSalary
-            btnCancel.isVisible = !isEmpty
+            etSelectPlace.setText(getString(R.string.full_place, state.country, state.region))
+            etSelectIndustry.setText(state.industry)
+            etSalary.setText(state.minSalary)
+            cbSalary.isChecked = state.isOnlyWithSalary
+            btnCancel.isVisible = !state.isEmpty
         }
 
     }
@@ -117,7 +102,7 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
     }
 
     private fun setEmptyFilters() {
-        renderState("", "", "", "", isOnlyWithSalary = false, isEmpty = true)
+        renderState(FiltersState("", "", "", false, "", true))
     }
 
     private fun openPlaceSelection() {
