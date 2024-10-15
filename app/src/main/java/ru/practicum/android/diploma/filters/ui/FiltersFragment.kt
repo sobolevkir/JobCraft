@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -18,18 +17,12 @@ import ru.practicum.android.diploma.common.presentation.FilterParametersViewMode
 import ru.practicum.android.diploma.databinding.FragmentFiltersBinding
 import ru.practicum.android.diploma.filters.domain.model.FilterParameters
 import ru.practicum.android.diploma.filters.presentation.FiltersViewModel
-import ru.practicum.android.diploma.filters.presentation.states.FiltersState
-import kotlin.math.ceil
 
 class FiltersFragment : Fragment(R.layout.fragment_filters) {
     private val binding by viewBinding(FragmentFiltersBinding::bind)
     private val viewModel: FiltersViewModel by viewModel()
 
     private var isClickAllowed = true
-
-    init {
-        viewModel.getFilters()
-    }
 
     // добавляем общую для всего графа навигации ViewModel
     private val filterParametersViewModel: FilterParametersViewModel by navGraphViewModels(R.id.root_navigation_graph)
@@ -38,17 +31,26 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
         super.onViewCreated(view, savedInstanceState)
         initListeners()
         viewModel.getStateLiveData().observe(viewLifecycleOwner) {
+            filterParametersViewModel.setFilterParametersLiveData(it)
             renderState(it)
+        }
+
+        filterParametersViewModel.getFilterParametersLiveData().observe(viewLifecycleOwner) {
+            viewModel.saveFiltersToLocalStorage(it)
         }
     }
 
-    private fun renderState(state: FiltersState) {
+    private fun renderState(state: FilterParameters) {
         with(binding) {
             etSelectPlace.setText(getString(R.string.full_place, state.country, state.region))
-            etSelectIndustry.setText(state.industry)
-            etSalary.setText(state.minSalary)
-            cbSalary.isChecked = state.isOnlyWithSalary
-            btnCancel.isVisible = !state.isEmpty
+            etSalary.setText(state.expectedSalary.toString())
+            cbSalary.isChecked = state.onlyWithSalary
+            if (state.industry != null) {
+                etSelectIndustry.setText(state.industry.name)
+            }
+            if (state.industry != null || state.country != null || state.expectedSalary != null || !state.onlyWithSalary) {
+
+            }
         }
 
     }
@@ -92,7 +94,7 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 if (searchDebounce()) {
                     if (s.toString().isNotEmpty()) {
-                        filterParametersViewModel.setExpectedSalary(ceil(s.toString().toDouble()).toInt())
+                        filterParametersViewModel.setExpectedSalary(s.toString().toInt())
                     } else {
                         filterParametersViewModel.setExpectedSalary(null)
                     }
@@ -102,7 +104,7 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
     }
 
     private fun setEmptyFilters() {
-        renderState(FiltersState("", "", "", false, "", true))
+        renderState(FilterParameters(null, null, null, null))
     }
 
     private fun openPlaceSelection() {
