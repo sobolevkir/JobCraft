@@ -26,10 +26,14 @@ class VacancyViewModel(
     fun getVacancyLiveData(): LiveData<ScreenState> = vacancyLiveData
 
     fun changeFavorite() {
-        if (currentVacancy != null) {
+        currentVacancy?.let { vacancy ->
             isFavorite = !isFavorite
             isFavoriteLiveData.postValue(isFavorite)
-            if (isFavorite) addToFavorites(currentVacancy!!) else removeFromFavorites(currentVacancy!!.id)
+            if (isFavorite) {
+                addToFavorites(vacancy)
+            } else {
+                removeFromFavorites(vacancy.id)
+            }
         }
     }
 
