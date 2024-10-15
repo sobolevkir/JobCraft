@@ -94,7 +94,7 @@
         app:layout_constraintTop_toBottomOf="@id/tl_salary" />
 
     <CheckBox
-        android:id="@+id/cb_salary_checkbox"
+        android:id="@+id/cb_salary"
         style="@style/CheckBox_Style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

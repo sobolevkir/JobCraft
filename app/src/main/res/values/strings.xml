@@ -51,6 +51,7 @@
     <string name="select_country">Выбор страны</string>
     <string name="failed_to_get_list">Не удалось получить\nсписок</string>
     <string name="enter_region">Введите регион</string>
+    <string name="select_industry">Выбор отрасли</string>
 
     <!-- Указание зарплаты -->
     <string name="salary_range">от %1$s до %2$s %3$s</string>
@@ -73,6 +74,8 @@
     <string name="address_separator">, </string>
     <string name="address_building_prefix">д. %1$s</string>
     <string name="address_not_specified">Адрес не указан</string>
+    <string name="enter_industry">Введите отрасль</string>
+    <string name="no_regions">Таких регионов нет</string>
 
     <plurals name="vacancies_count">
         <item quantity="one">Найдена %d вакансия</item>
