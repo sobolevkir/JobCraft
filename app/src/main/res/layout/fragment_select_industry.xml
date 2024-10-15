@@ -78,7 +78,7 @@
             <ImageView
                 android:layout_width="328dp"
                 android:layout_height="223dp"
-                android:src="@drawable/failed_to_get_list"
+                android:src="@drawable/er_failed_to_get_list"
                 android:layout_gravity="center_horizontal"
                 android:scaleType="centerCrop"
                 tools:ignore="contentDescription"/>
