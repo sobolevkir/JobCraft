@@ -95,7 +95,11 @@
         android:id="@+id/selectRegionFragment"
         android:name="ru.practicum.android.diploma.filters.ui.SelectRegionFragment"
         android:label="fragment_select_region"
-        tools:layout="@layout/fragment_select_region" />
+        tools:layout="@layout/fragment_select_region" >
+        <action
+            android:id="@+id/action_selectRegionFragment_to_selectPlaceFragment"
+            app:destination="@id/selectPlaceFragment" />
+    </fragment>
     <fragment
         android:id="@+id/selectIndustryFragment"
         android:name="ru.practicum.android.diploma.filters.ui.SelectIndustryFragment"
