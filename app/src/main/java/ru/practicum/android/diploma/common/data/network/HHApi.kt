@@ -18,6 +18,7 @@ interface HHApi {
 
     @GET("/areas")
     suspend fun getAreas(): List<AreaFilterDto>
+
     @GET("/industries")
     suspend fun getIndustries(): List<IndustryDto>
 
