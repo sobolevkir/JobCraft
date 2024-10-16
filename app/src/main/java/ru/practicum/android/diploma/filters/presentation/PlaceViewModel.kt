@@ -13,7 +13,6 @@ class PlaceViewModel : ViewModel() {
 
     fun passNewParameters(country: Area?, region: Area?) {
         areaLiveData.postValue(PlaceState(country?.name, region?.name))
-        // Log.e ("МОЁ", country?.name + "  " + region?.name)
     }
 }
 
