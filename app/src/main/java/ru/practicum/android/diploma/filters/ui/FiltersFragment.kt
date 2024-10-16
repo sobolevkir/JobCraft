@@ -41,7 +41,9 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
                 etSelectPlace.setText(getString(R.string.full_place, filters.country?.name ?: "", filters.region.name))
             } else if (filters?.country != null) {
                 etSelectPlace.setText(filters.country.name)
-            } else etSelectPlace.setText("")
+            } else {
+                etSelectPlace.setText("")
+            }
             etSelectIndustry.setText(filters?.industry?.name.orEmpty())
             cbSalary.isChecked = filters?.onlyWithSalary ?: false
             btnCancel.isVisible = filters?.industry != null ||
