@@ -17,13 +17,12 @@ import ru.practicum.android.diploma.common.ext.viewBinding
 import ru.practicum.android.diploma.common.presentation.FilterParametersViewModel
 import ru.practicum.android.diploma.databinding.FragmentFiltersBinding
 import ru.practicum.android.diploma.filters.domain.model.FilterParameters
-import ru.practicum.android.diploma.filters.presentation.FiltersViewModel
 
 class FiltersFragment : Fragment(R.layout.fragment_filters) {
     private val binding by viewBinding(FragmentFiltersBinding::bind)
-    private val viewModel: FiltersViewModel by viewModel()
 
     private var isClickAllowed = false
+    private var openFromSearch = true
 
     // добавляем общую для всего графа навигации ViewModel
     private val filterParametersViewModel: FilterParametersViewModel by navGraphViewModels(R.id.root_navigation_graph)
@@ -31,28 +30,34 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initListeners()
-        viewModel.getStateLiveData().observe(viewLifecycleOwner) {
-            filterParametersViewModel.setFilterParametersLiveData(it)
-            renderState(it)
+
+        if (openFromSearch){
+            filterParametersViewModel.getSavedParameters()
+            openFromSearch = false
         }
 
         filterParametersViewModel.getFilterParametersLiveData().observe(viewLifecycleOwner) {
-            viewModel.saveFiltersToLocalStorage(it)
+            renderState(it)
         }
+
     }
 
     private fun renderState(state: FilterParameters) {
         with(binding) {
-            etSelectPlace.setText(getString(R.string.full_place, state.country, state.region))
-            etSalary.setText(state.expectedSalary.toString())
-            cbSalary.isChecked = state.onlyWithSalary
+            if (state.country != null){
+                etSelectPlace.setText(getString(R.string.full_place, state.country, state.region))
+            }
+            if (state.expectedSalary != null){
+                etSalary.setText(state.expectedSalary.toString())
+            }
             if (state.industry != null) {
                 etSelectIndustry.setText(state.industry.name)
             }
+            cbSalary.isChecked = state.onlyWithSalary
             btnCancel.isVisible = state.industry != null ||
                 state.country != null ||
                 state.expectedSalary != null ||
-                !state.onlyWithSalary
+                state.onlyWithSalary
         }
 
     }
@@ -60,6 +65,7 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
     private fun initListeners() {
         binding.cbSalary.setOnCheckedChangeListener { _, isChecked ->
             filterParametersViewModel.setOnlyWithSalary(isChecked)
+            binding.btnCancel.isVisible = true
         }
         binding.btnCancel.setOnClickListener {
             setEmptyFilters()
@@ -76,6 +82,7 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
             applyFilters()
         }
         binding.toolbar.setNavigationOnClickListener {
+            openFromSearch = true
             findNavController().popBackStack()
         }
         binding.etSelectPlace.setOnClickListener {
@@ -94,7 +101,7 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (searchDebounce()) {
+                if (saveDebounce()) {
                     if (s.toString().isNotEmpty()) {
                         filterParametersViewModel.setExpectedSalary(s.toString().toInt())
                     } else {
@@ -120,14 +127,20 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
     }
 
     private fun applyFilters() {
-        filterParametersViewModel.applyFilters()
+        openFromSearch = true
+        with(filterParametersViewModel){
+            if (binding.etSalary.text.toString().isNotEmpty()){
+                setExpectedSalary(binding.etSalary.text.toString().toInt())
+            }
+            applyFilters()
+        }
         // Можно делать и вот так:
         // filterParametersViewMode.setFilterParameters(parameters)
         // это обновит лайвдату для всего графа навигации, где используется FilterParametersViewModel
         findNavController().popBackStack()
     }
 
-    private fun searchDebounce(): Boolean {
+    private fun saveDebounce(): Boolean {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false

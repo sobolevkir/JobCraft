@@ -2,9 +2,9 @@ package ru.practicum.android.diploma.di
 
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
+import ru.practicum.android.diploma.common.presentation.FilterParametersViewModel
 import ru.practicum.android.diploma.favorites.presentation.FavoritesViewModel
 import ru.practicum.android.diploma.filters.presentation.AreaViewModel
-import ru.practicum.android.diploma.filters.presentation.FiltersViewModel
 import ru.practicum.android.diploma.filters.presentation.IndustryViewModel
 import ru.practicum.android.diploma.filters.presentation.PlaceViewModel
 import ru.practicum.android.diploma.search.presentation.SearchViewModel
@@ -37,7 +37,7 @@ val viewModelModule = module {
     }
 
     viewModel {
-        FiltersViewModel(interactor = get())
+        FilterParametersViewModel(interactor = get())
     }
 
 }
