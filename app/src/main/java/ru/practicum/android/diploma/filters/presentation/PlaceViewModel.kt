@@ -1,6 +1,6 @@
 package ru.practicum.android.diploma.filters.presentation
 
-import android.util.Log
+// import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,7 +14,7 @@ class PlaceViewModel : ViewModel() {
 
     fun passNewParameters(country: Area?, region: Area?) {
         areaLiveData.postValue(PlaceState(country?.name, region?.name))
-        //Log.e ("МОЁ", country?.name + "  " + region?.name)
+        // Log.e ("МОЁ", country?.name + "  " + region?.name)
     }
 }
 
