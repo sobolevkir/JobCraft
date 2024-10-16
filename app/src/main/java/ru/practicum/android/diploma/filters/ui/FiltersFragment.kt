@@ -109,12 +109,14 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
                 onClear = {
                     filterParametersViewModel.setRegion(null)
                     filterParametersViewModel.setCountry(null)
-                })
+                }
+            )
         )
         binding.etSelectIndustry.addTextChangedListener(
             CustomTextWatcher(
                 binding.tlSelectIndustry,
-                onClear = { filterParametersViewModel.setIndustry(null) })
+                onClear = { filterParametersViewModel.setIndustry(null) }
+            )
         )
 
     }
