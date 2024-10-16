@@ -87,7 +87,7 @@ class SelectCountryFragment : Fragment(R.layout.fragment_select_region) {
             flSearch.isVisible = false
             progressBar.isVisible = false
             rvAreaList.isVisible = true
-            viewModel.showCountries()
+            viewModel.getCountries()
         }
     }
 
