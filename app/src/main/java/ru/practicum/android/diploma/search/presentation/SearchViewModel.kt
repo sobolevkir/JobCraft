@@ -19,8 +19,6 @@ class SearchViewModel(
     private val filtersLocalInteractor: FiltersLocalInteractor
 ) : ViewModel() {
 
-
-
     private var lastRequest: String? = null
     private var searchJob: Job? = null
     private var paddingPage = 0
@@ -103,7 +101,7 @@ class SearchViewModel(
                 .onEach { (searchResult, errorType) ->
                     when (errorType) {
                         null -> {
-                            if(isNew) {
+                            if (isNew) {
                                 fullList = searchResult!!.items
                             } else {
                                 fullList += searchResult!!.items
