@@ -16,6 +16,7 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.common.ext.viewBinding
 import ru.practicum.android.diploma.common.presentation.FilterParametersViewModel
 import ru.practicum.android.diploma.databinding.FragmentFiltersBinding
+import ru.practicum.android.diploma.filters.domain.model.Area
 import ru.practicum.android.diploma.filters.domain.model.FilterParameters
 
 class FiltersFragment : Fragment(R.layout.fragment_filters) {
@@ -37,21 +38,24 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
 
     private fun setParameters(filters: FilterParameters?) {
         with(binding) {
-            if (filters?.region != null) {
-                etSelectPlace.setText(getString(R.string.full_place, filters.country?.name ?: "", filters.region.name))
-            } else if (filters?.country != null) {
-                etSelectPlace.setText(filters.country.name)
-            } else {
-                etSelectPlace.setText("")
-            }
+            bindPlace(filters?.region, filters?.country)
             etSelectIndustry.setText(filters?.industry?.name.orEmpty())
             cbSalary.isChecked = filters?.onlyWithSalary ?: false
             btnCancel.isVisible = filters?.industry != null ||
                 filters?.country != null ||
                 filters?.expectedSalary != null ||
-                (filters?.onlyWithSalary ?: false)
+                filters?.onlyWithSalary ?: false
         }
+    }
 
+    private fun bindPlace(region: Area?, country: Area?) {
+        if (region != null) {
+            binding.etSelectPlace.setText(getString(R.string.full_place, country?.name ?: "", region.name))
+        } else if (country != null) {
+            binding.etSelectPlace.setText(country.name)
+        } else {
+            binding.etSelectPlace.setText("")
+        }
     }
 
     private fun initListeners() {
