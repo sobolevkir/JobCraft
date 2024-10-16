@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.search.presentation
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -89,9 +88,9 @@ class SearchViewModel(
             } else {
                 renderState(SearchState.Updating)
             }
-            Log.d("SEARCH!!!", "-> area - ${options["area"].toString()}")
+            /*Log.d("SEARCH!!!", "-> area - ${options["area"].toString()}")
             Log.d("SEARCH!!!", "-> salary - ${options["salary"].toString()}")
-            Log.d("SEARCH!!!", "-> onlyWithSalary - ${options["only_with_salary"].toString()}")
+            Log.d("SEARCH!!!", "-> onlyWithSalary - ${options["only_with_salary"].toString()}")*/
             vacanciesInteractor.searchVacancies(options)
                 .onEach { (searchResult, errorType) ->
                     when (errorType) {

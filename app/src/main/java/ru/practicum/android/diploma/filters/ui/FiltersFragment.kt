@@ -3,7 +3,6 @@ package ru.practicum.android.diploma.filters.ui
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -30,10 +29,10 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
         )
         filterParametersViewModel.getFilterParametersLiveData().observe(viewLifecycleOwner) {
             setParameters(it)
-            Log.d("FILTERS!!!", "country - ${it?.country?.id.toString()}")
-            Log.d("FILTERS!!!", "region - ${it?.region?.id.toString()}")
-            Log.d("FILTERS!!!", "salary - ${it?.expectedSalary.toString()}")
-            Log.d("FILTERS!!!", "onlyWithSalary - ${it?.onlyWithSalary.toString()}")
+            /*            Log.d("FILTERS!!!", "country - ${it?.country?.id.toString()}")
+                        Log.d("FILTERS!!!", "region - ${it?.region?.id.toString()}")
+                        Log.d("FILTERS!!!", "salary - ${it?.expectedSalary.toString()}")
+                        Log.d("FILTERS!!!", "onlyWithSalary - ${it?.onlyWithSalary.toString()}")*/
         }
         initListeners()
     }
