@@ -80,24 +80,7 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
             }
             etSelectPlace.setOnClickListener { openPlaceSelection() }
             etSelectIndustry.setOnClickListener { openIndustrySelection() }
-            etSalary.addTextChangedListener(object : TextWatcher {
-                private var salaryInputJob: Job? = null
-                override fun afterTextChanged(s: Editable) {
-                    salaryInputJob?.cancel()
-                    salaryInputJob = viewLifecycleOwner.lifecycleScope.launch {
-                        delay(SET_SALARY_DELAY_MILLIS)
-                        val salary = s.toString().toIntOrNull()
-                        filterParametersViewModel.setExpectedSalary(salary)
-                    }
-                }
-
-                override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-                    //Empty
-                }
-                override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                    //Empty
-                }
-            })
+            initSalaryTextListener()
             etSelectPlace.addTextChangedListener(
                 CustomTextWatcher(tlSelectPlace) {
                     filterParametersViewModel.setRegion(null)
@@ -110,6 +93,28 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
                 }
             )
         }
+    }
+
+    private fun FragmentFiltersBinding.initSalaryTextListener() {
+        etSalary.addTextChangedListener(object : TextWatcher {
+            private var salaryInputJob: Job? = null
+            override fun afterTextChanged(s: Editable) {
+                salaryInputJob?.cancel()
+                salaryInputJob = viewLifecycleOwner.lifecycleScope.launch {
+                    delay(SET_SALARY_DELAY_MILLIS)
+                    val salary = s.toString().toIntOrNull()
+                    filterParametersViewModel.setExpectedSalary(salary)
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+                //Empty
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                //Empty
+            }
+        })
     }
 
     private fun openPlaceSelection() {
