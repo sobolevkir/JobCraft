@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import ru.practicum.android.diploma.common.domain.model.ErrorType
 import ru.practicum.android.diploma.filters.domain.IndustryInteractor
-import ru.practicum.android.diploma.filters.domain.model.Area
 import ru.practicum.android.diploma.filters.domain.model.Industry
 import ru.practicum.android.diploma.filters.presentation.states.FilterIndustryState
 
@@ -29,8 +28,8 @@ class IndustryViewModel(private val interactor: IndustryInteractor) : ViewModel(
 
     }
 
-    fun searchRequest(search: String){
-        if (search.isNotEmpty()){
+    fun searchRequest(search: String) {
+        if (search.isNotEmpty()) {
             val filteredRegions = searchedIndustries.filter {
                 it.name.contains(search, ignoreCase = true)
             }
@@ -45,7 +44,7 @@ class IndustryViewModel(private val interactor: IndustryInteractor) : ViewModel(
     private fun processingResult(industry: List<Industry>?, errorType: ErrorType?) {
         if (industry != null) {
             searchedIndustries = industry
-            renderState(FilterIndustryState.IndustryFound(industry))
+            renderState(FilterIndustryState.IndustryFound(sortAreas(industry)))
         } else {
             when (errorType) {
                 ErrorType.NOTHING_FOUND -> {

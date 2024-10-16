@@ -12,7 +12,6 @@ import androidx.navigation.navGraphViewModels
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.w3c.dom.Text
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.common.ext.viewBinding
 import ru.practicum.android.diploma.common.presentation.FilterParametersViewModel
@@ -41,7 +40,7 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
     }
 
     private fun initListeners() {
-        with(binding){
+        with(binding) {
             btnBack.setOnClickListener {
                 findNavController().popBackStack()
             }
@@ -68,7 +67,7 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
                 }
             })
 
-            ivSearch.setOnClickListener{
+            ivSearch.setOnClickListener {
                 etSearch.setText("")
                 viewModel.getIndustries()
             }
@@ -85,16 +84,28 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
 
     private fun renderState(state: FilterIndustryState) {
         when (state) {
-            is FilterIndustryState.InternetError -> showError(R.drawable.er_no_internet, getString(R.string.no_internet))
-            is FilterIndustryState.NothingFound -> showError(R.drawable.er_nothing_found, getString(R.string.no_industry))
-            is FilterIndustryState.UnknownError -> showError(R.drawable.er_server_error, getString(R.string.server_error))
+            is FilterIndustryState.InternetError -> showError(
+                R.drawable.er_no_internet,
+                getString(R.string.no_internet)
+            )
+
+            is FilterIndustryState.NothingFound -> showError(
+                R.drawable.er_nothing_found,
+                getString(R.string.no_industry)
+            )
+
+            is FilterIndustryState.UnknownError -> showError(
+                R.drawable.er_server_error,
+                getString(R.string.server_error)
+            )
+
             is FilterIndustryState.IndustryFound -> showResults(state.industries)
             is FilterIndustryState.Loading -> showLoading()
         }
     }
 
-    private fun showError(image: Int, message: String){
-        with(binding){
+    private fun showError(image: Int, message: String) {
+        with(binding) {
             llPlaceholder.isVisible = true
             progressBar.isVisible = false
             recyclerview.isVisible = false
@@ -103,8 +114,8 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
         }
     }
 
-    private fun showLoading(){
-        with(binding){
+    private fun showLoading() {
+        with(binding) {
             progressBar.isVisible = true
             recyclerview.isVisible = false
             llPlaceholder.isVisible = false
