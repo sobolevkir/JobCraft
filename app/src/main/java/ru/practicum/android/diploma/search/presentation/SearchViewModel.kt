@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.search.presentation
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -71,9 +72,11 @@ class SearchViewModel(
         if (searchText.isNotEmpty()) {
             val filters = filtersLocalInteractor.getFilters()
             val areaId = (filters?.region?.id ?: filters?.country?.id).orEmpty()
+            Log.d("REGION-ID-SEARCH!!!", areaId)
             val industry = filters?.industry?.id.orEmpty()
             val salary = filters?.expectedSalary?.toString().orEmpty()
             val onlyWithSalary = if (filters?.onlyWithSalary == true) "true" else "false"
+            Log.d("REGION-ID-SEARCH!!!", onlyWithSalary)
             val options = mutableMapOf(
                 "text" to searchText,
                 "page" to page.toString(),
@@ -114,9 +117,9 @@ class SearchViewModel(
         stateLiveData.postValue(state)
     }
 
-    fun applyFilters(isFiltersApplied: Boolean) {
+    fun applyFilters() {
         val request = lastRequest
-        if (isFiltersApplied && !request.isNullOrEmpty()) {
+        if (!request.isNullOrEmpty()) {
             newSearch(request)
         }
     }

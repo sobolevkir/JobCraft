@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.filters.ui
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -11,48 +12,42 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.common.ext.viewBinding
 import ru.practicum.android.diploma.common.presentation.FilterParametersViewModel
 import ru.practicum.android.diploma.databinding.FragmentFiltersBinding
 import ru.practicum.android.diploma.filters.domain.model.FilterParameters
-import ru.practicum.android.diploma.filters.presentation.FiltersViewModel
 
 class FiltersFragment : Fragment(R.layout.fragment_filters) {
     private val binding by viewBinding(FragmentFiltersBinding::bind)
-    private val viewModel: FiltersViewModel by viewModel()
-
-    private var isClickAllowed = false
-
-    // добавляем общую для всего графа навигации ViewModel
     private val filterParametersViewModel: FilterParametersViewModel by navGraphViewModels(R.id.root_navigation_graph)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initListeners()
-        viewModel.getStateLiveData().observe(viewLifecycleOwner) {
-            filterParametersViewModel.setFilterParametersLiveData(it)
-            renderState(it)
-        }
-
+        binding.etSalary.setText(
+            filterParametersViewModel.getFilterParametersLiveData().value?.expectedSalary?.toString().orEmpty()
+        )
         filterParametersViewModel.getFilterParametersLiveData().observe(viewLifecycleOwner) {
-            viewModel.saveFiltersToLocalStorage(it)
+            setParameters(it)
+            Log.d("REGION-ID-FILTERS!!!", it?.region?.id.toString())
+            Log.d("REGION-ID-FILTERS!!!", it?.onlyWithSalary.toString())
         }
     }
 
-    private fun renderState(state: FilterParameters) {
+    private fun setParameters(filters: FilterParameters?) {
         with(binding) {
-            etSelectPlace.setText(getString(R.string.full_place, state.country, state.region))
-            etSalary.setText(state.expectedSalary.toString())
-            cbSalary.isChecked = state.onlyWithSalary
-            if (state.industry != null) {
-                etSelectIndustry.setText(state.industry.name)
-            }
-            btnCancel.isVisible = state.industry != null ||
-                state.country != null ||
-                state.expectedSalary != null ||
-                !state.onlyWithSalary
+            if (filters?.region != null) {
+                etSelectPlace.setText(getString(R.string.full_place, filters.country?.name ?: "", filters.region.name))
+            } else if (filters?.country != null) {
+                etSelectPlace.setText(filters.country.name)
+            } else etSelectPlace.setText("")
+            etSelectIndustry.setText(filters?.industry?.name.orEmpty())
+            cbSalary.isChecked = filters?.onlyWithSalary ?: false
+            btnCancel.isVisible = filters?.industry != null ||
+                filters?.country != null ||
+                filters?.expectedSalary != null ||
+                (filters?.onlyWithSalary ?: false)
         }
 
     }
@@ -60,17 +55,12 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
     private fun initListeners() {
         binding.cbSalary.setOnCheckedChangeListener { _, isChecked ->
             filterParametersViewModel.setOnlyWithSalary(isChecked)
+            binding.etSalary.clearFocus()
         }
         binding.btnCancel.setOnClickListener {
-            setEmptyFilters()
-            filterParametersViewModel.setFilterParametersLiveData(
-                FilterParameters(
-                    null,
-                    null,
-                    null,
-                    null
-                )
-            )
+            filterParametersViewModel.clearFilters()
+            binding.etSalary.setText("")
+            binding.etSalary.clearFocus()
         }
         binding.btnApply.setOnClickListener {
             applyFilters()
@@ -94,7 +84,8 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (searchDebounce()) {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    delay(SET_SALARY_DELAY_MILLIS)
                     if (s.toString().isNotEmpty()) {
                         filterParametersViewModel.setExpectedSalary(s.toString().toInt())
                     } else {
@@ -103,10 +94,6 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
                 }
             }
         })
-    }
-
-    private fun setEmptyFilters() {
-        renderState(FilterParameters(null, null, null, null))
     }
 
     private fun openPlaceSelection() {
@@ -121,26 +108,11 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
 
     private fun applyFilters() {
         filterParametersViewModel.applyFilters()
-        // Можно делать и вот так:
-        // filterParametersViewMode.setFilterParameters(parameters)
-        // это обновит лайвдату для всего графа навигации, где используется FilterParametersViewModel
         findNavController().popBackStack()
     }
 
-    private fun searchDebounce(): Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            viewLifecycleOwner.lifecycleScope.launch {
-                delay(SEARCH_DEBOUNCE_DELAY_MILLIS)
-                isClickAllowed = true
-            }
-        }
-        return current
-    }
-
     companion object {
-        const val SEARCH_DEBOUNCE_DELAY_MILLIS = 2000L
+        const val SET_SALARY_DELAY_MILLIS = 300L
     }
 
 }

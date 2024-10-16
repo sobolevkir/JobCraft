@@ -27,7 +27,7 @@ import ru.practicum.android.diploma.search.presentation.SearchViewModel
 
 class SearchFragment : Fragment(R.layout.fragment_search) {
     private val binding by viewBinding(FragmentSearchBinding::bind)
-    private val viewModel by viewModel<SearchViewModel>()
+    private val searchViewModel by viewModel<SearchViewModel>()
     private val filterParametersViewModel: FilterParametersViewModel by navGraphViewModels(R.id.root_navigation_graph)
     private var isClickAllowed = true
     private val adapter: VacancyListAdapter by lazy {
@@ -37,7 +37,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         filterParametersViewModel.getFiltersAppliedLiveEvent().observe(viewLifecycleOwner) { isFiltersApplied ->
-            viewModel.applyFilters(isFiltersApplied)
+            searchViewModel.applyFilters()
         }
         setStartOptions(true)
         initClickListeners()
@@ -45,7 +45,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         initScrollListener()
         binding.rvFoundVacanciesList.adapter = adapter
         binding.rvFoundVacanciesList.itemAnimator = null
-        viewModel.getStateLiveData().observe(viewLifecycleOwner) { renderState(it) }
+        searchViewModel.getStateLiveData().observe(viewLifecycleOwner) { renderState(it) }
 
     }
 
@@ -72,7 +72,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                             .findLastVisibleItemPosition()
                     val itemsCount = adapter.itemCount
                     if (pos >= itemsCount - 1) {
-                        viewModel.onLastItemReached()
+                        searchViewModel.onLastItemReached()
                     }
                 }
             }
@@ -91,7 +91,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 setStartOptions(s.isEmpty())
-                viewModel.search(s.toString())
+                searchViewModel.search(s.toString())
             }
         })
     }
@@ -101,7 +101,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 val query = binding.etSearchRequest.text.toString()
                 if (query.isNotEmpty()) {
-                    viewModel.newSearch(query)
+                    searchViewModel.newSearch(query)
                 }
             }
             false
