@@ -15,9 +15,12 @@ class IndustryViewModel(private val interactor: IndustryInteractor) : ViewModel(
 
     private val industryState = MutableLiveData<FilterIndustryState>()
 
+    private var searchedIndustries = listOf<Industry>()
+
     fun getStateLiveData(): LiveData<FilterIndustryState> = industryState
 
     fun getIndustries() {
+        renderState(FilterIndustryState.Loading)
         interactor.getIndustries()
             .onEach { (data, error) ->
                 processingResult(data, error)
@@ -25,13 +28,31 @@ class IndustryViewModel(private val interactor: IndustryInteractor) : ViewModel(
 
     }
 
+    fun searchRequest(search: String) {
+        if (search.isNotEmpty()) {
+            val filteredRegions = searchedIndustries.filter {
+                it.name.contains(search, ignoreCase = true)
+            }
+            if (filteredRegions.isEmpty()) {
+                renderState(FilterIndustryState.NothingFound)
+            } else {
+                renderState(FilterIndustryState.IndustryFound(filteredRegions))
+            }
+        }
+    }
+
     private fun processingResult(industry: List<Industry>?, errorType: ErrorType?) {
         if (industry != null) {
-            renderState(FilterIndustryState.IndustryFound(industry))
+            searchedIndustries = industry
+            renderState(FilterIndustryState.IndustryFound(sortIndustries(industry)))
         } else {
             when (errorType) {
                 ErrorType.NOTHING_FOUND -> {
                     renderState(FilterIndustryState.NothingFound)
+                }
+
+                ErrorType.CONNECTION_PROBLEM -> {
+                    renderState(FilterIndustryState.InternetError)
                 }
 
                 else -> {
@@ -44,4 +65,12 @@ class IndustryViewModel(private val interactor: IndustryInteractor) : ViewModel(
     private fun renderState(state: FilterIndustryState) {
         industryState.postValue(state)
     }
+
+    private fun sortIndustries(area: List<Industry>): List<Industry> {
+        val sortedListByName = area.sortedBy { it.name.replace('Ё', 'Е').replace('ё', 'е') }
+        val areasWithoutDigits = sortedListByName.filter { !it.name.any { char -> char.isDigit() } }
+        val areasWithDigits = sortedListByName.filter { it.name.any { char -> char.isDigit() } }
+        return areasWithoutDigits + areasWithDigits // Сначала без цифр, затем с цифрами
+    }
+
 }

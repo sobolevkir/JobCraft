@@ -1,6 +1,8 @@
 package ru.practicum.android.diploma.filters.ui
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -26,19 +28,54 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
 
     private var isClickAllowed = true
 
-    private val adapter: IndustriesAdapter by lazy {
-        IndustriesAdapter(onItemSelect = { if (clickDebounce()) saveSelect(it) })
-    }
+    private lateinit var adapter: IndustriesAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        filterParametersViewModel.getFilterParametersLiveData().observe(viewLifecycleOwner) { industry ->
+            adapter = if (industry.industry != null) {
+                IndustriesAdapter(onItemSelect = { if (clickDebounce()) saveSelect(it) }, industry.industry.id)
+            } else{
+                IndustriesAdapter(onItemSelect = { if (clickDebounce()) saveSelect(it) }, "")
+            }
+            binding.recyclerview.adapter = adapter
+        }
         super.onViewCreated(view, savedInstanceState)
         searchIndustries()
         initListeners()
     }
 
     private fun initListeners() {
-        binding.btnBack.setOnClickListener {
-            findNavController().popBackStack()
+        with(binding) {
+            btnBack.setOnClickListener {
+                findNavController().popBackStack()
+            }
+
+            etSearch.addTextChangedListener(object : TextWatcher {
+                override fun afterTextChanged(p0: Editable?) {
+                    // empty
+                }
+
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                    // empty
+                }
+
+                override fun onTextChanged(s: CharSequence, p1: Int, p2: Int, p3: Int) {
+                    if (s.isEmpty()) {
+                        viewModel.getIndustries()
+                        ivSearch.setImageResource(R.drawable.ic_search)
+                        ivSearch.isClickable = false
+                    } else {
+                        viewModel.searchRequest(s.toString())
+                        ivSearch.setImageResource(R.drawable.ic_clear)
+                        ivSearch.isClickable = true
+                    }
+                }
+            })
+
+            ivSearch.setOnClickListener {
+                etSearch.setText("")
+                viewModel.getIndustries()
+            }
         }
     }
 
@@ -52,32 +89,47 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
 
     private fun renderState(state: FilterIndustryState) {
         when (state) {
-            is FilterIndustryState.NothingFound -> showNothingFound()
-            is FilterIndustryState.UnknownError -> showUnknownError()
+            is FilterIndustryState.InternetError -> showError(
+                R.drawable.er_no_internet,
+                getString(R.string.no_internet)
+            )
+
+            is FilterIndustryState.NothingFound -> showError(
+                R.drawable.er_nothing_found,
+                getString(R.string.no_industry)
+            )
+
+            is FilterIndustryState.UnknownError -> showError(
+                R.drawable.er_server_error,
+                getString(R.string.server_error)
+            )
+
             is FilterIndustryState.IndustryFound -> showResults(state.industries)
+            is FilterIndustryState.Loading -> showLoading()
         }
     }
 
-    private fun showNothingFound() {
+    private fun showError(image: Int, message: String) {
         with(binding) {
-            llPlaceholderEmpty.isVisible = true
-            llPlaceholderUnknown.isVisible = false
+            llPlaceholder.isVisible = true
+            progressBar.isVisible = false
             recyclerview.isVisible = false
+            ivError.setImageResource(image)
+            tvError.text = message
         }
     }
 
-    private fun showUnknownError() {
+    private fun showLoading() {
         with(binding) {
-            llPlaceholderEmpty.isVisible = false
-            llPlaceholderUnknown.isVisible = true
+            progressBar.isVisible = true
             recyclerview.isVisible = false
+            llPlaceholder.isVisible = false
         }
     }
 
     private fun showResults(list: List<Industry>) {
         with(binding) {
-            llPlaceholderEmpty.isVisible = false
-            llPlaceholderUnknown.isVisible = false
+            progressBar.isVisible = false
             recyclerview.isVisible = true
         }
         adapter.submitList(list)

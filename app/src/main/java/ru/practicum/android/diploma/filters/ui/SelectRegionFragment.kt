@@ -19,6 +19,7 @@ import ru.practicum.android.diploma.databinding.FragmentSelectRegionBinding
 import ru.practicum.android.diploma.filters.domain.model.Area
 import ru.practicum.android.diploma.filters.presentation.AreaState
 import ru.practicum.android.diploma.filters.presentation.AreaViewModel
+import ru.practicum.android.diploma.filters.ui.adapters.RegionListAdapter
 
 class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
     private val binding by viewBinding(FragmentSelectRegionBinding::bind)

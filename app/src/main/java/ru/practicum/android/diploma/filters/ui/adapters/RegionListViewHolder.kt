@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.filters.ui
+package ru.practicum.android.diploma.filters.ui.adapters
 
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.databinding.RegionListItemBinding
