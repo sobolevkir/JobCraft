@@ -110,8 +110,8 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
         return filteredAreas
     }
 
-    companion object {
-        const val SEARCH_DELAY = 500L
+    fun getCountryByParentId(parentId: String): Area? {
+        return searchedRegions.find { it.id == parentId }
     }
 
     private fun sortAreas(area: List<Area>): List<Area> {
@@ -123,6 +123,10 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
 
     private fun sortCountries(area: List<Area>): List<Area> {
         return area.sortedBy { if (it.name == "Другие регионы") 1 else 0 }
+    }
+
+    companion object {
+        const val SEARCH_DELAY = 500L
     }
 
 }
