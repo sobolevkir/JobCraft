@@ -15,4 +15,3 @@ class PlaceViewModel : ViewModel() {
         areaLiveData.postValue(PlaceState(country?.name, region?.name))
     }
 }
-

@@ -126,10 +126,10 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
     }
 
     private fun applyChanges(region: Area) {
-            filterParametersViewModel.setRegion(region)
-            val country = viewModel.getCountryByParentId(region.parentId.toString())
-            filterParametersViewModel.setCountry(country)
-            findNavController().popBackStack()
+        filterParametersViewModel.setRegion(region)
+        val country = viewModel.getCountryByParentId(region.parentId.toString())
+        filterParametersViewModel.setCountry(country)
+        findNavController().popBackStack()
     }
 
     private fun clickDebounce(): Boolean {
