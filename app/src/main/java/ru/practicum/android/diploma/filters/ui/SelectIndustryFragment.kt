@@ -29,7 +29,7 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
     private var isClickAllowed = true
 
     private val adapter: IndustriesAdapter by lazy {
-        IndustriesAdapter(onItemSelect = { if (clickDebounce()) saveSelect(it) })
+        IndustriesAdapter(onItemSelect = { if (clickDebounce()) saveSelect(it) }, selectedId = { getIdFromSaves() })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -37,6 +37,16 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
         searchIndustries()
         initListeners()
         binding.recyclerview.adapter = adapter
+    }
+
+    private fun getIdFromSaves(): String {
+        var id = ""
+        filterParametersViewModel.getFilterParametersLiveData().observe(viewLifecycleOwner) {
+            if (it.industry != null) {
+                id = it.industry.name
+            }
+        }
+        return id
     }
 
     private fun initListeners() {
@@ -47,11 +57,11 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
 
             etSearch.addTextChangedListener(object : TextWatcher {
                 override fun afterTextChanged(p0: Editable?) {
-                    //empty
+                    // empty
                 }
 
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    //empty
+                    // empty
                 }
 
                 override fun onTextChanged(s: CharSequence, p1: Int, p2: Int, p3: Int) {
