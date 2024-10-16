@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.filters.presentation
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -79,7 +78,6 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
                         } else {
                             val sortedCountries = sortCountries(searchResult)
                             countries = sortedCountries.toMutableList()
-                            Log.d("TEST, ", "Countries: ${countries.map { "${it.name} (${it.id})" }}")
                             renderState(AreaState.Success(sortedCountries))
                         }
                     }
