@@ -66,11 +66,10 @@ class IndustryViewModel(private val interactor: IndustryInteractor) : ViewModel(
         industryState.postValue(state)
     }
 
-    private fun sortIndustries(area: List<Industry>): List<Industry> {
-        val sortedListByName = area.sortedBy { it.name.replace('Ё', 'Е').replace('ё', 'е') }
+    private fun sortIndustries(industries: List<Industry>): List<Industry> {
+        val sortedListByName = industries.sortedBy { it.name.replace('Ё', 'Е').replace('ё', 'е') }
         val areasWithoutDigits = sortedListByName.filter { !it.name.any { char -> char.isDigit() } }
-        val areasWithDigits = sortedListByName.filter { it.name.any { char -> char.isDigit() } }
-        return areasWithoutDigits + areasWithDigits // Сначала без цифр, затем с цифрами
+        return areasWithoutDigits
     }
 
 }

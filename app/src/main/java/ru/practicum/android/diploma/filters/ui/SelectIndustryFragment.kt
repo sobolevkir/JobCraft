@@ -16,7 +16,6 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.common.ext.viewBinding
 import ru.practicum.android.diploma.common.presentation.FilterParametersViewModel
 import ru.practicum.android.diploma.databinding.FragmentSelectIndustryBinding
-import ru.practicum.android.diploma.filters.domain.model.Industry
 import ru.practicum.android.diploma.filters.presentation.IndustryViewModel
 import ru.practicum.android.diploma.filters.presentation.states.FilterIndustryState
 import ru.practicum.android.diploma.filters.ui.adapters.IndustriesAdapter
@@ -25,20 +24,23 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
     private val binding by viewBinding(FragmentSelectIndustryBinding::bind)
     private val viewModel by viewModel<IndustryViewModel>()
     private val filterParametersViewModel: FilterParametersViewModel by navGraphViewModels(R.id.root_navigation_graph)
+    private val converter = IndustryConverter()
 
+    private var selectedId = ""
+    private var actualIndustries = listOf<IndustryForUi>()
     private var isClickAllowed = true
 
-    private lateinit var adapter: IndustriesAdapter
+    private val adapter = IndustriesAdapter(onItemSelect = { if (clickDebounce()) saveSelect(it) })
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        filterParametersViewModel.getFilterParametersLiveData().observe(viewLifecycleOwner) { industry ->
-            adapter = if (industry.industry != null) {
-                IndustriesAdapter(onItemSelect = { if (clickDebounce()) saveSelect(it) }, industry.industry.id)
-            } else{
-                IndustriesAdapter(onItemSelect = { if (clickDebounce()) saveSelect(it) }, "")
+        filterParametersViewModel.getFilterParametersLiveData().observe(viewLifecycleOwner) { parametrs ->
+            selectedId = if (parametrs.industry != null) {
+                parametrs.industry.id
+            } else {
+                ""
             }
-            binding.recyclerview.adapter = adapter
         }
+        binding.recyclerview.adapter = adapter
         super.onViewCreated(view, savedInstanceState)
         searchIndustries()
         initListeners()
@@ -104,7 +106,10 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
                 getString(R.string.server_error)
             )
 
-            is FilterIndustryState.IndustryFound -> showResults(state.industries)
+            is FilterIndustryState.IndustryFound -> showResults(state.industries.map { industry ->
+                converter.map(industry)
+            })
+
             is FilterIndustryState.Loading -> showLoading()
         }
     }
@@ -127,18 +132,29 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
         }
     }
 
-    private fun showResults(list: List<Industry>) {
+    private fun showResults(list: List<IndustryForUi>) {
         with(binding) {
             progressBar.isVisible = false
             recyclerview.isVisible = true
         }
+        actualIndustries = list
+        actualIndustries.forEach { industry ->
+            if (industry.id == selectedId) {
+                industry.isSelected = true
+            }
+        }
         adapter.submitList(list)
     }
 
-    private fun saveSelect(select: Industry) {
+    private fun saveSelect(select: IndustryForUi) {
+        selectedId = select.id
+        actualIndustries.forEach { industry ->
+            industry.isSelected = industry.id == selectedId
+        }
+        adapter.submitList(actualIndustries)
         binding.selectBtn.isVisible = true
         binding.selectBtn.setOnClickListener {
-            filterParametersViewModel.setIndustry(select)
+            filterParametersViewModel.setIndustry(converter.map(select))
             findNavController().popBackStack()
         }
     }

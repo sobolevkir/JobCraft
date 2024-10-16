@@ -5,12 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.databinding.IndustryListItemBinding
-import ru.practicum.android.diploma.filters.domain.model.Industry
+import ru.practicum.android.diploma.filters.ui.IndustryForUi
 
 class IndustriesAdapter(
-    private val onItemSelect: (Industry) -> Unit,
-    private val selectedId: String
-) : ListAdapter<Industry, IndustriesViewHolder>(IndustryItemComparator()) {
+    private val onItemSelect: (IndustryForUi) -> Unit
+) : ListAdapter<IndustryForUi, IndustriesViewHolder>(IndustryItemComparator()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IndustriesViewHolder {
         val layoutInspector = LayoutInflater.from(parent.context)
@@ -19,9 +18,8 @@ class IndustriesAdapter(
 
     override fun onBindViewHolder(holder: IndustriesViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item.name, selectedId == item.id)
+        holder.bind(item)
         holder.itemView.setOnClickListener {
-            holder.bind(item.name, true)
             onItemSelect(item)
         }
     }
@@ -30,8 +28,10 @@ class IndustriesAdapter(
 class IndustriesViewHolder(private val binding: IndustryListItemBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(name: String, isSelected: Boolean) {
-        binding.tvIndustry.text = name
-        binding.industryItemSelect.isSelected = isSelected
+    fun bind(model: IndustryForUi) {
+        with(binding){
+            tvIndustry.text = model.name
+            industryItemSelect.isSelected = model.isSelected
+        }
     }
 }
