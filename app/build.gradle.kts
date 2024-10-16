@@ -66,6 +66,7 @@ dependencies {
 
     // Dependency Injection
     implementation(libs.koin.android)
+    implementation(libs.koin.androidx.navigation)
 
     // Navigation
     implementation(libs.navigation.fragmentKtx)

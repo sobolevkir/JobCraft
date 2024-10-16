@@ -3,11 +3,16 @@ package ru.practicum.android.diploma.common.presentation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+import ru.practicum.android.diploma.filters.domain.FiltersLocalInteractor
 import ru.practicum.android.diploma.filters.domain.model.Area
 import ru.practicum.android.diploma.filters.domain.model.FilterParameters
 import ru.practicum.android.diploma.filters.domain.model.Industry
 
-class FilterParametersViewModel : ViewModel() {
+class FilterParametersViewModel : ViewModel(), KoinComponent {
+
+    private val filtersLocalInteractor: FiltersLocalInteractor by inject()
 
     private var filtersAppliedLiveEvent = SingleLiveEvent<Boolean>()
     fun getFiltersAppliedLiveEvent(): SingleLiveEvent<Boolean> = filtersAppliedLiveEvent
@@ -15,12 +20,28 @@ class FilterParametersViewModel : ViewModel() {
     private var filterParametersLiveData = MutableLiveData<FilterParameters>()
     fun getFilterParametersLiveData(): LiveData<FilterParameters> = filterParametersLiveData
 
+    init {
+        getFiltersFromLocalStorage()
+    }
+
+    private fun getFiltersFromLocalStorage() {
+        filterParametersLiveData.postValue(
+            filtersLocalInteractor.getFilters() ?: FilterParameters(
+                null,
+                null,
+                null,
+                null
+            )
+        )
+    }
+
     fun applyFilters() {
         filtersAppliedLiveEvent.value = true
     }
 
-    fun setFilterParametersLiveData(parameters: FilterParameters) {
-        filterParametersLiveData.postValue(parameters)
+    fun clearFilters() {
+        filterParametersLiveData.postValue(FilterParameters(null, null, null, null))
+        saveFiltersToLocalStorage()
     }
 
     fun setRegion(region: Area?) {
@@ -29,6 +50,7 @@ class FilterParametersViewModel : ViewModel() {
                 this.value?.copy(region = region)
             )
         }
+        saveFiltersToLocalStorage()
     }
 
     fun setCountry(country: Area?) {
@@ -37,6 +59,7 @@ class FilterParametersViewModel : ViewModel() {
                 this.value?.copy(country = country)
             )
         }
+        saveFiltersToLocalStorage()
     }
 
     fun setIndustry(industry: Industry?) {
@@ -45,6 +68,7 @@ class FilterParametersViewModel : ViewModel() {
                 this.value?.copy(industry = industry)
             )
         }
+        saveFiltersToLocalStorage()
     }
 
     fun setExpectedSalary(salary: Int?) {
@@ -53,6 +77,7 @@ class FilterParametersViewModel : ViewModel() {
                 this.value?.copy(expectedSalary = salary)
             )
         }
+        saveFiltersToLocalStorage()
     }
 
     fun setOnlyWithSalary(onlyWithSalary: Boolean) {
@@ -61,6 +86,13 @@ class FilterParametersViewModel : ViewModel() {
                 this.value?.copy(onlyWithSalary = onlyWithSalary)
             )
         }
+        saveFiltersToLocalStorage()
+    }
+
+    private fun saveFiltersToLocalStorage() {
+        filtersLocalInteractor.saveFilters(
+            filterParametersLiveData.value ?: FilterParameters(null, null, null, null)
+        )
     }
 
 }
