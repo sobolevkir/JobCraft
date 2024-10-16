@@ -25,15 +25,17 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initListeners()
         binding.etSalary.setText(
             filterParametersViewModel.getFilterParametersLiveData().value?.expectedSalary?.toString().orEmpty()
         )
         filterParametersViewModel.getFilterParametersLiveData().observe(viewLifecycleOwner) {
             setParameters(it)
-            Log.d("REGION-ID-FILTERS!!!", it?.region?.id.toString())
-            Log.d("REGION-ID-FILTERS!!!", it?.onlyWithSalary.toString())
+            Log.d("FILTERS!!!", "country - ${it?.country?.id.toString()}")
+            Log.d("FILTERS!!!", "region - ${it?.region?.id.toString()}")
+            Log.d("FILTERS!!!", "salary - ${it?.expectedSalary.toString()}")
+            Log.d("FILTERS!!!", "onlyWithSalary - ${it?.onlyWithSalary.toString()}")
         }
+        initListeners()
     }
 
     private fun setParameters(filters: FilterParameters?) {

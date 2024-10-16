@@ -72,11 +72,9 @@ class SearchViewModel(
         if (searchText.isNotEmpty()) {
             val filters = filtersLocalInteractor.getFilters()
             val areaId = (filters?.region?.id ?: filters?.country?.id).orEmpty()
-            Log.d("REGION-ID-SEARCH!!!", areaId)
             val industry = filters?.industry?.id.orEmpty()
             val salary = filters?.expectedSalary?.toString().orEmpty()
             val onlyWithSalary = if (filters?.onlyWithSalary == true) "true" else "false"
-            Log.d("REGION-ID-SEARCH!!!", onlyWithSalary)
             val options = mutableMapOf(
                 "text" to searchText,
                 "page" to page.toString(),
@@ -91,7 +89,9 @@ class SearchViewModel(
             } else {
                 renderState(SearchState.Updating)
             }
-
+            Log.d("SEARCH!!!", "-> area - ${options["area"].toString()}")
+            Log.d("SEARCH!!!", "-> salary - ${options["salary"].toString()}")
+            Log.d("SEARCH!!!", "-> onlyWithSalary - ${options["only_with_salary"].toString()}")
             vacanciesInteractor.searchVacancies(options)
                 .onEach { (searchResult, errorType) ->
                     when (errorType) {

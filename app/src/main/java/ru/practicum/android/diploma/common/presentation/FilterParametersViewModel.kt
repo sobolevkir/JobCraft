@@ -25,13 +25,11 @@ class FilterParametersViewModel : ViewModel(), KoinComponent {
     }
 
     private fun getFiltersFromLocalStorage() {
-        filterParametersLiveData.postValue(
-            filtersLocalInteractor.getFilters() ?: FilterParameters(
-                null,
-                null,
-                null,
-                null
-            )
+        filterParametersLiveData.value = filtersLocalInteractor.getFilters() ?: FilterParameters(
+            null,
+            null,
+            null,
+            null
         )
     }
 
@@ -40,52 +38,32 @@ class FilterParametersViewModel : ViewModel(), KoinComponent {
     }
 
     fun clearFilters() {
-        filterParametersLiveData.postValue(FilterParameters(null, null, null, null))
+        filterParametersLiveData.value = FilterParameters(null, null, null, null)
         saveFiltersToLocalStorage()
     }
 
     fun setRegion(region: Area?) {
-        with(filterParametersLiveData) {
-            this.postValue(
-                this.value?.copy(region = region)
-            )
-        }
+        filterParametersLiveData.value = filterParametersLiveData.value?.copy(region = region)
         saveFiltersToLocalStorage()
     }
 
     fun setCountry(country: Area?) {
-        with(filterParametersLiveData) {
-            this.postValue(
-                this.value?.copy(country = country)
-            )
-        }
+        filterParametersLiveData.value = filterParametersLiveData.value?.copy(country = country)
         saveFiltersToLocalStorage()
     }
 
     fun setIndustry(industry: Industry?) {
-        with(filterParametersLiveData) {
-            this.postValue(
-                this.value?.copy(industry = industry)
-            )
-        }
+        filterParametersLiveData.value = filterParametersLiveData.value?.copy(industry = industry)
         saveFiltersToLocalStorage()
     }
 
     fun setExpectedSalary(salary: Int?) {
-        with(filterParametersLiveData) {
-            this.postValue(
-                this.value?.copy(expectedSalary = salary)
-            )
-        }
+        filterParametersLiveData.value = filterParametersLiveData.value?.copy(expectedSalary = salary)
         saveFiltersToLocalStorage()
     }
 
     fun setOnlyWithSalary(onlyWithSalary: Boolean) {
-        with(filterParametersLiveData) {
-            this.postValue(
-                this.value?.copy(onlyWithSalary = onlyWithSalary)
-            )
-        }
+        filterParametersLiveData.value = filterParametersLiveData.value?.copy(onlyWithSalary = onlyWithSalary)
         saveFiltersToLocalStorage()
     }
 
