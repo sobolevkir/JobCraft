@@ -110,10 +110,6 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
         return filteredAreas
     }
 
-    companion object {
-        const val SEARCH_DELAY = 500L
-    }
-
     private fun sortAreas(area: List<Area>): List<Area> {
         val sortedListByName = area.sortedBy { it.name.replace('Ё', 'Е').replace('ё', 'е') }
         val areasWithoutDigits = sortedListByName.filter { !it.name.any { char -> char.isDigit() } }
