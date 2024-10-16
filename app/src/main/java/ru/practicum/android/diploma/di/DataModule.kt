@@ -1,5 +1,7 @@
 package ru.practicum.android.diploma.di
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.room.Room
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineDispatcher
@@ -21,9 +23,32 @@ import ru.practicum.android.diploma.vacancy.data.impl.ExternalNavigatorImpl
 import ru.practicum.android.diploma.vacancy.domain.ExternalNavigator
 
 private const val BASE_URL = "https://api.hh.ru/"
+private const val APP_SETTINGS = "app_settings"
 
 val dataModule = module {
 
+    // Local Storage
+    single<SharedPreferences> {
+        androidContext().getSharedPreferences(APP_SETTINGS, Context.MODE_PRIVATE)
+    }
+    single {
+        Gson()
+    }
+    single {
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
+            .fallbackToDestructiveMigration()
+            .build()
+    }
+
+    // Network
+    single<NetworkClient> {
+        RetrofitNetworkClient(api = get(), context = androidContext(), ioDispatcher = get(named("ioDispatcher")))
+    }
+    single<OkHttpClient> {
+        OkHttpClient.Builder()
+            .addInterceptor(HeaderInterceptor())
+            .build()
+    }
     single<HHApi> {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -33,33 +58,18 @@ val dataModule = module {
             .create(HHApi::class.java)
     }
 
-    single {
-        Gson()
-    }
-
+    // Converters
     factory { ParametersConverter(context = get()) }
     factory { FavoriteVacancyDbConverter(get()) }
 
-    single<NetworkClient> {
-        RetrofitNetworkClient(api = get(), context = androidContext(), ioDispatcher = get(named("ioDispatcher")))
-    }
-
+    // Dispatchers
     single<CoroutineDispatcher>(named("ioDispatcher")) {
         Dispatchers.IO
     }
 
-    single<OkHttpClient> {
-        OkHttpClient.Builder()
-            .addInterceptor(HeaderInterceptor())
-            .build()
-    }
-    single {
-        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
-            .fallbackToDestructiveMigration()
-            .build()
-    }
-
+    // External Navigator
     single<ExternalNavigator> {
         ExternalNavigatorImpl(androidContext())
     }
+
 }

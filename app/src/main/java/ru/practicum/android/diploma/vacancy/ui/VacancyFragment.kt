@@ -69,10 +69,12 @@ class VacancyFragment : Fragment(R.layout.fragment_vacancy) {
                 binding.ivVacancyPlaceholder.setImageResource(R.drawable.vacancy_not_found)
                 binding.tvVacancyPlaceholder.text = getString(R.string.vacancy_not_found)
             }
+
             ScreenMode.CONNECTION_PROBLEM -> {
                 binding.ivVacancyPlaceholder.setImageResource(R.drawable.er_no_internet)
                 binding.tvVacancyPlaceholder.text = getString(R.string.no_internet)
             }
+
             else -> {
                 binding.ivVacancyPlaceholder.setImageResource(R.drawable.server_error)
                 binding.tvVacancyPlaceholder.text = getString(R.string.server_error)

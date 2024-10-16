@@ -1,37 +1,174 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="?attr/jcBackgroundColor"
     tools:context=".filters.ui.SelectPlaceFragment">
 
-    <!-- Нужно будет использовать Toolbar, это упрощает код -->
-    <Button
-        android:id="@+id/btn_back"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:background="@drawable/ic_back_arrow" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginVertical="8dp"
+            android:layout_marginStart="4dp"
+            android:clickable="true"
+            android:src="@drawable/ic_back_arrow"
+            app:tint="?attr/jcMainTextColor"
+            tools:ignore="contentDescription" />
+
+        <TextView
+            style="@style/Medium_22_Style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="4dp"
+            android:layout_marginStart="4dp"
+            android:text="@string/place_of_work"
+            android:textColor="?attr/jcMainTextColor" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_country"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
+        android:paddingStart="16dp"
+        android:gravity="center_vertical"
+        android:foreground="?attr/selectableItemBackground">
+
+        <TextView
+            android:id="@+id/tv_country_empty"
+            style="@style/Regular_16_Style"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/gray"
+            android:text="@string/country"
+            android:visibility="visible"/>
+
+        <LinearLayout
+            android:id="@+id/ll_country_filled"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                style="@style/Regular_12_Style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/jcMainTextColor"
+                android:text="@string/country"/>
+
+            <TextView
+                android:id="@+id/tv_country_filled"
+                style="@style/Regular_16_Style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/jcMainTextColor"
+                tools:text="Россия"/>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_country"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:layout_marginEnd="4dp"
+            android:src="@drawable/ic_arrow_forward"
+            app:tint="?attr/jcMainTextColor"
+            tools:ignore="contentDescription"
+            android:foreground="?attr/selectableItemBackground"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_region"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:gravity="center_vertical"
+        android:foreground="?attr/selectableItemBackground">
+
+        <TextView
+            android:id="@+id/tv_region_empty"
+            style="@style/Regular_16_Style"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/gray"
+            android:text="@string/region"
+            android:visibility="visible"
+            android:background="@android:color/transparent"/>
+
+        <LinearLayout
+            android:id="@+id/ll_region_filled"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                style="@style/Regular_12_Style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/jcMainTextColor"
+                android:text="@string/region"/>
+
+            <TextView
+                android:id="@+id/tv_region_filled"
+                style="@style/Regular_16_Style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/jcMainTextColor"
+                tools:text="Балашиха"/>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_region"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:layout_marginEnd="4dp"
+            android:src="@drawable/ic_arrow_forward"
+            app:tint="?attr/jcMainTextColor"
+            tools:ignore="contentDescription"
+            android:foreground="?attr/selectableItemBackground"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/btn_select"
+        style="@style/Medium_16_Style"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/place_filter_sign" />
-
-    <Button
-        android:id="@+id/btn_select_country"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/country_but_sign" />
-
-    <Button
-        android:id="@+id/btn_select_region"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/region_but_sign" />
+        android:background="@drawable/bg_rounded_button"
+        android:gravity="center"
+        android:paddingVertical="20dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="24dp"
+        android:text="@string/choose"
+        android:textColor="@color/white"
+        android:foreground="?attr/selectableItemBackground"
+        android:visibility="gone"/>
 
 </LinearLayout>

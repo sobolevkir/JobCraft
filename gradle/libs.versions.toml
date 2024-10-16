@@ -48,6 +48,7 @@ network-converterGson = { module = "com.squareup.retrofit2:converter-gson", vers
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 glideCompiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
+koin-androidx-navigation = { module = "io.insert-koin:koin-androidx-navigation", version.ref = "koin" }
 navigation-fragmentKtx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "nav" }
 navigation-uiKtx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "nav" }
 db-roomRuntime = { module = "androidx.room:room-runtime", version.ref = "room" }

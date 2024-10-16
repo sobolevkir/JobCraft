@@ -7,7 +7,7 @@
     android:layout_marginBottom="@dimen/search_field_height"
     android:background="?attr/jcBackgroundColor"
     android:orientation="vertical"
-    tools:context=".search.ui.FavoritesFragment">
+    tools:context=".favorites.ui.FavoritesFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
