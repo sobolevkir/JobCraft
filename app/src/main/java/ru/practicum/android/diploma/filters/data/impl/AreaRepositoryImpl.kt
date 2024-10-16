@@ -51,14 +51,13 @@ class AreaRepositoryImpl(
     private fun getAllNestedAreas(areaDtoList: List<AreaFilterDto>, parentId: String? = null): List<Area> {
         val areaList = mutableListOf<Area>()
         areaDtoList.forEach { areaDto ->
-            areaList.add(Area(parentId, areaDto.id, areaDto.name))
+            areaList.add(Area(parentId ?: areaDto.id, areaDto.id, areaDto.name))
             areaDto.areas?.let { nestedAreas ->
-                areaList.addAll(getAllNestedAreas(nestedAreas, areaDto.id))
+                areaList.addAll(getAllNestedAreas(nestedAreas, parentId ?: areaDto.id))
             }
         }
         return areaList
     }
-
     private fun getCountriesFromAreas(areaDtoList: List<AreaFilterDto>): List<Area> {
         val areaList = mutableListOf<Area>()
         areaDtoList.forEach {
