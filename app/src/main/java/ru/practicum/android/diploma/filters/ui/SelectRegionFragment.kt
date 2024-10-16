@@ -3,7 +3,6 @@ package ru.practicum.android.diploma.filters.ui
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -50,7 +49,6 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
             is AreaState.NoList -> showError(R.drawable.er_failed_to_get_list, R.string.failed_to_get_list)
             is AreaState.Success -> showResults(state.regions)
             is AreaState.Loading -> showLoading()
-            else -> {}
         }
     }
 
