@@ -77,7 +77,7 @@
             android:scaleType="fitCenter"
             android:src="@drawable/vacancy_search_start"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_error"
@@ -96,12 +96,12 @@
             android:clipToPadding="false"
             android:paddingTop="@dimen/margin_large"
             android:paddingBottom="@dimen/header_height"
+            android:visibility="gone"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:itemCount="4"
-            tools:listitem="@layout/vacancy_list_item"
-            android:visibility="gone"/>
+            tools:listitem="@layout/vacancy_list_item" />
 
         <TextView
             android:id="@+id/tv_search_result_message"

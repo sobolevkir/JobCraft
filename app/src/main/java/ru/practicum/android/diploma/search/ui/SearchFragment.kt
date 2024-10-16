@@ -55,6 +55,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             is SearchState.NothingFound -> {
                 showError(R.drawable.er_nothing_found, R.string.no_vacancies, true)
             }
+
             is SearchState.SearchResult -> showResults(state.vacancies, state.found)
             is SearchState.Loading -> showLoading()
             is SearchState.Updating -> showUpdating()
