@@ -126,9 +126,7 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
     }
 
     private fun applyChanges(region: Area) {
-        val country = viewModel.getCountryByParentId(region.parentId ?: "")
         filterParametersViewModel.setRegion(region)
-        filterParametersViewModel.setCountry(country)
         findNavController().popBackStack()
     }
 
