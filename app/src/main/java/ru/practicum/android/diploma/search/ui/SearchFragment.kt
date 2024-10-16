@@ -36,7 +36,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        filterParametersViewModel.getFiltersAppliedLiveEvent().observe(viewLifecycleOwner) { isFiltersApplied ->
+        filterParametersViewModel.getFiltersAppliedLiveEvent().observe(viewLifecycleOwner) { _ ->
             searchViewModel.applyFilters()
         }
         initClickListeners()
@@ -52,7 +52,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         when (state) {
             is SearchState.InternetError -> showError(R.drawable.er_no_internet, R.string.no_internet)
             is SearchState.ServerError -> showError(R.drawable.er_server_error, R.string.server_error)
-            is SearchState.NothingFound -> showError(R.drawable.er_nothing_found, R.string.no_vacancies)
+            is SearchState.NothingFound -> {
+                showError(R.drawable.er_nothing_found, R.string.no_vacancies, true)
+            }
             is SearchState.SearchResult -> showResults(state.vacancies, state.found)
             is SearchState.Loading -> showLoading()
             is SearchState.Updating -> showUpdating()
@@ -126,7 +128,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private fun showLoading() {
         with(binding) {
-            llError.isVisible = false
             progressBar.isVisible = true
             clSearchResult.isVisible = false
         }
@@ -134,7 +135,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private fun showUpdating() {
         with(binding) {
-            llError.isVisible = false
             progressBar.isVisible = false
             clSearchResult.isVisible = true
             rvFoundVacanciesList.isVisible = true
@@ -147,7 +147,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         adapter.submitList(vacancies) {
             with(binding) {
                 loadMoreProgressBar.isVisible = false
-                llError.isVisible = false
                 progressBar.isVisible = false
                 tvSearchResultMessage.text = binding.root.context.resources.getQuantityString(
                     R.plurals.vacancies_count,
@@ -157,21 +156,22 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 clSearchResult.isVisible = true
                 rvFoundVacanciesList.isVisible = true
                 tvSearchResultMessage.isVisible = true
+                ivSearchResult.isVisible = false
+                tvError.isVisible = false
             }
         }
     }
 
     private fun showError(image: Int, text: Int? = null, messageState: Boolean = false) {
         with(binding) {
-            llError.isVisible = true
             progressBar.isVisible = false
             clSearchResult.isVisible = true
             rvFoundVacanciesList.isVisible = false
             ivSearchResult.isVisible = true
             loadMoreProgressBar.isVisible = false
             ivSearchResult.setImageResource(image)
-            tvSearchResultMessage.isVisible = messageState
             tvSearchResultMessage.setText(R.string.no_found_vacancies)
+            tvSearchResultMessage.isVisible = messageState
             if (text == null) {
                 tvError.text = ""
             } else {

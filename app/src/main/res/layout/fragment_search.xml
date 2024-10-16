@@ -62,14 +62,10 @@
             android:src="@drawable/ic_search" />
     </FrameLayout>
 
-    <LinearLayout
-        android:id="@+id/ll_error"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_search_result"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/search_field_height"
-        android:gravity="center|center_vertical"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/iv_search_result"
@@ -79,7 +75,9 @@
             android:adjustViewBounds="true"
             android:importantForAccessibility="no"
             android:scaleType="fitCenter"
-            android:src="@drawable/vacancy_search_start" />
+            android:src="@drawable/vacancy_search_start"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
             android:id="@+id/tv_error"
@@ -87,13 +85,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_standard"
-            android:text="@string/no_internet" />
-    </LinearLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_search_result"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+            android:text="@string/no_internet"
+            app:layout_constraintTop_toBottomOf="@id/iv_search_result" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_found_vacancies_list"
@@ -107,7 +100,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:itemCount="4"
-            tools:listitem="@layout/vacancy_list_item" />
+            tools:listitem="@layout/vacancy_list_item"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/tv_search_result_message"
@@ -126,8 +120,8 @@
 
         <ProgressBar
             android:id="@+id/load_more_progress_bar"
-            android:layout_width="@dimen/small_icon_size"
-            android:layout_height="@dimen/small_icon_size"
+            android:layout_width="@dimen/progress_bar_size"
+            android:layout_height="@dimen/progress_bar_size"
             android:indeterminateTint="@color/blue"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
