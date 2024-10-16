@@ -9,7 +9,7 @@ import ru.practicum.android.diploma.filters.domain.model.Industry
 
 class IndustriesAdapter(
     private val onItemSelect: (Industry) -> Unit,
-    private val selectedId: () -> String
+    private val selectedId: String
 ) : ListAdapter<Industry, IndustriesViewHolder>(IndustryItemComparator()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IndustriesViewHolder {
@@ -19,7 +19,7 @@ class IndustriesAdapter(
 
     override fun onBindViewHolder(holder: IndustriesViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item.name, selectedId.toString() == item.id)
+        holder.bind(item.name, selectedId == item.id)
         holder.itemView.setOnClickListener {
             holder.bind(item.name, true)
             onItemSelect(item)

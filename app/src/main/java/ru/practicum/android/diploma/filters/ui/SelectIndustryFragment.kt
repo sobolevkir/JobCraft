@@ -28,25 +28,20 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
 
     private var isClickAllowed = true
 
-    private val adapter: IndustriesAdapter by lazy {
-        IndustriesAdapter(onItemSelect = { if (clickDebounce()) saveSelect(it) }, selectedId = { getIdFromSaves() })
-    }
+    private lateinit var adapter: IndustriesAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        filterParametersViewModel.getFilterParametersLiveData().observe(viewLifecycleOwner) { industry ->
+            adapter = if (industry.industry != null) {
+                IndustriesAdapter(onItemSelect = { if (clickDebounce()) saveSelect(it) }, industry.industry.id)
+            } else{
+                IndustriesAdapter(onItemSelect = { if (clickDebounce()) saveSelect(it) }, "")
+            }
+            binding.recyclerview.adapter = adapter
+        }
         super.onViewCreated(view, savedInstanceState)
         searchIndustries()
         initListeners()
-        binding.recyclerview.adapter = adapter
-    }
-
-    private fun getIdFromSaves(): String {
-        var id = ""
-        filterParametersViewModel.getFilterParametersLiveData().observe(viewLifecycleOwner) {
-            if (it.industry != null) {
-                id = it.industry.name
-            }
-        }
-        return id
     }
 
     private fun initListeners() {
