@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.R
@@ -61,64 +62,50 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
     }
 
     private fun initListeners() {
-        binding.cbSalary.setOnCheckedChangeListener { _, isChecked ->
-            filterParametersViewModel.setOnlyWithSalary(isChecked)
-            binding.etSalary.clearFocus()
-        }
-        binding.btnCancel.setOnClickListener {
-            filterParametersViewModel.clearFilters()
-            binding.etSalary.setText("")
-            binding.etSalary.clearFocus()
-        }
-        binding.btnApply.setOnClickListener {
-            applyFilters()
-        }
-        binding.toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
-        }
-        binding.etSelectPlace.setOnClickListener {
-            openPlaceSelection()
-        }
-        binding.etSelectIndustry.setOnClickListener {
-            openIndustrySelection()
-        }
-        binding.etSalary.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable) {
-                viewLifecycleOwner.lifecycleScope.launch {
-                    delay(SET_SALARY_DELAY_MILLIS)
-                    if (s.toString().isNotEmpty()) {
-                        filterParametersViewModel.setExpectedSalary(s.toString().toInt())
-                    } else {
-                        filterParametersViewModel.setExpectedSalary(null)
+        with(binding) {
+            cbSalary.setOnCheckedChangeListener { _, isChecked ->
+                filterParametersViewModel.setOnlyWithSalary(isChecked)
+                etSalary.clearFocus()
+            }
+            btnCancel.setOnClickListener {
+                filterParametersViewModel.clearFilters()
+                etSalary.setText("")
+                etSalary.clearFocus()
+            }
+            btnApply.setOnClickListener {
+                applyFilters()
+            }
+            toolbar.setNavigationOnClickListener {
+                findNavController().popBackStack()
+            }
+            etSelectPlace.setOnClickListener { openPlaceSelection() }
+            etSelectIndustry.setOnClickListener { openIndustrySelection() }
+            etSalary.addTextChangedListener(object : TextWatcher {
+                private var salaryInputJob: Job? = null
+                override fun afterTextChanged(s: Editable) {
+                    salaryInputJob?.cancel()
+                    salaryInputJob = viewLifecycleOwner.lifecycleScope.launch {
+                        delay(SET_SALARY_DELAY_MILLIS)
+                        val salary = s.toString().toIntOrNull()
+                        filterParametersViewModel.setExpectedSalary(salary)
                     }
                 }
-            }
 
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-                // Empty
-            }
-
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                // Empty
-            }
-        })
-
-        binding.etSelectPlace.addTextChangedListener(
-            CustomTextWatcher(
-                binding.tlSelectPlace,
-                onClear = {
+                override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+                override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+            })
+            etSelectPlace.addTextChangedListener(
+                CustomTextWatcher(tlSelectPlace) {
                     filterParametersViewModel.setRegion(null)
                     filterParametersViewModel.setCountry(null)
                 }
             )
-        )
-        binding.etSelectIndustry.addTextChangedListener(
-            CustomTextWatcher(
-                binding.tlSelectIndustry,
-                onClear = { filterParametersViewModel.setIndustry(null) }
+            etSelectIndustry.addTextChangedListener(
+                CustomTextWatcher(tlSelectIndustry) {
+                    filterParametersViewModel.setIndustry(null)
+                }
             )
-        )
-
+        }
     }
 
     private fun openPlaceSelection() {
