@@ -2,6 +2,7 @@ package ru.practicum.android.diploma.filters.ui
 
 import android.os.Bundle
 import android.text.Editable
+// import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
@@ -64,16 +65,18 @@ class SelectPlaceFragment : Fragment(R.layout.fragment_select_place) {
             openRegionSelection()
         }
         binding.ivCountry.setOnClickListener {
-            if (binding.tvCountryFilled.text.isNullOrEmpty()) resetCountry()
+            if (!binding.tvCountryFilled.text.isNullOrEmpty()) resetCountry()
         }
         binding.ivRegion.setOnClickListener {
-            if (binding.tvRegionFilled.text.isNullOrEmpty()) resetRegion()
+            if (!binding.tvRegionFilled.text.isNullOrEmpty()) resetRegion()
         }
         binding.btnSelect.setOnClickListener {
             processingBtnSelect()
         }
         filterParametersViewModel.getFilterParametersLiveData().observe(viewLifecycleOwner) { filterParameters ->
             viewModel.passNewParameters(filterParameters.country, filterParameters.region)
+            // Log.e ("МОЁ","country: parentId = " + filterParameters.country?.parentId +  "  id = " + filterParameters.country?.id + "  name = "+ filterParameters.country?.name)
+            // Log.e ("МОЁ","region: parentId = " + filterParameters.region?.parentId +  "  id = " + filterParameters.region?.id + "  name = "+ filterParameters.region?.name)
         }
         viewModel.getAreaLiveData().observe(viewLifecycleOwner) { newState ->
             if (newState.country.isNullOrEmpty()) {
@@ -100,12 +103,10 @@ class SelectPlaceFragment : Fragment(R.layout.fragment_select_place) {
     }
 
     private fun resetCountry() {
-        viewModel.resetCountry()
         filterParametersViewModel.setCountry(null)
     }
 
     private fun resetRegion() {
-        viewModel.resetRegion()
         filterParametersViewModel.setRegion(null)
     }
 
