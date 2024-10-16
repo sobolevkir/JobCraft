@@ -34,6 +34,7 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
         super.onViewCreated(view, savedInstanceState)
         searchIndustries()
         initListeners()
+        binding.recyclerview.adapter = adapter
     }
 
     private fun initListeners() {
@@ -52,32 +53,35 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
 
     private fun renderState(state: FilterIndustryState) {
         when (state) {
-            is FilterIndustryState.NothingFound -> showNothingFound()
-            is FilterIndustryState.UnknownError -> showUnknownError()
+            is FilterIndustryState.InternetError -> showError(R.drawable.er_no_internet, getString(R.string.no_internet))
+            is FilterIndustryState.NothingFound -> showError(R.drawable.er_nothing_found, getString(R.string.no_regions))
+            is FilterIndustryState.UnknownError -> showError(R.drawable.er_server_error, getString(R.string.server_error))
             is FilterIndustryState.IndustryFound -> showResults(state.industries)
+            is FilterIndustryState.Loading -> showLoading()
         }
     }
 
-    private fun showNothingFound() {
-        with(binding) {
-            llPlaceholderEmpty.isVisible = true
-            llPlaceholderUnknown.isVisible = false
+    private fun showError(image: Int, message: String){
+        with(binding){
+            llPlaceholder.isVisible = true
+            progressBar.isVisible = false
             recyclerview.isVisible = false
+            ivError.setImageResource(image)
+            tvError.text = message
         }
     }
 
-    private fun showUnknownError() {
-        with(binding) {
-            llPlaceholderEmpty.isVisible = false
-            llPlaceholderUnknown.isVisible = true
+    private fun showLoading(){
+        with(binding){
+            progressBar.isVisible = true
             recyclerview.isVisible = false
+            llPlaceholder.isVisible = false
         }
     }
 
     private fun showResults(list: List<Industry>) {
         with(binding) {
-            llPlaceholderEmpty.isVisible = false
-            llPlaceholderUnknown.isVisible = false
+            progressBar.isVisible = false
             recyclerview.isVisible = true
         }
         adapter.submitList(list)

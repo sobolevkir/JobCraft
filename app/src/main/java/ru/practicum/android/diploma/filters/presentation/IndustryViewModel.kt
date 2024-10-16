@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import ru.practicum.android.diploma.common.domain.model.ErrorType
 import ru.practicum.android.diploma.filters.domain.IndustryInteractor
+import ru.practicum.android.diploma.filters.domain.model.Area
 import ru.practicum.android.diploma.filters.domain.model.Industry
 import ru.practicum.android.diploma.filters.presentation.states.FilterIndustryState
 
@@ -34,6 +35,10 @@ class IndustryViewModel(private val interactor: IndustryInteractor) : ViewModel(
                     renderState(FilterIndustryState.NothingFound)
                 }
 
+                ErrorType.CONNECTION_PROBLEM -> {
+                    renderState(FilterIndustryState.InternetError)
+                }
+
                 else -> {
                     renderState(FilterIndustryState.UnknownError)
                 }
@@ -44,4 +49,12 @@ class IndustryViewModel(private val interactor: IndustryInteractor) : ViewModel(
     private fun renderState(state: FilterIndustryState) {
         industryState.postValue(state)
     }
+
+    private fun sortAreas(area: List<Industry>): List<Industry> {
+        val sortedListByName = area.sortedBy { it.name.replace('Ё', 'Е').replace('ё', 'е') }
+        val areasWithoutDigits = sortedListByName.filter { !it.name.any { char -> char.isDigit() } }
+        val areasWithDigits = sortedListByName.filter { it.name.any { char -> char.isDigit() } }
+        return areasWithoutDigits + areasWithDigits // Сначала без цифр, затем с цифрами
+    }
+
 }

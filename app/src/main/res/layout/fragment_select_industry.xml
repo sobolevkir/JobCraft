@@ -68,7 +68,7 @@
         android:layout_weight="1">
 
         <LinearLayout
-            android:id="@+id/ll_placeholder_unknown"
+            android:id="@+id/ll_placeholder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -76,6 +76,7 @@
             android:visibility="gone">
 
             <ImageView
+                android:id="@+id/iv_error"
                 android:layout_width="328dp"
                 android:layout_height="223dp"
                 android:src="@drawable/er_failed_to_get_list"
@@ -84,6 +85,7 @@
                 tools:ignore="contentDescription"/>
 
             <TextView
+                android:id="@+id/tv_error"
                 style="@style/Medium_22_Style"
                 android:textColor="?attr/jcMainTextColor"
                 android:text="@string/failed_to_get_list"
@@ -95,34 +97,15 @@
 
         </LinearLayout>
 
-
-        <LinearLayout
-            android:id="@+id/ll_placeholder_empty"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="center_vertical"
-            android:visibility="gone">
-
-            <ImageView
-                android:layout_width="328dp"
-                android:layout_height="223dp"
-                android:src="@drawable/er_nothing_found"
-                android:layout_gravity="center_horizontal"
-                android:scaleType="centerCrop"
-                tools:ignore="contentDescription"/>
-
-            <TextView
-                style="@style/Medium_22_Style"
-                android:textColor="?attr/jcMainTextColor"
-                android:text="@string/no_regions"
-                android:gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="46dp"
-                android:layout_marginTop="@dimen/margin_standard"/>
-
-        </LinearLayout>
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="@dimen/progress_bar_size"
+            android:layout_height="@dimen/progress_bar_size"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin_large"
+            android:layout_marginBottom="@dimen/margin_standard"
+            android:indeterminateTint="@color/blue"
+            android:visibility="gone"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview"
@@ -130,6 +113,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginTop="@dimen/margin_standard"
+            tools:listitem="@layout/industry_list_item"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:visibility="visible"/>
     </FrameLayout>
