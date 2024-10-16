@@ -39,7 +39,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         filterParametersViewModel.getFiltersAppliedLiveEvent().observe(viewLifecycleOwner) { isFiltersApplied ->
             searchViewModel.applyFilters()
         }
-        setStartOptions(true)
         initClickListeners()
         initQueryChangeListener()
         initScrollListener()
@@ -57,6 +56,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             is SearchState.SearchResult -> showResults(state.vacancies, state.found)
             is SearchState.Loading -> showLoading()
             is SearchState.Updating -> showUpdating()
+            is SearchState.Default -> showDefault()
         }
     }
 
@@ -90,25 +90,34 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                setStartOptions(s.isEmpty())
+                if (s.isEmpty()) {
+                    binding.ivClearRequest.isVisible = false
+                    binding.ivSearch.isVisible = true
+                } else {
+                    binding.ivClearRequest.isVisible = true
+                    binding.ivSearch.isVisible = false
+
+                }
                 searchViewModel.search(s.toString())
             }
         })
     }
 
     private fun initClickListeners() {
-        binding.etSearchRequest.setOnEditorActionListener { _, actionId, _ ->
+        binding.etSearchRequest.setOnEditorActionListener { textview, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 val query = binding.etSearchRequest.text.toString()
                 if (query.isNotEmpty()) {
+                    textview.clearFocus()
                     searchViewModel.newSearch(query)
                 }
             }
             false
         }
         binding.ivClearRequest.setOnClickListener {
+            activity?.hideKeyboard()
             binding.etSearchRequest.setText("")
-            setStartOptions(true)
+            binding.etSearchRequest.clearFocus()
         }
         binding.btnFilters.setOnClickListener {
             openFilters()
@@ -171,15 +180,10 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     }
 
-    private fun setStartOptions(isQueryEmpty: Boolean) {
-        if (isQueryEmpty) {
-            showError(R.drawable.vacancy_search_start, null)
-        }
-
-        with(binding) {
-            ivClearRequest.isVisible = !isQueryEmpty
-            ivSearch.isVisible = isQueryEmpty
-        }
+    private fun showDefault() {
+        showError(R.drawable.vacancy_search_start, null)
+        binding.ivClearRequest.isVisible = false
+        binding.ivSearch.isVisible = true
     }
 
     private fun openFilters() {

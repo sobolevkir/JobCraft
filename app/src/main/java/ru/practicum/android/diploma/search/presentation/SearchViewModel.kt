@@ -19,7 +19,7 @@ class SearchViewModel(
     private val filtersLocalInteractor: FiltersLocalInteractor
 ) : ViewModel() {
 
-    private val stateLiveData = MutableLiveData<SearchState>()
+
 
     private var lastRequest: String? = null
     private var searchJob: Job? = null
@@ -29,7 +29,12 @@ class SearchViewModel(
     private var isSearch = false
     private var isNextPageLoading = false
 
+    private val stateLiveData = MutableLiveData<SearchState>()
     fun getStateLiveData(): LiveData<SearchState> = stateLiveData
+
+    init {
+        stateLiveData.postValue(SearchState.Default)
+    }
 
     fun onLastItemReached() {
         if (!isNextPageLoading && paddingPage != maxPage - 1) {
@@ -42,6 +47,9 @@ class SearchViewModel(
     fun search(request: String) {
         if (request == lastRequest) {
             return
+        }
+        if (request.isEmpty()) {
+            renderState(SearchState.Default)
         }
         isSearch = request.isNotEmpty()
         lastRequest = request
@@ -95,7 +103,11 @@ class SearchViewModel(
                 .onEach { (searchResult, errorType) ->
                     when (errorType) {
                         null -> {
-                            fullList += searchResult!!.items
+                            if(isNew) {
+                                fullList = searchResult!!.items
+                            } else {
+                                fullList += searchResult!!.items
+                            }
                             renderState(SearchState.SearchResult(fullList, searchResult.found))
                             maxPage = searchResult.pages
                         }
@@ -109,6 +121,8 @@ class SearchViewModel(
                     isNextPageLoading = false
                 }
                 .launchIn(viewModelScope)
+        } else {
+            renderState(SearchState.Default)
         }
     }
 
