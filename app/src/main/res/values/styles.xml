@@ -68,6 +68,7 @@
         <item name="boxStrokeColor">@null</item>
         <item name="android:editable">true</item>
         <item name="endIconMode">custom</item>
+        <item name="endIconTint">?attr/jcMainTextColor</item>
         <item name="endIconDrawable">@drawable/btn_forward</item>
         <item name="hintTextColor">?attr/jcMainTextColor</item>
     </style>

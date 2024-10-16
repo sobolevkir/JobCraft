@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
+import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.R
@@ -32,7 +34,7 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
             /*            Log.d("FILTERS!!!", "country - ${it?.country?.id.toString()}")
                         Log.d("FILTERS!!!", "region - ${it?.region?.id.toString()}")
                         Log.d("FILTERS!!!", "salary - ${it?.expectedSalary.toString()}")
-                        Log.d("FILTERS!!!", "onlyWithSalary - ${it?.onlyWithSalary.toString()}")*/
+                        Log.d("FILTERS!!!", "onlyWithSalary - ${it?.onlyWithSalary.toString()}") */
         }
         initListeners()
     }
@@ -60,30 +62,49 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
     }
 
     private fun initListeners() {
-        binding.cbSalary.setOnCheckedChangeListener { _, isChecked ->
-            filterParametersViewModel.setOnlyWithSalary(isChecked)
-            binding.etSalary.clearFocus()
+        with(binding) {
+            cbSalary.setOnCheckedChangeListener { _, isChecked ->
+                filterParametersViewModel.setOnlyWithSalary(isChecked)
+                etSalary.clearFocus()
+            }
+            btnCancel.setOnClickListener {
+                filterParametersViewModel.clearFilters()
+                etSalary.setText("")
+                etSalary.clearFocus()
+            }
+            btnApply.setOnClickListener {
+                applyFilters()
+            }
+            toolbar.setNavigationOnClickListener {
+                findNavController().popBackStack()
+            }
+            etSelectPlace.setOnClickListener { openPlaceSelection() }
+            etSelectIndustry.setOnClickListener { openIndustrySelection() }
+            initSalaryTextListener()
+            etSelectPlace.addTextChangedListener(
+                CustomTextWatcher(tlSelectPlace) {
+                    filterParametersViewModel.setRegion(null)
+                    filterParametersViewModel.setCountry(null)
+                }
+            )
+            etSelectIndustry.addTextChangedListener(
+                CustomTextWatcher(tlSelectIndustry) {
+                    filterParametersViewModel.setIndustry(null)
+                }
+            )
         }
-        binding.btnCancel.setOnClickListener {
-            filterParametersViewModel.clearFilters()
-            binding.etSalary.setText("")
-            binding.etSalary.clearFocus()
-        }
-        binding.btnApply.setOnClickListener {
-            applyFilters()
-        }
-        binding.toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
-        }
-        binding.etSelectPlace.setOnClickListener {
-            openPlaceSelection()
-        }
-        binding.etSelectIndustry.setOnClickListener {
-            openIndustrySelection()
-        }
-        binding.etSalary.addTextChangedListener(object : TextWatcher {
+    }
+
+    private fun FragmentFiltersBinding.initSalaryTextListener() {
+        etSalary.addTextChangedListener(object : TextWatcher {
+            private var salaryInputJob: Job? = null
             override fun afterTextChanged(s: Editable) {
-                // Empty
+                salaryInputJob?.cancel()
+                salaryInputJob = viewLifecycleOwner.lifecycleScope.launch {
+                    delay(SET_SALARY_DELAY_MILLIS)
+                    val salary = s.toString().toIntOrNull()
+                    filterParametersViewModel.setExpectedSalary(salary)
+                }
             }
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
@@ -91,14 +112,7 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                viewLifecycleOwner.lifecycleScope.launch {
-                    delay(SET_SALARY_DELAY_MILLIS)
-                    if (s.toString().isNotEmpty()) {
-                        filterParametersViewModel.setExpectedSalary(s.toString().toInt())
-                    } else {
-                        filterParametersViewModel.setExpectedSalary(null)
-                    }
-                }
+                // Empty
             }
         })
     }
@@ -120,6 +134,30 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
 
     companion object {
         const val SET_SALARY_DELAY_MILLIS = 300L
+    }
+
+    class CustomTextWatcher(private val textInputLayout: TextInputLayout, private val onClear: (() -> Unit)? = null) :
+        TextWatcher {
+        override fun afterTextChanged(s: Editable?) {
+            if (s.isNullOrEmpty()) {
+                textInputLayout.setEndIconDrawable(R.drawable.btn_forward)
+                textInputLayout.setEndIconOnClickListener(null)
+            } else {
+                textInputLayout.setEndIconDrawable(R.drawable.ic_clear)
+                textInputLayout.setEndIconOnClickListener {
+                    textInputLayout.editText?.text?.clear()
+                    onClear?.invoke()
+                }
+            }
+        }
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            // Empty
+        }
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            // Empty
+        }
     }
 
 }
