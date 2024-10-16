@@ -39,11 +39,11 @@
         android:id="@+id/ll_country"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_marginTop="16dp"
-        android:foreground="?attr/selectableItemBackground"
-        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingStart="16dp">
+        android:layout_marginTop="16dp"
+        android:paddingStart="16dp"
+        android:gravity="center_vertical"
+        android:foreground="?attr/selectableItemBackground">
 
         <TextView
             android:id="@+id/tv_country_empty"
@@ -51,9 +51,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/country"
             android:textColor="@color/gray"
-            android:visibility="visible" />
+            android:text="@string/country"
+            android:visibility="visible"/>
 
         <LinearLayout
             android:id="@+id/ll_country_filled"
@@ -67,8 +67,8 @@
                 style="@style/Regular_12_Style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/country"
-                android:textColor="?attr/jcMainTextColor" />
+                android:textColor="?attr/jcMainTextColor"
+                android:text="@string/country"/>
 
             <TextView
                 android:id="@+id/tv_country_filled"
@@ -76,7 +76,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="?attr/jcMainTextColor"
-                tools:text="Россия" />
+                tools:text="Россия"/>
 
         </LinearLayout>
 
@@ -84,12 +84,12 @@
             android:id="@+id/iv_country"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            android:foreground="?attr/selectableItemBackground"
             android:padding="12dp"
+            android:layout_marginEnd="4dp"
             android:src="@drawable/ic_arrow_forward"
             app:tint="?attr/jcMainTextColor"
-            tools:ignore="contentDescription" />
+            tools:ignore="contentDescription"
+            android:foreground="?attr/selectableItemBackground"/>
 
     </LinearLayout>
 
