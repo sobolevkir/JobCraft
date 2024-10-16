@@ -88,7 +88,9 @@ class SearchViewModel(
             } else {
                 renderState(SearchState.Updating)
             }
-
+            /*Log.d("SEARCH!!!", "-> area - ${options["area"].toString()}")
+            Log.d("SEARCH!!!", "-> salary - ${options["salary"].toString()}")
+            Log.d("SEARCH!!!", "-> onlyWithSalary - ${options["only_with_salary"].toString()}")*/
             vacanciesInteractor.searchVacancies(options)
                 .onEach { (searchResult, errorType) ->
                     when (errorType) {

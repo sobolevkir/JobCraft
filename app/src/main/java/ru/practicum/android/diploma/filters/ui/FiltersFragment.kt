@@ -3,7 +3,6 @@ package ru.practicum.android.diploma.filters.ui
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -16,6 +15,7 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.common.ext.viewBinding
 import ru.practicum.android.diploma.common.presentation.FilterParametersViewModel
 import ru.practicum.android.diploma.databinding.FragmentFiltersBinding
+import ru.practicum.android.diploma.filters.domain.model.Area
 import ru.practicum.android.diploma.filters.domain.model.FilterParameters
 
 class FiltersFragment : Fragment(R.layout.fragment_filters) {
@@ -24,34 +24,39 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initListeners()
         binding.etSalary.setText(
             filterParametersViewModel.getFilterParametersLiveData().value?.expectedSalary?.toString().orEmpty()
         )
         filterParametersViewModel.getFilterParametersLiveData().observe(viewLifecycleOwner) {
             setParameters(it)
-            Log.d("REGION-ID-FILTERS!!!", it?.region?.id.toString())
-            Log.d("REGION-ID-FILTERS!!!", it?.onlyWithSalary.toString())
+            /*            Log.d("FILTERS!!!", "country - ${it?.country?.id.toString()}")
+                        Log.d("FILTERS!!!", "region - ${it?.region?.id.toString()}")
+                        Log.d("FILTERS!!!", "salary - ${it?.expectedSalary.toString()}")
+                        Log.d("FILTERS!!!", "onlyWithSalary - ${it?.onlyWithSalary.toString()}")*/
         }
+        initListeners()
     }
 
     private fun setParameters(filters: FilterParameters?) {
         with(binding) {
-            if (filters?.region != null) {
-                etSelectPlace.setText(getString(R.string.full_place, filters.country?.name ?: "", filters.region.name))
-            } else if (filters?.country != null) {
-                etSelectPlace.setText(filters.country.name)
-            } else {
-                etSelectPlace.setText("")
-            }
+            bindPlace(filters?.region, filters?.country)
             etSelectIndustry.setText(filters?.industry?.name.orEmpty())
             cbSalary.isChecked = filters?.onlyWithSalary ?: false
             btnCancel.isVisible = filters?.industry != null ||
                 filters?.country != null ||
                 filters?.expectedSalary != null ||
-                (filters?.onlyWithSalary ?: false)
+                filters?.onlyWithSalary ?: false
         }
+    }
 
+    private fun bindPlace(region: Area?, country: Area?) {
+        if (region != null) {
+            binding.etSelectPlace.setText(getString(R.string.full_place, country?.name ?: "", region.name))
+        } else if (country != null) {
+            binding.etSelectPlace.setText(country.name)
+        } else {
+            binding.etSelectPlace.setText("")
+        }
     }
 
     private fun initListeners() {
