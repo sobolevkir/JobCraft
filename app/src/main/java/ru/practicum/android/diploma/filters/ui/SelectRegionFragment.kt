@@ -3,7 +3,6 @@ package ru.practicum.android.diploma.filters.ui
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -128,7 +127,8 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
 
     private fun applyChanges(region: Area) {
         filterParametersViewModel.setRegion(region)
-        Log.d("region1", region.parentId.toString())
+        val country = viewModel.getCountryByParentId(region.parentId.toString())
+        filterParametersViewModel.setCountry(country)
         findNavController().popBackStack()
     }
 
