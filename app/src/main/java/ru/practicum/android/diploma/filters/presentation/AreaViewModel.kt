@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.filters.presentation
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,15 +12,15 @@ import ru.practicum.android.diploma.filters.domain.AreaInteractor
 import ru.practicum.android.diploma.filters.domain.model.Area
 
 class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
+    init {
+        getCountries()
+    }
 
     private val stateLiveData = MutableLiveData<AreaState>()
     fun getStateLiveData(): LiveData<AreaState> = stateLiveData
 
     private var searchedRegions = mutableListOf<Area>()
-
-    fun showCountries() {
-        getCountries()
-    }
+    private var countries = mutableListOf<Area>()
 
     fun searchRequest(searchText: String) {
         if (searchText.isNotEmpty()) {
@@ -68,7 +69,7 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
             .launchIn(viewModelScope)
     }
 
-    private fun getCountries() {
+    fun getCountries() {
         interactor.getCountries()
             .onEach { (searchResult, errorType) ->
                 when (errorType) {
@@ -77,6 +78,8 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
                             renderState(AreaState.NoList) // ??
                         } else {
                             val sortedCountries = sortCountries(searchResult)
+                            countries = sortedCountries.toMutableList()
+                            Log.d("TEST, ", "Countries: ${countries.map { "${it.name} (${it.id})" }}")
                             renderState(AreaState.Success(sortedCountries))
                         }
                     }
@@ -95,6 +98,10 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
                 }
             }
             .launchIn(viewModelScope)
+    }
+
+    fun getCountryByParentId(parentId: String): Area? {
+        return countries.find { it.id == parentId }
     }
 
     private fun excludeCountries(area: List<Area>): List<Area> {
@@ -118,7 +125,11 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
     }
 
     private fun sortCountries(area: List<Area>): List<Area> {
-        return area.sortedBy { if (it.name == "Другие регионы") 1 else 0 }
+        return area.sortedBy { if (it.name == OTHER_REGIONS) 1 else 0 }
+    }
+
+    companion object {
+        private const val OTHER_REGIONS = "Другие регионы"
     }
 
 }
