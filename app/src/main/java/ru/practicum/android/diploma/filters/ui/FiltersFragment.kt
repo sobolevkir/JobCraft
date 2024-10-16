@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
+import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.R
@@ -32,7 +33,7 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
             /*            Log.d("FILTERS!!!", "country - ${it?.country?.id.toString()}")
                         Log.d("FILTERS!!!", "region - ${it?.region?.id.toString()}")
                         Log.d("FILTERS!!!", "salary - ${it?.expectedSalary.toString()}")
-                        Log.d("FILTERS!!!", "onlyWithSalary - ${it?.onlyWithSalary.toString()}")*/
+                        Log.d("FILTERS!!!", "onlyWithSalary - ${it?.onlyWithSalary.toString()}") */
         }
         initListeners()
     }
@@ -83,14 +84,6 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
         }
         binding.etSalary.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
-                // Empty
-            }
-
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-                // Empty
-            }
-
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 viewLifecycleOwner.lifecycleScope.launch {
                     delay(SET_SALARY_DELAY_MILLIS)
                     if (s.toString().isNotEmpty()) {
@@ -100,7 +93,30 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
                     }
                 }
             }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+                // Empty
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                // Empty
+            }
         })
+
+        binding.etSelectPlace.addTextChangedListener(
+            CustomTextWatcher(
+                binding.tlSelectPlace,
+                onClear = {
+                    filterParametersViewModel.setRegion(null)
+                    filterParametersViewModel.setCountry(null)
+                })
+        )
+        binding.etSelectIndustry.addTextChangedListener(
+            CustomTextWatcher(
+                binding.tlSelectIndustry,
+                onClear = { filterParametersViewModel.setIndustry(null) })
+        )
+
     }
 
     private fun openPlaceSelection() {
@@ -120,6 +136,30 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
 
     companion object {
         const val SET_SALARY_DELAY_MILLIS = 300L
+    }
+
+    class CustomTextWatcher(private val textInputLayout: TextInputLayout, private val onClear: (() -> Unit)? = null) :
+        TextWatcher {
+        override fun afterTextChanged(s: Editable?) {
+            if (s.isNullOrEmpty()) {
+                textInputLayout.setEndIconDrawable(R.drawable.btn_forward)
+                textInputLayout.setEndIconOnClickListener(null)
+            } else {
+                textInputLayout.setEndIconDrawable(R.drawable.ic_clear)
+                textInputLayout.setEndIconOnClickListener {
+                    textInputLayout.editText?.text?.clear()
+                    onClear?.invoke()
+                }
+            }
+        }
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            // Empty
+        }
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            // Empty
+        }
     }
 
 }
