@@ -16,9 +16,12 @@ class IndustryViewModel(private val interactor: IndustryInteractor) : ViewModel(
 
     private val industryState = MutableLiveData<FilterIndustryState>()
 
+    private var searchedIndustries = listOf<Industry>()
+
     fun getStateLiveData(): LiveData<FilterIndustryState> = industryState
 
     fun getIndustries() {
+        renderState(FilterIndustryState.Loading)
         interactor.getIndustries()
             .onEach { (data, error) ->
                 processingResult(data, error)
@@ -26,8 +29,22 @@ class IndustryViewModel(private val interactor: IndustryInteractor) : ViewModel(
 
     }
 
+    fun searchRequest(search: String){
+        if (search.isNotEmpty()){
+            val filteredRegions = searchedIndustries.filter {
+                it.name.contains(search, ignoreCase = true)
+            }
+            if (filteredRegions.isEmpty()) {
+                renderState(FilterIndustryState.NothingFound)
+            } else {
+                renderState(FilterIndustryState.IndustryFound(filteredRegions))
+            }
+        }
+    }
+
     private fun processingResult(industry: List<Industry>?, errorType: ErrorType?) {
         if (industry != null) {
+            searchedIndustries = industry
             renderState(FilterIndustryState.IndustryFound(industry))
         } else {
             when (errorType) {
