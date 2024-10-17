@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.practicum.android.diploma.filters.domain.FiltersLocalInteractor
-import ru.practicum.android.diploma.filters.domain.model.FilterParameters
+import ru.practicum.android.diploma.common.presentation.model.FilterParameters
 
 class FiltersViewModel(private val interactor: FiltersLocalInteractor) : ViewModel() {
     private val stateLiveData = MutableLiveData<FilterParameters>()

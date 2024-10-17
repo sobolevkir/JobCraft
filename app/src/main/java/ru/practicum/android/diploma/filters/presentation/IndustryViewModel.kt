@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.onEach
 import ru.practicum.android.diploma.common.domain.model.ErrorType
 import ru.practicum.android.diploma.filters.domain.IndustryInteractor
 import ru.practicum.android.diploma.filters.domain.model.Industry
-import ru.practicum.android.diploma.filters.presentation.states.FilterIndustryState
+import ru.practicum.android.diploma.filters.presentation.models.FilterIndustryState
 
 class IndustryViewModel(private val interactor: IndustryInteractor) : ViewModel() {
 

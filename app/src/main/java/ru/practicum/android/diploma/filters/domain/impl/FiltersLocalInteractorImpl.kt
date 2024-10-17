@@ -2,7 +2,7 @@ package ru.practicum.android.diploma.filters.domain.impl
 
 import ru.practicum.android.diploma.filters.domain.FiltersLocalInteractor
 import ru.practicum.android.diploma.filters.domain.FiltersLocalRepository
-import ru.practicum.android.diploma.filters.domain.model.FilterParameters
+import ru.practicum.android.diploma.common.presentation.model.FilterParameters
 
 class FiltersLocalInteractorImpl(
     private val repository: FiltersLocalRepository
