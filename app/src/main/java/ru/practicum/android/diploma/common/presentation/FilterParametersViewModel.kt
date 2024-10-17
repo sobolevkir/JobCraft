@@ -103,4 +103,19 @@ class FilterParametersViewModel : ViewModel(), KoinComponent {
         filtersAppliedLiveEvent.value = true
     }
 
+    fun filtersAreEmpty(): Boolean {
+        return filterParametersLiveData.value == null ||
+            (filterParametersLiveData.value?.country == null &&
+                filterParametersLiveData.value?.region == null &&
+                filterParametersLiveData.value?.industry == null &&
+                filterParametersLiveData.value?.expectedSalary == null &&
+                filterParametersLiveData.value?.onlyWithSalary == false
+                ) || (filterParametersLiveData.value?.country == null &&
+            filterParametersLiveData.value?.region == null &&
+            filterParametersLiveData.value?.industry == null &&
+            filterParametersLiveData.value?.expectedSalary == null &&
+            filterParametersLiveData.value?.onlyWithSalary == null
+            )
+    }
+
 }
