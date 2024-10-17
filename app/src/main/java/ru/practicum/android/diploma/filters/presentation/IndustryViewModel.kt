@@ -10,12 +10,15 @@ import ru.practicum.android.diploma.common.domain.model.ErrorType
 import ru.practicum.android.diploma.filters.domain.IndustryInteractor
 import ru.practicum.android.diploma.filters.domain.model.Industry
 import ru.practicum.android.diploma.filters.presentation.states.FilterIndustryState
+import ru.practicum.android.diploma.filters.ui.IndustryForUi
 
 class IndustryViewModel(private val interactor: IndustryInteractor) : ViewModel() {
 
     private val industryState = MutableLiveData<FilterIndustryState>()
+    private val converter = IndustryConverter()
 
-    private var searchedIndustries = listOf<Industry>()
+    private var selectedId = ""
+    private var searchedIndustries = listOf<IndustryForUi>()
 
     fun getStateLiveData(): LiveData<FilterIndustryState> = industryState
 
@@ -26,6 +29,13 @@ class IndustryViewModel(private val interactor: IndustryInteractor) : ViewModel(
                 processingResult(data, error)
             }.launchIn(viewModelScope)
 
+    }
+
+    fun getIndustriesWithSelected(){
+        searchedIndustries.forEach {
+            it.isSelected = it.id == selectedId
+        }
+        renderState(FilterIndustryState.IndustryFound(searchedIndustries))
     }
 
     fun searchRequest(search: String) {
@@ -43,8 +53,8 @@ class IndustryViewModel(private val interactor: IndustryInteractor) : ViewModel(
 
     private fun processingResult(industry: List<Industry>?, errorType: ErrorType?) {
         if (industry != null) {
-            searchedIndustries = industry
-            renderState(FilterIndustryState.IndustryFound(sortIndustries(industry)))
+            searchedIndustries = sortIndustries(industry.map { converter.map(it) })
+            getIndustriesWithSelected()
         } else {
             when (errorType) {
                 ErrorType.NOTHING_FOUND -> {
@@ -62,11 +72,15 @@ class IndustryViewModel(private val interactor: IndustryInteractor) : ViewModel(
         }
     }
 
+    fun setId(id: String){
+        selectedId = id
+    }
+
     private fun renderState(state: FilterIndustryState) {
         industryState.postValue(state)
     }
 
-    private fun sortIndustries(industries: List<Industry>): List<Industry> {
+    private fun sortIndustries(industries: List<IndustryForUi>): List<IndustryForUi> {
         val sortedListByName = industries.sortedBy { it.name.replace('Ё', 'Е').replace('ё', 'е') }
         val areasWithoutDigits = sortedListByName.filter { !it.name.any { char -> char.isDigit() } }
         return areasWithoutDigits
