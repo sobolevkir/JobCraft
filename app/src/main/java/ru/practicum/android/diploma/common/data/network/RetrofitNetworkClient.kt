@@ -12,6 +12,8 @@ import ru.practicum.android.diploma.common.data.network.dto.ResultCode
 import ru.practicum.android.diploma.common.data.network.dto.VacanciesSearchRequest
 import ru.practicum.android.diploma.common.data.network.dto.VacancyDetailsRequest
 import ru.practicum.android.diploma.common.ext.isNetworkConnected
+import java.io.IOException
+import java.net.SocketTimeoutException
 
 class RetrofitNetworkClient(
     private val api: HHApi,
@@ -40,6 +42,12 @@ class RetrofitNetworkClient(
                     apiResponse.apply { resultCode = ResultCode.SUCCESS }
                 } catch (ex: HttpException) {
                     response.resultCode = handleHttpException(ex)
+                    response
+                } catch (e: SocketTimeoutException) {
+                    response.resultCode = ResultCode.CONNECTION_PROBLEM
+                    response
+                } catch (e: IOException) {
+                    response.resultCode = ResultCode.CONNECTION_PROBLEM
                     response
                 }
             }
