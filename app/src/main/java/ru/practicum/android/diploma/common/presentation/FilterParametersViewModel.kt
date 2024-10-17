@@ -104,18 +104,12 @@ class FilterParametersViewModel : ViewModel(), KoinComponent {
     }
 
     fun filtersAreEmpty(): Boolean {
-        return filterParametersLiveData.value == null ||
-            (filterParametersLiveData.value?.country == null &&
-                filterParametersLiveData.value?.region == null &&
-                filterParametersLiveData.value?.industry == null &&
-                filterParametersLiveData.value?.expectedSalary == null &&
-                filterParametersLiveData.value?.onlyWithSalary == false
-                ) || (filterParametersLiveData.value?.country == null &&
-            filterParametersLiveData.value?.region == null &&
-            filterParametersLiveData.value?.industry == null &&
-            filterParametersLiveData.value?.expectedSalary == null &&
-            filterParametersLiveData.value?.onlyWithSalary == null
-            )
+        val filters = filterParametersLiveData.value ?: return true
+        val areBasicFiltersEmpty = filters.country == null &&
+            filters.region == null &&
+            filters.industry == null &&
+            filters.expectedSalary == null
+        return areBasicFiltersEmpty && (!filters.onlyWithSalary)
     }
 
 }
