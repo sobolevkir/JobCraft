@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.common.data.network
 
 import android.content.Context
+import android.util.Log
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
@@ -41,12 +42,15 @@ class RetrofitNetworkClient(
                         }
                     apiResponse.apply { resultCode = ResultCode.SUCCESS }
                 } catch (ex: HttpException) {
+                    Log.e("RetrofitNetworkClient", "HTTP error: ${ex.message()}", ex)
                     response.resultCode = handleHttpException(ex)
                     response
-                } catch (e: SocketTimeoutException) {
+                } catch (ex: SocketTimeoutException) {
+                    Log.e("RetrofitNetworkClient", "Socket timeout: ${ex.message}", ex)
                     response.resultCode = ResultCode.CONNECTION_PROBLEM
                     response
-                } catch (e: IOException) {
+                } catch (ex: IOException) {
+                    Log.e("RetrofitNetworkClient", "IO error: ${ex.message}", ex)
                     response.resultCode = ResultCode.CONNECTION_PROBLEM
                     response
                 }
