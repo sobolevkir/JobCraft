@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.filters.presentation
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -72,11 +73,12 @@ class IndustryViewModel(private val interactor: IndustryInteractor) : ViewModel(
         }
     }
 
-    fun setId(id: String){
+    fun setSelectedID(id: String){
         selectedId = id
     }
 
     private fun renderState(state: FilterIndustryState) {
+        Log.d("FILTERS!!!", "state - $state")
         industryState.postValue(state)
     }
 

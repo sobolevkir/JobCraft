@@ -32,7 +32,7 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         filterParametersViewModel.getFilterParametersLiveData().observe(viewLifecycleOwner) { parametrs ->
-            viewModel.setId(if (parametrs.industry != null) {
+            viewModel.setSelectedID(if (parametrs.industry != null) {
                 parametrs.industry.id
             } else {
                 ""
@@ -137,7 +137,7 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
     }
 
     private fun saveSelect(select: IndustryForUi) {
-        viewModel.setId(select.id)
+        viewModel.setSelectedID(select.id)
         binding.selectBtn.isVisible = true
         binding.selectBtn.setOnClickListener {
             filterParametersViewModel.setIndustry(Industry(select.id, select.name))
