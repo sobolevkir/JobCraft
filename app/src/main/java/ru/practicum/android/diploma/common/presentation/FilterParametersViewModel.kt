@@ -5,10 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import ru.practicum.android.diploma.common.presentation.model.FilterParameters
 import ru.practicum.android.diploma.filters.domain.FiltersLocalInteractor
 import ru.practicum.android.diploma.filters.domain.model.Area
-import ru.practicum.android.diploma.filters.domain.model.FilterParameters
 import ru.practicum.android.diploma.filters.domain.model.Industry
+import ru.practicum.android.diploma.filters.presentation.models.PlaceParameters
 
 class FilterParametersViewModel : ViewModel(), KoinComponent {
 
@@ -19,6 +20,9 @@ class FilterParametersViewModel : ViewModel(), KoinComponent {
 
     private var filterParametersLiveData = MutableLiveData<FilterParameters>()
     fun getFilterParametersLiveData(): LiveData<FilterParameters> = filterParametersLiveData
+
+    private var placeTemporaryLiveData = MutableLiveData<PlaceParameters>()
+    fun getPlaceTemporaryLiveData(): LiveData<PlaceParameters> = placeTemporaryLiveData
 
     init {
         getFiltersFromLocalStorage()
@@ -31,17 +35,40 @@ class FilterParametersViewModel : ViewModel(), KoinComponent {
             null,
             null
         )
+        placeTemporaryLiveData.value = PlaceParameters(
+            countryTemp = filterParametersLiveData.value?.country,
+            regionTemp = filterParametersLiveData.value?.region
+        )
     }
 
-    fun applyFilters() {
-        filtersAppliedLiveEvent.value = true
+    private fun saveFiltersToLocalStorage() {
+        filtersLocalInteractor.saveFilters(
+            filterParametersLiveData.value ?: FilterParameters(null, null, null, null)
+        )
     }
 
-    fun clearFilters() {
-        filterParametersLiveData.value = FilterParameters(null, null, null, null)
-        saveFiltersToLocalStorage()
+    // Работа с PlaceTemporaryLiveData
+    fun applyPlaceTemporaryLiveData() {
+        setCountry(placeTemporaryLiveData.value?.countryTemp)
+        setRegion(placeTemporaryLiveData.value?.regionTemp)
     }
 
+    fun resetPlaceTemporaryLiveData() {
+        placeTemporaryLiveData.value = PlaceParameters(
+            countryTemp = filterParametersLiveData.value?.country,
+            regionTemp = filterParametersLiveData.value?.region
+        )
+    }
+
+    fun setCountryTemporary(country: Area?) {
+        placeTemporaryLiveData.value = placeTemporaryLiveData.value?.copy(countryTemp = country)
+    }
+
+    fun setRegionTemporary(region: Area?) {
+        placeTemporaryLiveData.value = placeTemporaryLiveData.value?.copy(regionTemp = region)
+    }
+
+    // Работа с FilterParametersLiveData
     fun setRegion(region: Area?) {
         filterParametersLiveData.value = filterParametersLiveData.value?.copy(region = region)
         saveFiltersToLocalStorage()
@@ -67,10 +94,13 @@ class FilterParametersViewModel : ViewModel(), KoinComponent {
         saveFiltersToLocalStorage()
     }
 
-    private fun saveFiltersToLocalStorage() {
-        filtersLocalInteractor.saveFilters(
-            filterParametersLiveData.value ?: FilterParameters(null, null, null, null)
-        )
+    fun clearFilters() {
+        filterParametersLiveData.value = FilterParameters(null, null, null, null)
+        saveFiltersToLocalStorage()
+    }
+
+    fun applyFilters() {
+        filtersAppliedLiveEvent.value = true
     }
 
 }

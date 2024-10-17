@@ -16,9 +16,9 @@ import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.common.ext.viewBinding
 import ru.practicum.android.diploma.common.presentation.FilterParametersViewModel
+import ru.practicum.android.diploma.common.presentation.model.FilterParameters
 import ru.practicum.android.diploma.databinding.FragmentFiltersBinding
 import ru.practicum.android.diploma.filters.domain.model.Area
-import ru.practicum.android.diploma.filters.domain.model.FilterParameters
 
 class FiltersFragment : Fragment(R.layout.fragment_filters) {
     private val binding by viewBinding(FragmentFiltersBinding::bind)
