@@ -27,14 +27,11 @@ class AreaRepositoryImpl(
                 if (areaFilterDto.isEmpty()) {
                     emit(Resource.Error(ErrorType.NOTHING_FOUND))
                 } else {
-                    emit(Resource.Success(getAllNestedAreas(excludeCountries(areaFilterDto))))
+                    emit(Resource.Success(getAllNestedAreas(areaFilterDto)))
                 }
             }
         }
     }.flowOn(ioDispatcher)
-    private fun excludeCountries(area: List<AreaFilterDto>): List<AreaFilterDto> {
-        return area.filter { it.parentId != null && it.parentId != "1001" }
-    }
 
     override fun getCountries(): Flow<Resource<List<Area>>> = flow {
         val response = networkClient.doRequest(FilterSearchRequest.AREAS)
@@ -54,7 +51,7 @@ class AreaRepositoryImpl(
     private fun getAllNestedAreas(areaDtoList: List<AreaFilterDto>, parentId: String? = null): List<Area> {
         val areaList = mutableListOf<Area>()
         areaDtoList.forEach { areaDto ->
-            areaList.add(Area(parentId ?: areaDto.id, areaDto.id, areaDto.name))
+            areaList.add(Area(parentId ?:"1001", areaDto.id, areaDto.name))
             areaDto.areas?.let { nestedAreas ->
                 areaList.addAll(getAllNestedAreas(nestedAreas, parentId ?: areaDto.id))
             }
