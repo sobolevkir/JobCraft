@@ -8,4 +8,6 @@ interface AreaRepository {
     fun getRegions(): Flow<Resource<List<Area>>>
 
     fun getCountries(): Flow<Resource<List<Area>>>
+
+    fun getOtherRegions(): Flow<Resource<List<Area>>>
 }

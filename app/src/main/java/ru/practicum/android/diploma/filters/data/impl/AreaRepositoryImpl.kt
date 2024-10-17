@@ -18,6 +18,7 @@ class AreaRepositoryImpl(
     private val networkClient: NetworkClient,
     private val ioDispatcher: CoroutineDispatcher,
 ) : AreaRepository {
+    private val OTHERS_PARENT_ID = "1001"
     override fun getRegions(): Flow<Resource<List<Area>>> = flow {
         val response = networkClient.doRequest(FilterSearchRequest.AREAS)
         when (response.resultCode) {
@@ -28,6 +29,20 @@ class AreaRepositoryImpl(
                     emit(Resource.Error(ErrorType.NOTHING_FOUND))
                 } else {
                     emit(Resource.Success(getAllNestedAreas(areaFilterDto)))
+                }
+            }
+        }
+    }.flowOn(ioDispatcher)
+    override fun getOtherRegions(): Flow<Resource<List<Area>>> = flow {
+        val response = networkClient.doRequest(FilterSearchRequest.AREAS)
+        when (response.resultCode) {
+            ResultCode.SUCCESS -> {
+                val areaSearchResponse = response as AreaSearchResponse
+                val areaFilterDto = areaSearchResponse.items
+                if (areaFilterDto.isEmpty()) {
+                    emit(Resource.Error(ErrorType.NOTHING_FOUND))
+                } else {
+                    emit(Resource.Success(getOtherCountriesFromAreas(areaFilterDto)))
                 }
             }
         }
@@ -47,17 +62,6 @@ class AreaRepositoryImpl(
             }
         }
     }.flowOn(ioDispatcher)
-
-    private fun getAllNestedAreas(areaDtoList: List<AreaFilterDto>, parentId: String? = null): List<Area> {
-        val areaList = mutableListOf<Area>()
-        areaDtoList.forEach { areaDto ->
-            areaList.add(Area(parentId ?: areaDto.id, areaDto.id, areaDto.name))
-            areaDto.areas?.let { nestedAreas ->
-                areaList.addAll(getAllNestedAreas(nestedAreas, parentId ?: areaDto.id))
-            }
-        }
-        return areaList
-    }
     private fun getCountriesFromAreas(areaDtoList: List<AreaFilterDto>): List<Area> {
         val areaList = mutableListOf<Area>()
         areaDtoList.forEach {
@@ -67,4 +71,34 @@ class AreaRepositoryImpl(
         }
         return areaList
     }
+    private fun getAllNestedAreas(areaDtoList: List<AreaFilterDto>, parentId: String? = null): List<Area> {
+        val areaList = mutableListOf<Area>()
+        areaDtoList.forEach { areaDto ->
+            areaList.add(Area(parentId ?: OTHERS_PARENT_ID, areaDto.id, areaDto.name))
+            areaDto.areas?.let { nestedAreas ->
+                areaList.addAll(getAllNestedAreas(nestedAreas, areaDto.id))
+            }
+        }
+
+        return areaList
+    }
+
+    private fun getOtherCountriesFromAreas(areaDtoList: List<AreaFilterDto>): List<Area> {
+        val areaList = mutableListOf<Area>()
+
+        areaDtoList.forEach { areaDto ->
+            if (areaDto.parentId == OTHERS_PARENT_ID || areaDto.id == OTHERS_PARENT_ID) {
+                areaList.add(Area("1001", areaDto.id, areaDto.name))
+                areaDto.areas?.let { nestedAreas ->
+                    areaList.addAll(getAllNestedAreas(nestedAreas, areaDto.id))
+                }
+            }
+        }
+
+        return areaList
+    }
+
+
+
+
 }

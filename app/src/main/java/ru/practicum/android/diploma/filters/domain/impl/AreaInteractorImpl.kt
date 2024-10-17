@@ -33,4 +33,16 @@ class AreaInteractorImpl(private val repository: AreaRepository) : AreaInteracto
         }
     }
 
+    override fun getOtherRegions(): Flow<Pair<List<Area>?, ErrorType?>> {
+        return repository.getOtherRegions().map { result ->
+            when (result) {
+                is Resource.Success -> {
+                    Pair(result.data, null)
+                }
+
+                is Resource.Error -> Pair(null, result.errorType)
+            }
+        }
+    }
+
 }
