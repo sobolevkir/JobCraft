@@ -32,7 +32,7 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
     private val filterParametersViewModel: FilterParametersViewModel by navGraphViewModels(R.id.root_navigation_graph)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        countryId = filterParametersViewModel.getFilterParametersLiveData().value?.country?.id
+        countryId = filterParametersViewModel.getPlaceTemporaryLiveData().value?.countryTemp?.id
         viewModel.getStateLiveData().observe(viewLifecycleOwner) { renderState(it) }
         setStartOptions()
         initClickListeners()
@@ -126,9 +126,9 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
     }
 
     private fun applyChanges(region: Area) {
-        filterParametersViewModel.setRegion(region)
+        filterParametersViewModel.setRegionTemporary(region)
         val country = viewModel.getCountryByParentId(region.parentId.toString())
-        filterParametersViewModel.setCountry(country)
+        filterParametersViewModel.setCountryTemporary(country)
         findNavController().popBackStack()
     }
 
