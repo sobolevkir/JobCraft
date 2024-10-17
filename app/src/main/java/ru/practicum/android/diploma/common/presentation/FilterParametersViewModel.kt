@@ -109,7 +109,7 @@ class FilterParametersViewModel : ViewModel(), KoinComponent {
             filters.region == null &&
             filters.industry == null &&
             filters.expectedSalary == null
-        return areBasicFiltersEmpty && (!filters.onlyWithSalary)
+        return areBasicFiltersEmpty && !filters.onlyWithSalary
     }
 
 }
