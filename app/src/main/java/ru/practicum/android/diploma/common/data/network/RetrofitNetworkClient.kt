@@ -42,15 +42,15 @@ class RetrofitNetworkClient(
                         }
                     apiResponse.apply { resultCode = ResultCode.SUCCESS }
                 } catch (ex: HttpException) {
-                    Log.e("RetrofitNetworkClient", "HTTP error: ${ex.message()}", ex)
+                    Log.e(TAG, "HTTP error: ${ex.message()}", ex)
                     response.resultCode = handleHttpException(ex)
                     response
                 } catch (ex: SocketTimeoutException) {
-                    Log.e("RetrofitNetworkClient", "Socket timeout: ${ex.message}", ex)
+                    Log.e(TAG, "Socket timeout: ${ex.message}", ex)
                     response.resultCode = ResultCode.CONNECTION_PROBLEM
                     response
                 } catch (ex: IOException) {
-                    Log.e("RetrofitNetworkClient", "IO error: ${ex.message}", ex)
+                    Log.e(TAG, "IO error: ${ex.message}", ex)
                     response.resultCode = ResultCode.CONNECTION_PROBLEM
                     response
                 }
@@ -82,5 +82,9 @@ class RetrofitNetworkClient(
 
             else -> ResultCode.UNKNOWN_ERROR
         }
+    }
+
+    companion object {
+        private const val TAG = "RetrofitNetworkClient"
     }
 }
