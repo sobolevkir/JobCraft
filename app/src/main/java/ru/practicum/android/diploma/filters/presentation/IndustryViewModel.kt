@@ -51,7 +51,7 @@ class IndustryViewModel(private val interactor: IndustryInteractor) : ViewModel(
                     renderState(FilterIndustryState.NothingFound)
                 }
 
-                ErrorType.CONNECTION_PROBLEM -> {
+                ErrorType.CONNECTION_PROBLEM, ErrorType.SERVER_ERROR -> {
                     renderState(FilterIndustryState.InternetError)
                 }
 
