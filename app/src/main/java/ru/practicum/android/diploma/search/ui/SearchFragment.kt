@@ -42,10 +42,16 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         initClickListeners()
         initQueryChangeListener()
         initScrollListener()
-        binding.rvFoundVacanciesList.adapter = adapter
-        binding.rvFoundVacanciesList.itemAnimator = null
+        with(binding) {
+            rvFoundVacanciesList.adapter = adapter
+            rvFoundVacanciesList.itemAnimator = null
+            if (filterParametersViewModel.filtersAreEmpty()) {
+                btnFilters.setImageResource(R.drawable.ic_filters_off)
+            } else {
+                btnFilters.setImageResource(R.drawable.ic_filters_on)
+            }
+        }
         searchViewModel.getStateLiveData().observe(viewLifecycleOwner) { renderState(it) }
-
     }
 
     private fun renderState(state: SearchState) {

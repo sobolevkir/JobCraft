@@ -21,7 +21,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/filter_but_sign"
             android:padding="@dimen/margin_standard"
-            android:src="@drawable/ic_filters" />
+            android:src="@drawable/ic_filters_off" />
     </com.google.android.material.appbar.MaterialToolbar>
 
     <FrameLayout

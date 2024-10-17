@@ -103,4 +103,13 @@ class FilterParametersViewModel : ViewModel(), KoinComponent {
         filtersAppliedLiveEvent.value = true
     }
 
+    fun filtersAreEmpty(): Boolean {
+        val filters = filterParametersLiveData.value ?: return true
+        val areBasicFiltersEmpty = filters.country == null &&
+            filters.region == null &&
+            filters.industry == null &&
+            filters.expectedSalary == null
+        return areBasicFiltersEmpty && !filters.onlyWithSalary
+    }
+
 }
