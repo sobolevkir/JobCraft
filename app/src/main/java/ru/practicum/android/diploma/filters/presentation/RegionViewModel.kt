@@ -16,6 +16,7 @@ import ru.practicum.android.diploma.filters.presentation.models.AreaState
 class RegionViewModel(private val interactor: AreaInteractor) : ViewModel() {
     init {
         getCountries()
+
     }
 
     private val stateLiveData = MutableLiveData<AreaState>()
@@ -38,19 +39,15 @@ class RegionViewModel(private val interactor: AreaInteractor) : ViewModel() {
     fun getRegions(countryId: String?, name: String?) {
         renderState(AreaState.Loading)
         if (name == OTHER_REGIONS) {
-            interactor.getOtherRegions()
-                .handleRegionsResponse(countryId)
+            interactor.getOtherRegions().handleRegionsResponse(countryId)
         } else {
-
-            interactor.getRegions()
-                .map { (searchResult, errorType) ->
-                    if (errorType == null) {
-                        searchResult?.let { excludeCountries(it) } to errorType
-                    } else {
-                        searchResult to errorType
-                    }
+            interactor.getRegions().map { (searchResult, errorType) ->
+                if (errorType == null) {
+                    searchResult?.let { excludeCountries(it) } to errorType
+                } else {
+                    searchResult to errorType
                 }
-                .handleRegionsResponse(countryId)
+            }.handleRegionsResponse(countryId)
         }
     }
 
@@ -85,33 +82,30 @@ class RegionViewModel(private val interactor: AreaInteractor) : ViewModel() {
         }.launchIn(viewModelScope)
     }
 
-
     private fun getCountries() {
-        interactor.getCountries()
-            .onEach { (searchResult, errorType) ->
-                when (errorType) {
-                    null -> {
-                        if (searchResult.isNullOrEmpty()) {
-                            renderState(AreaState.NoList)
-                        } else {
-                            countries = searchResult.toMutableList()
-                        }
-                    }
-
-                    ErrorType.CONNECTION_PROBLEM -> {
-                        renderState(AreaState.InternetError)
-                    }
-
-                    ErrorType.NOTHING_FOUND -> {
-                        renderState(AreaState.NothingFound)
-                    }
-
-                    else -> {
-                        renderState(AreaState.ServerError)
+        interactor.getCountries().onEach { (searchResult, errorType) ->
+            when (errorType) {
+                null -> {
+                    if (searchResult.isNullOrEmpty()) {
+                        renderState(AreaState.NoList)
+                    } else {
+                        countries = searchResult.toMutableList()
                     }
                 }
+
+                ErrorType.CONNECTION_PROBLEM -> {
+                    renderState(AreaState.InternetError)
+                }
+
+                ErrorType.NOTHING_FOUND -> {
+                    renderState(AreaState.NothingFound)
+                }
+
+                else -> {
+                    renderState(AreaState.ServerError)
+                }
             }
-            .launchIn(viewModelScope)
+        }.launchIn(viewModelScope)
     }
 
     fun getCountryByParentId(parentId: String): Area? {
