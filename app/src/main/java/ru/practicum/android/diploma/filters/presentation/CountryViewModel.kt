@@ -23,7 +23,7 @@ class CountryViewModel(private val interactor: AreaInteractor) : ViewModel() {
                 when (errorType) {
                     null -> {
                         if (searchResult.isNullOrEmpty()) {
-                            renderState(AreaState.NoList) // ??
+                            renderState(AreaState.NoList)
                         } else {
                             val sortedCountries = sortCountries(searchResult)
                             renderState(AreaState.Success(sortedCountries))
@@ -38,8 +38,12 @@ class CountryViewModel(private val interactor: AreaInteractor) : ViewModel() {
                         renderState(AreaState.NothingFound)
                     }
 
-                    else -> {
+                    ErrorType.SERVER_ERROR -> {
                         renderState(AreaState.ServerError)
+                    }
+
+                    else -> {
+                        renderState(AreaState.NoList)
                     }
                 }
             }

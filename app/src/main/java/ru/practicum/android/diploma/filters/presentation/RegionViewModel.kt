@@ -75,8 +75,12 @@ class RegionViewModel(private val interactor: AreaInteractor) : ViewModel() {
                     renderState(AreaState.NothingFound)
                 }
 
-                else -> {
+                ErrorType.SERVER_ERROR -> {
                     renderState(AreaState.ServerError)
+                }
+
+                else -> {
+                    renderState(AreaState.NoList)
                 }
             }
         }.launchIn(viewModelScope)
