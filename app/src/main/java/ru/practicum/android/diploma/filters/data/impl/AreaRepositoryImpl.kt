@@ -14,11 +14,12 @@ import ru.practicum.android.diploma.common.util.Resource
 import ru.practicum.android.diploma.filters.domain.AreaRepository
 import ru.practicum.android.diploma.filters.domain.model.Area
 
+private const val OTHERS_PARENT_ID = "1001"
+
 class AreaRepositoryImpl(
     private val networkClient: NetworkClient,
     private val ioDispatcher: CoroutineDispatcher,
 ) : AreaRepository {
-    private val othersParentId = "1001"
     override fun getRegions(): Flow<Resource<List<Area>>> = flow {
         val response = networkClient.doRequest(FilterSearchRequest.AREAS)
         when (response.resultCode) {
@@ -87,7 +88,7 @@ class AreaRepositoryImpl(
     private fun getAllNestedAreas(areaDtoList: List<AreaFilterDto>, parentId: String? = null): List<Area> {
         val areaList = mutableListOf<Area>()
         areaDtoList.forEach { areaDto ->
-            areaList.add(Area(parentId ?: othersParentId, areaDto.id, areaDto.name))
+            areaList.add(Area(parentId ?: OTHERS_PARENT_ID, areaDto.id, areaDto.name))
             areaDto.areas?.let { nestedAreas ->
                 areaList.addAll(getAllNestedAreas(nestedAreas, areaDto.id))
             }
@@ -100,8 +101,8 @@ class AreaRepositoryImpl(
         val areaList = mutableListOf<Area>()
 
         areaDtoList.forEach { areaDto ->
-            if (areaDto.parentId == othersParentId || areaDto.id == othersParentId) {
-                areaList.add(Area(othersParentId, areaDto.id, areaDto.name))
+            if (areaDto.parentId == OTHERS_PARENT_ID || areaDto.id == OTHERS_PARENT_ID) {
+                areaList.add(Area(OTHERS_PARENT_ID, areaDto.id, areaDto.name))
                 areaDto.areas?.let { nestedAreas ->
                     areaList.addAll(getAllNestedAreas(nestedAreas, areaDto.id))
                 }
