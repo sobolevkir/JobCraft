@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/margin_standard"
     android:layout_marginVertical="@dimen/margin_small"
-    android:background="?attr/jcBackgroundColor"
+    android:foreground="?attr/selectableItemBackground"
     android:orientation="horizontal">
 
     <ImageView
@@ -13,9 +13,8 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginEnd="@dimen/margin_medium"
-        android:background="@drawable/cover_border"
-        android:contentDescription="@string/logo_hint"
-        android:padding="0.5dp" />
+        android:foreground="@drawable/cover_border"
+        android:contentDescription="@string/logo_hint"/>
 
     <LinearLayout
         android:layout_width="match_parent"
