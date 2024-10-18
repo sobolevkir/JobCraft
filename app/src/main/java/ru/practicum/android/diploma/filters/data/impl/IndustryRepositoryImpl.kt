@@ -23,13 +23,21 @@ class IndustryRepositoryImpl(
         when (response.resultCode) {
             ResultCode.SUCCESS -> {
                 val industrySearchResponse = response as IndustrySearchResponse
-                val industryDto = industrySearchResponse.items
-                if (industryDto.isEmpty()) {
-                    emit(Resource.Error(ErrorType.NOTHING_FOUND))
-                } else {
-                    emit(Resource.Success(convertIndustry(industrySearchResponse.items)))
-                }
+                emit(Resource.Success(convertIndustry(industrySearchResponse.items)))
             }
+
+            ResultCode.CONNECTION_PROBLEM -> {
+                emit(Resource.Error(ErrorType.CONNECTION_PROBLEM))
+            }
+
+            ResultCode.NOTHING_FOUND -> {
+                emit(Resource.Error(ErrorType.NOTHING_FOUND))
+            }
+
+            ResultCode.BAD_REQUEST -> emit(Resource.Error(ErrorType.BAD_REQUEST))
+            ResultCode.SERVER_ERROR -> emit(Resource.Error(ErrorType.SERVER_ERROR))
+            ResultCode.FORBIDDEN_ERROR -> emit(Resource.Error(ErrorType.FORBIDDEN_ERROR))
+            else -> emit(Resource.Error(ErrorType.UNKNOWN_ERROR))
         }
     }.flowOn(ioDispatcher)
 

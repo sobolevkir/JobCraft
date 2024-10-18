@@ -9,7 +9,28 @@ import ru.practicum.android.diploma.filters.domain.model.Industry
 
 class IndustriesAdapter(
     private val onItemSelect: (Industry) -> Unit
-) : ListAdapter<Industry, IndustriesViewHolder>(IndustryItemComparator()) {
+) : ListAdapter<Industry, IndustriesAdapter.IndustriesViewHolder>(IndustryItemComparator()) {
+
+    private var selectedPosition = -1
+
+    inner class IndustriesViewHolder(private val binding: IndustryListItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(model: Industry, isSelected: Boolean) {
+            with(binding) {
+                tvIndustry.text = model.name
+                rbIndustryItemSelect.isSelected = isSelected
+
+                rbIndustryItemSelect.setOnClickListener {
+                    if (adapterPosition == selectedPosition) {
+                        return@setOnClickListener
+                    }
+                    onItemSelect(model)
+                }
+            }
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IndustriesViewHolder {
         val layoutInspector = LayoutInflater.from(parent.context)
         return IndustriesViewHolder(IndustryListItemBinding.inflate(layoutInspector, parent, false))
@@ -17,17 +38,14 @@ class IndustriesAdapter(
 
     override fun onBindViewHolder(holder: IndustriesViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item.name)
-        holder.itemView.setOnClickListener {
-            onItemSelect(item)
-        }
+        holder.bind(item, position == selectedPosition)
+    }
+
+    fun setSelectedPosition(position: Int) {
+        val previousPosition = selectedPosition
+        selectedPosition = position
+        notifyItemChanged(previousPosition)
+        notifyItemChanged(selectedPosition)
     }
 }
 
-class IndustriesViewHolder(private val binding: IndustryListItemBinding) :
-    RecyclerView.ViewHolder(binding.root) {
-
-    fun bind(name: String) {
-        binding.tvIndustry.text = name
-    }
-}
