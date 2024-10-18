@@ -26,6 +26,7 @@ class SelectPlaceFragment : Fragment(R.layout.fragment_select_place) {
         object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 filterParametersViewModel.resetPlaceTemporaryLiveData()
+                findNavController().popBackStack()
             }
         }
 
