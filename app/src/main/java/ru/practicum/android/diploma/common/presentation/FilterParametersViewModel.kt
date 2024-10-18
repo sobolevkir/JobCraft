@@ -24,17 +24,14 @@ class FilterParametersViewModel : ViewModel(), KoinComponent {
     private var placeTemporaryLiveData = MutableLiveData<PlaceParameters>()
     fun getPlaceTemporaryLiveData(): LiveData<PlaceParameters> = placeTemporaryLiveData
 
+    private val emptyFilterParameters: FilterParameters = FilterParameters(null, null, null, null)
+
     init {
         getFiltersFromLocalStorage()
     }
 
     private fun getFiltersFromLocalStorage() {
-        filterParametersLiveData.value = filtersLocalInteractor.getFilters() ?: FilterParameters(
-            null,
-            null,
-            null,
-            null
-        )
+        filterParametersLiveData.value = filtersLocalInteractor.getFilters() ?: emptyFilterParameters
         placeTemporaryLiveData.value = PlaceParameters(
             countryTemp = filterParametersLiveData.value?.country,
             regionTemp = filterParametersLiveData.value?.region
@@ -42,9 +39,7 @@ class FilterParametersViewModel : ViewModel(), KoinComponent {
     }
 
     private fun saveFiltersToLocalStorage() {
-        filtersLocalInteractor.saveFilters(
-            filterParametersLiveData.value ?: FilterParameters(null, null, null, null)
-        )
+        filtersLocalInteractor.saveFilters(filterParametersLiveData.value ?: emptyFilterParameters)
     }
 
     // Работа с PlaceTemporaryLiveData
@@ -71,11 +66,13 @@ class FilterParametersViewModel : ViewModel(), KoinComponent {
     // Работа с FilterParametersLiveData
     fun setRegion(region: Area?) {
         filterParametersLiveData.value = filterParametersLiveData.value?.copy(region = region)
+        placeTemporaryLiveData.value = placeTemporaryLiveData.value?.copy(regionTemp = region)
         saveFiltersToLocalStorage()
     }
 
     fun setCountry(country: Area?) {
         filterParametersLiveData.value = filterParametersLiveData.value?.copy(country = country)
+        placeTemporaryLiveData.value = placeTemporaryLiveData.value?.copy(countryTemp = country)
         saveFiltersToLocalStorage()
     }
 
@@ -95,7 +92,7 @@ class FilterParametersViewModel : ViewModel(), KoinComponent {
     }
 
     fun clearFilters() {
-        filterParametersLiveData.value = FilterParameters(null, null, null, null)
+        filterParametersLiveData.value = emptyFilterParameters
         saveFiltersToLocalStorage()
     }
 
