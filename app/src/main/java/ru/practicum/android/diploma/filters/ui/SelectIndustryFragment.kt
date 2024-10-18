@@ -27,15 +27,16 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
     private val filterParametersViewModel: FilterParametersViewModel by navGraphViewModels(R.id.root_navigation_graph)
 
     private var isClickAllowed = true
+    private var industries = listOf<Industry>()
 
     private val adapter = IndustriesAdapter(onItemSelect = { if (clickDebounce()) saveSelect(it) })
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         filterParametersViewModel.getFilterParametersLiveData().observe(viewLifecycleOwner) { parametrs ->
-            viewModel.setSelectedID(if (parametrs.industry != null) {
+            adapter.setSelectedPosition(if (parametrs.industry != null) {
                 parametrs.industry.id
             } else {
-                ""
+                "-1"
             })
         }
         binding.recyclerview.adapter = adapter
@@ -60,12 +61,11 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
                 }
 
                 override fun onTextChanged(s: CharSequence, p1: Int, p2: Int, p3: Int) {
+                    viewModel.searchRequest(s.toString())
                     if (s.isEmpty()) {
-                        viewModel.getIndustriesWithSelected()
                         ivSearch.setImageResource(R.drawable.ic_search)
                         ivSearch.isClickable = false
                     } else {
-                        viewModel.searchRequest(s.toString())
                         ivSearch.setImageResource(R.drawable.ic_clear)
                         ivSearch.isClickable = true
                     }
@@ -128,19 +128,23 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
         }
     }
 
-    private fun showResults(list: List<IndustryForUi>) {
+    private fun showResults(list: List<Industry>) {
         with(binding) {
             progressBar.isVisible = false
             recyclerview.isVisible = true
         }
+        industries = list
         adapter.submitList(list)
     }
 
-    private fun saveSelect(select: IndustryForUi) {
-        viewModel.setSelectedID(select.id)
+    private fun saveSelect(select: Industry) {
+        val selectedPosition = industries.indexOfFirst { it.id == select.id }
+        if (selectedPosition != -1){
+            adapter.setSelectedPosition(selectedPosition.toString())
+        }
         binding.selectBtn.isVisible = true
         binding.selectBtn.setOnClickListener {
-            filterParametersViewModel.setIndustry(Industry(select.id, select.name))
+            filterParametersViewModel.setIndustry(select)
             findNavController().popBackStack()
         }
     }

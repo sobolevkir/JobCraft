@@ -17,13 +17,12 @@
         tools:text="IT"/>
 
         <RadioButton
-            android:id="@+id/industry_item_select"
+            android:id="@+id/rb_industry_item_select"
             style="@style/RadioButton_Style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="12dp"
             android:gravity="center"/>
-
 
 </LinearLayout>

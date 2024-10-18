@@ -5,11 +5,31 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.databinding.IndustryListItemBinding
-import ru.practicum.android.diploma.filters.ui.IndustryForUi
+import ru.practicum.android.diploma.filters.domain.model.Industry
 
 class IndustriesAdapter(
-    private val onItemSelect: (IndustryForUi) -> Unit
-) : ListAdapter<IndustryForUi, IndustriesViewHolder>(IndustryItemComparator()) {
+    private val onItemSelect: (Industry) -> Unit
+) : ListAdapter<Industry, IndustriesAdapter.IndustriesViewHolder>(IndustryItemComparator()) {
+
+    private var selectedPosition = -1
+
+    inner class IndustriesViewHolder(private val binding: IndustryListItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(model: Industry, isSelected: Boolean) {
+            with(binding) {
+                tvIndustry.text = model.name
+                rbIndustryItemSelect.isSelected = isSelected
+
+                rbIndustryItemSelect.setOnClickListener {
+                    if (adapterPosition == selectedPosition) {
+                        return@setOnClickListener
+                    }
+                    onItemSelect(model)
+                }
+            }
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IndustriesViewHolder {
         val layoutInspector = LayoutInflater.from(parent.context)
@@ -18,20 +38,14 @@ class IndustriesAdapter(
 
     override fun onBindViewHolder(holder: IndustriesViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item)
-        holder.itemView.setOnClickListener {
-            onItemSelect(item)
-        }
+        holder.bind(item, position == selectedPosition)
+    }
+
+    fun setSelectedPosition(position: String) {
+        val previousPosition = selectedPosition
+        selectedPosition = position.toInt()
+        notifyItemChanged(previousPosition)
+        notifyItemChanged(selectedPosition)
     }
 }
 
-class IndustriesViewHolder(private val binding: IndustryListItemBinding) :
-    RecyclerView.ViewHolder(binding.root) {
-
-    fun bind(model: IndustryForUi) {
-        with(binding){
-            tvIndustry.text = model.name
-            industryItemSelect.isSelected = model.isSelected
-        }
-    }
-}
