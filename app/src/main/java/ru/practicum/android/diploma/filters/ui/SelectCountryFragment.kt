@@ -102,10 +102,10 @@ class SelectCountryFragment : Fragment(R.layout.fragment_select_region) {
     }
 
     private fun applyChanges(country: Area) {
-        filterParametersViewModel.setCountry(country)
-        val regionFromfilterParameters = filterParametersViewModel.getFilterParametersLiveData().value?.region
-        if (regionFromfilterParameters == null || regionFromfilterParameters.parentId != country.id) {
-            filterParametersViewModel.setRegion(null)
+        filterParametersViewModel.setCountryTemporary(country)
+        val savedRegion = filterParametersViewModel.getPlaceTemporaryLiveData().value?.regionTemp
+        if (savedRegion == null || savedRegion.parentId != country.id) {
+            filterParametersViewModel.setRegionTemporary(null)
         }
         findNavController().popBackStack()
     }

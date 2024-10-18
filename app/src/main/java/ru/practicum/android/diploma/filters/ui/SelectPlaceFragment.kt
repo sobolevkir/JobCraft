@@ -3,6 +3,7 @@ package ru.practicum.android.diploma.filters.ui
 import android.os.Bundle
 import android.text.Editable
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -19,10 +20,20 @@ class SelectPlaceFragment : Fragment(R.layout.fragment_select_place) {
     private val viewModel by viewModel<PlaceViewModel>()
     private val binding by viewBinding(FragmentSelectPlaceBinding::bind)
     private val filterParametersViewModel: FilterParametersViewModel by navGraphViewModels(R.id.root_navigation_graph)
+    private val onBackPressedCallback: OnBackPressedCallback =
+        object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                filterParametersViewModel.resetPlaceTemporaryLiveData()
+            }
+        }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            onBackPressedCallback
+        )
         binding.tvCountryFilled.addTextChangedListener(
             afterTextChanged = { s: Editable? ->
                 if (s.isNullOrEmpty()) {
@@ -54,6 +65,7 @@ class SelectPlaceFragment : Fragment(R.layout.fragment_select_place) {
         // Нужен общий debounse для btnBack, llCountry, llRegion, btnSelect после клика по любой из них  запретить
         // реакцию на клик по всем вышеперечисленным и еще по ivCountry и ivRegion (по всем сенсорным объектам)
         binding.btnBack.setOnClickListener {
+            filterParametersViewModel.resetPlaceTemporaryLiveData()
             findNavController().popBackStack()
         }
         binding.llCountry.setOnClickListener {
@@ -79,8 +91,8 @@ class SelectPlaceFragment : Fragment(R.layout.fragment_select_place) {
         binding.btnSelect.setOnClickListener {
             processingBtnSelect()
         }
-        filterParametersViewModel.getFilterParametersLiveData().observe(viewLifecycleOwner) { filterParameters ->
-            viewModel.passNewParameters(filterParameters.country, filterParameters.region)
+        filterParametersViewModel.getPlaceTemporaryLiveData().observe(viewLifecycleOwner) { filterParameters ->
+            viewModel.passNewParameters(filterParameters.countryTemp, filterParameters.regionTemp)
         }
         viewModel.getAreaLiveData().observe(viewLifecycleOwner) { newState ->
             if (newState.country.isNullOrEmpty()) {
@@ -96,22 +108,27 @@ class SelectPlaceFragment : Fragment(R.layout.fragment_select_place) {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        onBackPressedCallback.remove()
+    }
+
     private fun visibilityBtnSelect() {
         binding.btnSelect.isVisible =
             !(binding.tvCountryFilled.text.isNullOrEmpty() && binding.tvRegionFilled.text.isNullOrEmpty())
     }
 
     private fun processingBtnSelect() {
-        // Добавить обработку нажатия BtnSelect
+        filterParametersViewModel.applyPlaceTemporaryLiveData()
         findNavController().popBackStack()
     }
 
     private fun resetCountry() {
-        filterParametersViewModel.setCountry(null)
+        filterParametersViewModel.setCountryTemporary(null)
     }
 
     private fun resetRegion() {
-        filterParametersViewModel.setRegion(null)
+        filterParametersViewModel.setRegionTemporary(null)
     }
 
     private fun openCountrySelection() {
