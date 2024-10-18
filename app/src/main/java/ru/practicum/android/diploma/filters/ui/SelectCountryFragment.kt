@@ -40,10 +40,10 @@ class SelectCountryFragment : Fragment(R.layout.fragment_select_region) {
 
     private fun renderState(state: AreaState) {
         when (state) {
-            is AreaState.InternetError -> showError(R.drawable.er_no_internet, R.string.no_internet, true)
-            is AreaState.ServerError -> showError(R.drawable.er_server_error, R.string.server_error, true)
-            is AreaState.NothingFound -> showError(R.drawable.er_nothing_found, R.string.no_regions, true)
-            is AreaState.NoList -> showError(R.drawable.er_failed_to_get_list, R.string.failed_to_get_list, true)
+            is AreaState.InternetError -> showError(R.drawable.er_no_internet, R.string.no_internet)
+            is AreaState.ServerError -> showError(R.drawable.er_server_error, R.string.server_error)
+            is AreaState.NothingFound -> showError(R.drawable.er_nothing_found, R.string.no_regions)
+            is AreaState.NoList -> showError(R.drawable.er_failed_to_get_list, R.string.failed_to_get_list)
             is AreaState.Success -> showResults(state.regions)
             is AreaState.Loading -> showLoading()
             else -> {}
@@ -68,13 +68,13 @@ class SelectCountryFragment : Fragment(R.layout.fragment_select_region) {
         }
     }
 
-    private fun showError(image: Int, text: Int? = null, messageState: Boolean = false) {
+    private fun showError(image: Int, text: Int? = null) {
         with(binding) {
             llError.isVisible = true
             progressBar.isVisible = false
             rvAreaList.isVisible = false
             ivError.setImageResource(image)
-            tvError.isVisible = messageState
+            tvError.isVisible = true
             if (text == null) {
                 tvError.text = ""
             } else {

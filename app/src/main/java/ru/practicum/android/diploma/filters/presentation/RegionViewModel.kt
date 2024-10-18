@@ -86,7 +86,7 @@ class RegionViewModel(private val interactor: AreaInteractor) : ViewModel() {
     }
 
 
-    fun getCountries() {
+    private fun getCountries() {
         interactor.getCountries()
             .onEach { (searchResult, errorType) ->
                 when (errorType) {
