@@ -9,15 +9,17 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.common.ext.viewBinding
 import ru.practicum.android.diploma.common.presentation.FilterParametersViewModel
 import ru.practicum.android.diploma.databinding.FragmentSelectPlaceBinding
-import ru.practicum.android.diploma.filters.presentation.PlaceViewModel
 
 class SelectPlaceFragment : Fragment(R.layout.fragment_select_place) {
-    private val viewModel by viewModel<PlaceViewModel>()
+    private var isClickAllowed = true
     private val binding by viewBinding(FragmentSelectPlaceBinding::bind)
     private val filterParametersViewModel: FilterParametersViewModel by navGraphViewModels(R.id.root_navigation_graph)
     private val onBackPressedCallback: OnBackPressedCallback =
@@ -62,49 +64,40 @@ class SelectPlaceFragment : Fragment(R.layout.fragment_select_place) {
                 visibilityBtnSelect()
             }
         )
-        // Нужен общий debounse для btnBack, llCountry, llRegion, btnSelect после клика по любой из них  запретить
-        // реакцию на клик по всем вышеперечисленным и еще по ivCountry и ivRegion (по всем сенсорным объектам)
         binding.btnBack.setOnClickListener {
             filterParametersViewModel.resetPlaceTemporaryLiveData()
             findNavController().popBackStack()
         }
         binding.llCountry.setOnClickListener {
-            openCountrySelection()
+            if (clickDebounce()) openCountrySelection()
         }
         binding.llRegion.setOnClickListener {
-            openRegionSelection()
+            if (clickDebounce()) openRegionSelection()
         }
         binding.ivCountry.setOnClickListener {
-            if (!binding.tvCountryFilled.text.isNullOrEmpty()) {
-                resetCountry()
-            } else {
-                openCountrySelection()
+            if (clickDebounce()) {
+                if (!binding.tvCountryFilled.text.isNullOrEmpty()) {
+                    resetCountry()
+                } else {
+                    openCountrySelection()
+                }
             }
         }
         binding.ivRegion.setOnClickListener {
-            if (!binding.tvRegionFilled.text.isNullOrEmpty()) {
-                resetRegion()
-            } else {
-                openRegionSelection()
+            if (clickDebounce()) {
+                if (!binding.tvRegionFilled.text.isNullOrEmpty()) {
+                    resetRegion()
+                } else {
+                    openRegionSelection()
+                }
             }
         }
         binding.btnSelect.setOnClickListener {
             processingBtnSelect()
         }
         filterParametersViewModel.getPlaceTemporaryLiveData().observe(viewLifecycleOwner) { filterParameters ->
-            viewModel.passNewParameters(filterParameters.countryTemp, filterParameters.regionTemp)
-        }
-        viewModel.getAreaLiveData().observe(viewLifecycleOwner) { newState ->
-            if (newState.country.isNullOrEmpty()) {
-                binding.tvCountryFilled.text = ""
-            } else {
-                binding.tvCountryFilled.text = newState.country
-            }
-            if (newState.region.isNullOrEmpty()) {
-                binding.tvRegionFilled.text = ""
-            } else {
-                binding.tvRegionFilled.text = newState.region
-            }
+            binding.tvCountryFilled.text = filterParameters.countryTemp?.name.orEmpty()
+            binding.tvRegionFilled.text = filterParameters.regionTemp?.name.orEmpty()
         }
     }
 
@@ -125,6 +118,7 @@ class SelectPlaceFragment : Fragment(R.layout.fragment_select_place) {
 
     private fun resetCountry() {
         filterParametersViewModel.setCountryTemporary(null)
+        filterParametersViewModel.setRegionTemporary(null)
     }
 
     private fun resetRegion() {
@@ -139,5 +133,21 @@ class SelectPlaceFragment : Fragment(R.layout.fragment_select_place) {
     private fun openRegionSelection() {
         val action = SelectPlaceFragmentDirections.actionSelectPlaceFragmentToSelectRegionFragment()
         findNavController().navigate(action)
+    }
+
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            CoroutineScope(Dispatchers.Main).launch {
+                delay(CLICK_DEBOUNCE_DELAY_MILLIS)
+                isClickAllowed = true
+            }
+        }
+        return current
+    }
+
+    companion object {
+        private const val CLICK_DEBOUNCE_DELAY_MILLIS = 1000L
     }
 }
