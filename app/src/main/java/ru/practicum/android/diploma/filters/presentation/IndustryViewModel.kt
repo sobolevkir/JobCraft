@@ -45,7 +45,7 @@ class IndustryViewModel(private val interactor: IndustryInteractor) : ViewModel(
     private fun processingResult(industry: List<Industry>?, errorType: ErrorType?) {
         if (industry != null) {
             searchedIndustries = sortIndustries(industry)
-            renderState(FilterIndustryState.IndustryFound(industry))
+            renderState(FilterIndustryState.IndustryFound(searchedIndustries))
         } else {
             when (errorType) {
                 ErrorType.NOTHING_FOUND -> {

@@ -41,9 +41,9 @@ class IndustriesAdapter(
         holder.bind(item, position == selectedPosition)
     }
 
-    fun setSelectedPosition(position: String) {
+    fun setSelectedPosition(position: Int) {
         val previousPosition = selectedPosition
-        selectedPosition = position.toInt()
+        selectedPosition = position
         notifyItemChanged(previousPosition)
         notifyItemChanged(selectedPosition)
     }

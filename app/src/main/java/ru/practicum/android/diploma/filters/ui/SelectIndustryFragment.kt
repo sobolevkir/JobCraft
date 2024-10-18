@@ -26,18 +26,18 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
     private val viewModel by viewModel<IndustryViewModel>()
     private val filterParametersViewModel: FilterParametersViewModel by navGraphViewModels(R.id.root_navigation_graph)
 
+    private var selectedPosition = -1
     private var isClickAllowed = true
     private var industries = listOf<Industry>()
 
     private val adapter = IndustriesAdapter(onItemSelect = { if (clickDebounce()) saveSelect(it) })
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        filterParametersViewModel.getFilterParametersLiveData().observe(viewLifecycleOwner) { parametrs ->
-            adapter.setSelectedPosition(if (parametrs.industry != null) {
-                parametrs.industry.id
-            } else {
-                "-1"
-            })
+        val value = filterParametersViewModel.getFilterParametersLiveData().value
+        if (value != null){
+            if (value.industry != null){
+                saveSelect(value.industry)
+            }
         }
         binding.recyclerview.adapter = adapter
         super.onViewCreated(view, savedInstanceState)
@@ -138,11 +138,11 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
     }
 
     private fun saveSelect(select: Industry) {
-        val selectedPosition = industries.indexOfFirst { it.id == select.id }
+        selectedPosition = industries.indexOfFirst { it.id == select.id }
         if (selectedPosition != -1){
-            adapter.setSelectedPosition(selectedPosition.toString())
+            adapter.setSelectedPosition(selectedPosition)
+            binding.selectBtn.isVisible = true
         }
-        binding.selectBtn.isVisible = true
         binding.selectBtn.setOnClickListener {
             filterParametersViewModel.setIndustry(select)
             findNavController().popBackStack()
