@@ -18,7 +18,7 @@ class AreaRepositoryImpl(
     private val networkClient: NetworkClient,
     private val ioDispatcher: CoroutineDispatcher,
 ) : AreaRepository {
-    private val thersParentId = "1001"
+    private val othersParentId = "1001"
     override fun getRegions(): Flow<Resource<List<Area>>> = flow {
         val response = networkClient.doRequest(FilterSearchRequest.AREAS)
         when (response.resultCode) {
@@ -80,14 +80,14 @@ class AreaRepositoryImpl(
     private fun getCountriesFromAreas(areaDtoList: List<AreaFilterDto>): List<Area> {
         val areaList = mutableListOf<Area>()
         areaDtoList.forEach {
-                areaList.add(Area(it.parentId, it.id, it.name))
+            areaList.add(Area(it.parentId, it.id, it.name))
         }
         return areaList
     }
     private fun getAllNestedAreas(areaDtoList: List<AreaFilterDto>, parentId: String? = null): List<Area> {
         val areaList = mutableListOf<Area>()
         areaDtoList.forEach { areaDto ->
-            areaList.add(Area(parentId ?: thersParentId, areaDto.id, areaDto.name))
+            areaList.add(Area(parentId ?: othersParentId, areaDto.id, areaDto.name))
             areaDto.areas?.let { nestedAreas ->
                 areaList.addAll(getAllNestedAreas(nestedAreas, areaDto.id))
             }
@@ -100,8 +100,8 @@ class AreaRepositoryImpl(
         val areaList = mutableListOf<Area>()
 
         areaDtoList.forEach { areaDto ->
-            if (areaDto.parentId == thersParentId || areaDto.id == thersParentId) {
-                areaList.add(Area("1001", areaDto.id, areaDto.name))
+            if (areaDto.parentId == othersParentId || areaDto.id == othersParentId) {
+                areaList.add(Area(othersParentId, areaDto.id, areaDto.name))
                 areaDto.areas?.let { nestedAreas ->
                     areaList.addAll(getAllNestedAreas(nestedAreas, areaDto.id))
                 }
