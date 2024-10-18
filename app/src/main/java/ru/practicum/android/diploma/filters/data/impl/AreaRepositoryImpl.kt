@@ -80,9 +80,7 @@ class AreaRepositoryImpl(
     private fun getCountriesFromAreas(areaDtoList: List<AreaFilterDto>): List<Area> {
         val areaList = mutableListOf<Area>()
         areaDtoList.forEach {
-            if (it.parentId == null) {
                 areaList.add(Area(it.parentId, it.id, it.name))
-            }
         }
         return areaList
     }
