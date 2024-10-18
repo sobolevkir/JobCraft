@@ -33,16 +33,19 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
     private val adapter = IndustriesAdapter(onItemSelect = { if (clickDebounce()) saveSelect(it) })
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        searchIndustries()
+        initListeners()
+        binding.recyclerview.adapter = adapter
+    }
+
+    private fun getSavedIndustry(){
         val value = filterParametersViewModel.getFilterParametersLiveData().value
         if (value != null){
             if (value.industry != null){
                 saveSelect(value.industry)
             }
         }
-        binding.recyclerview.adapter = adapter
-        super.onViewCreated(view, savedInstanceState)
-        searchIndustries()
-        initListeners()
     }
 
     private fun initListeners() {
@@ -81,10 +84,10 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
 
     private fun searchIndustries() {
         viewModel.getIndustries()
-
         viewModel.getStateLiveData().observe(viewLifecycleOwner) {
             renderState(it)
         }
+        getSavedIndustry()
     }
 
     private fun renderState(state: FilterIndustryState) {
@@ -130,6 +133,7 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
 
     private fun showResults(list: List<Industry>) {
         with(binding) {
+            llPlaceholder.isVisible = false
             progressBar.isVisible = false
             recyclerview.isVisible = true
         }
