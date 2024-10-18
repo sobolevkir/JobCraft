@@ -9,8 +9,9 @@ import kotlinx.coroutines.flow.onEach
 import ru.practicum.android.diploma.common.domain.model.ErrorType
 import ru.practicum.android.diploma.filters.domain.AreaInteractor
 import ru.practicum.android.diploma.filters.domain.model.Area
+import ru.practicum.android.diploma.filters.presentation.models.AreaState
 
-class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
+class RegionViewModel(private val interactor: AreaInteractor) : ViewModel() {
     init {
         getCountries()
     }
@@ -35,6 +36,7 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
     }
 
     fun getRegions(countryId: String?) {
+        renderState(AreaState.Loading)
         interactor.getRegions()
             .onEach { (searchResult, errorType) ->
                 when (errorType) {
@@ -74,11 +76,9 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
                 when (errorType) {
                     null -> {
                         if (searchResult.isNullOrEmpty()) {
-                            renderState(AreaState.NoList) // ??
+                            renderState(AreaState.NoList)
                         } else {
-                            val sortedCountries = sortCountries(searchResult)
-                            countries = sortedCountries.toMutableList()
-                            renderState(AreaState.Success(sortedCountries))
+                            countries = searchResult.toMutableList()
                         }
                     }
 
@@ -99,6 +99,17 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
     }
 
     fun getCountryByParentId(parentId: String): Area? {
+        interactor.getCountries().onEach { (searchResult, errorType) ->
+            when (errorType) {
+                null -> {
+                    if (!searchResult.isNullOrEmpty()) {
+                        countries = searchResult.toMutableList()
+                    }
+                }
+
+                else -> {}
+            }
+        }.launchIn(viewModelScope)
         return countries.find { it.id == parentId }
     }
 
@@ -121,13 +132,4 @@ class AreaViewModel(private val interactor: AreaInteractor) : ViewModel() {
         val areasWithDigits = sortedListByName.filter { it.name.any { char -> char.isDigit() } }
         return areasWithoutDigits + areasWithDigits // Сначала без цифр, затем с цифрами
     }
-
-    private fun sortCountries(area: List<Area>): List<Area> {
-        return area.sortedBy { if (it.name == OTHER_REGIONS) 1 else 0 }
-    }
-
-    companion object {
-        private const val OTHER_REGIONS = "Другие регионы"
-    }
-
 }

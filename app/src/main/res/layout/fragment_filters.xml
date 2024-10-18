@@ -37,14 +37,17 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tl_select_industry"
         style="@style/TextInputLayoutStyle"
+        android:paddingTop="@dimen/margin_small"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tl_select_place">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_select_industry"
+            android:paddingTop="@dimen/margin_micro"
+            android:paddingBottom="@dimen/margin_small"
             style="@style/TextInputEditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -100,8 +103,8 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/margin_micro"
         android:layout_marginTop="30dp"
-        android:focusable="true"
         android:clickable="true"
+        android:focusable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tl_salary" />
 

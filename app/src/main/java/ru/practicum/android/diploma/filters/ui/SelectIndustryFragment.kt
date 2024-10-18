@@ -18,7 +18,7 @@ import ru.practicum.android.diploma.common.presentation.FilterParametersViewMode
 import ru.practicum.android.diploma.databinding.FragmentSelectIndustryBinding
 import ru.practicum.android.diploma.filters.domain.model.Industry
 import ru.practicum.android.diploma.filters.presentation.IndustryViewModel
-import ru.practicum.android.diploma.filters.presentation.states.FilterIndustryState
+import ru.practicum.android.diploma.filters.presentation.models.FilterIndustryState
 import ru.practicum.android.diploma.filters.ui.adapters.IndustriesAdapter
 
 class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {

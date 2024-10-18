@@ -17,9 +17,8 @@ import ru.practicum.android.diploma.common.ext.viewBinding
 import ru.practicum.android.diploma.common.presentation.FilterParametersViewModel
 import ru.practicum.android.diploma.databinding.FragmentSelectRegionBinding
 import ru.practicum.android.diploma.filters.domain.model.Area
-import ru.practicum.android.diploma.filters.presentation.AreaState
-import ru.practicum.android.diploma.filters.presentation.AreaViewModel
-import ru.practicum.android.diploma.filters.ui.adapters.RegionListAdapter
+import ru.practicum.android.diploma.filters.presentation.RegionViewModel
+import ru.practicum.android.diploma.filters.presentation.models.AreaState
 
 class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
     private val binding by viewBinding(FragmentSelectRegionBinding::bind)
@@ -29,11 +28,11 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
     }
     private var countryId: String? = null
 
-    private val viewModel: AreaViewModel by viewModel()
+    private val viewModel: RegionViewModel by viewModel()
     private val filterParametersViewModel: FilterParametersViewModel by navGraphViewModels(R.id.root_navigation_graph)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        countryId = filterParametersViewModel.getFilterParametersLiveData().value?.country?.id
+        countryId = filterParametersViewModel.getPlaceTemporaryLiveData().value?.countryTemp?.id
         viewModel.getStateLiveData().observe(viewLifecycleOwner) { renderState(it) }
         setStartOptions()
         initClickListeners()
@@ -127,9 +126,9 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
     }
 
     private fun applyChanges(region: Area) {
-        filterParametersViewModel.setRegion(region)
+        filterParametersViewModel.setRegionTemporary(region)
         val country = viewModel.getCountryByParentId(region.parentId.toString())
-        filterParametersViewModel.setCountry(country)
+        filterParametersViewModel.setCountryTemporary(country)
         findNavController().popBackStack()
     }
 

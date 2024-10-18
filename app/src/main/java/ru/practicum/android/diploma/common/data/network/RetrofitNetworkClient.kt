@@ -1,6 +1,7 @@
 package ru.practicum.android.diploma.common.data.network
 
 import android.content.Context
+import android.util.Log
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
@@ -12,6 +13,8 @@ import ru.practicum.android.diploma.common.data.network.dto.ResultCode
 import ru.practicum.android.diploma.common.data.network.dto.VacanciesSearchRequest
 import ru.practicum.android.diploma.common.data.network.dto.VacancyDetailsRequest
 import ru.practicum.android.diploma.common.ext.isNetworkConnected
+import java.io.IOException
+import java.net.SocketTimeoutException
 
 class RetrofitNetworkClient(
     private val api: HHApi,
@@ -39,7 +42,16 @@ class RetrofitNetworkClient(
                         }
                     apiResponse.apply { resultCode = ResultCode.SUCCESS }
                 } catch (ex: HttpException) {
+                    Log.e(TAG, "HTTP error: ${ex.message()}", ex)
                     response.resultCode = handleHttpException(ex)
+                    response
+                } catch (ex: SocketTimeoutException) {
+                    Log.e(TAG, "Socket timeout: ${ex.message}", ex)
+                    response.resultCode = ResultCode.CONNECTION_PROBLEM
+                    response
+                } catch (ex: IOException) {
+                    Log.e(TAG, "IO error: ${ex.message}", ex)
+                    response.resultCode = ResultCode.CONNECTION_PROBLEM
                     response
                 }
             }
@@ -70,5 +82,9 @@ class RetrofitNetworkClient(
 
             else -> ResultCode.UNKNOWN_ERROR
         }
+    }
+
+    companion object {
+        private const val TAG = "RetrofitNetworkClient"
     }
 }

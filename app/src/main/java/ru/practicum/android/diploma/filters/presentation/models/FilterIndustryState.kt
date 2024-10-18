@@ -1,4 +1,4 @@
-package ru.practicum.android.diploma.filters.presentation.states
+package ru.practicum.android.diploma.filters.presentation.models
 
 import ru.practicum.android.diploma.filters.ui.IndustryForUi
 
