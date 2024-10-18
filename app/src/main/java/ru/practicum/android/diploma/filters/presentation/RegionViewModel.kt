@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.filters.presentation
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -26,15 +25,13 @@ class RegionViewModel(private val interactor: AreaInteractor) : ViewModel() {
     private var countries = mutableListOf<Area>()
 
     fun searchRequest(searchText: String) {
-        if (searchText.isNotEmpty()) {
-            val filteredRegions = searchedRegions.filter {
-                it.name.contains(searchText, ignoreCase = true)
-            }
-            if (filteredRegions.isEmpty()) {
-                renderState(AreaState.NothingFound)
-            } else {
-                renderState(AreaState.Success(filteredRegions))
-            }
+        val filteredRegions = searchedRegions.filter {
+            it.name.contains(searchText, ignoreCase = true)
+        }
+        if (filteredRegions.isEmpty()) {
+            renderState(AreaState.NothingFound)
+        } else {
+            renderState(AreaState.Success(filteredRegions))
         }
     }
 

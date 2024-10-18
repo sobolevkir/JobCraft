@@ -27,15 +27,14 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
     private val adapter: RegionListAdapter by lazy {
         RegionListAdapter(onItemClick = { if (clickDebounce()) applyChanges(it) })
     }
-    private var countryId: String? = null
-    private var countryName: String? = null
 
     private val viewModel: RegionViewModel by viewModel()
     private val filterParametersViewModel: FilterParametersViewModel by navGraphViewModels(R.id.root_navigation_graph)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        countryId = filterParametersViewModel.getPlaceTemporaryLiveData().value?.countryTemp?.id
-        countryName = filterParametersViewModel.getPlaceTemporaryLiveData().value?.countryTemp?.name
+        filterParametersViewModel.getPlaceTemporaryLiveData().observe(viewLifecycleOwner) { placeParameters ->
+            viewModel.getRegions(placeParameters.countryTemp?.id, placeParameters.countryTemp?.name)
+        }
         viewModel.getStateLiveData().observe(viewLifecycleOwner) { renderState(it) }
         setStartOptions()
         initClickListeners()
@@ -93,7 +92,6 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
             tvFragmentTitle.text = getString(R.string.region_but_sign)
             flSearch.isVisible = true
             progressBar.isVisible = false
-            viewModel.getRegions(countryId, countryName)
         }
     }
 
