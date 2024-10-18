@@ -19,6 +19,7 @@ import ru.practicum.android.diploma.databinding.FragmentSelectRegionBinding
 import ru.practicum.android.diploma.filters.domain.model.Area
 import ru.practicum.android.diploma.filters.presentation.RegionViewModel
 import ru.practicum.android.diploma.filters.presentation.models.AreaState
+import ru.practicum.android.diploma.filters.ui.adapters.RegionListAdapter
 
 class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
     private val binding by viewBinding(FragmentSelectRegionBinding::bind)
@@ -27,12 +28,14 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
         RegionListAdapter(onItemClick = { if (clickDebounce()) applyChanges(it) })
     }
     private var countryId: String? = null
+    private var countryName: String? = null
 
     private val viewModel: RegionViewModel by viewModel()
     private val filterParametersViewModel: FilterParametersViewModel by navGraphViewModels(R.id.root_navigation_graph)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         countryId = filterParametersViewModel.getPlaceTemporaryLiveData().value?.countryTemp?.id
+        countryName = filterParametersViewModel.getPlaceTemporaryLiveData().value?.countryTemp?.name
         viewModel.getStateLiveData().observe(viewLifecycleOwner) { renderState(it) }
         setStartOptions()
         initClickListeners()
@@ -43,10 +46,10 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
 
     private fun renderState(state: AreaState) {
         when (state) {
-            is AreaState.InternetError -> showError(R.drawable.er_no_internet, R.string.no_internet)
-            is AreaState.ServerError -> showError(R.drawable.er_server_error, R.string.server_error)
-            is AreaState.NothingFound -> showError(R.drawable.er_nothing_found, R.string.no_regions)
-            is AreaState.NoList -> showError(R.drawable.er_failed_to_get_list, R.string.failed_to_get_list)
+            is AreaState.InternetError -> showError(R.drawable.er_no_internet, R.string.no_internet, true)
+            is AreaState.ServerError -> showError(R.drawable.er_server_error, R.string.server_error, true)
+            is AreaState.NothingFound -> showError(R.drawable.er_nothing_found, R.string.no_regions, true)
+            is AreaState.NoList -> showError(R.drawable.er_failed_to_get_list, R.string.failed_to_get_list, true)
             is AreaState.Success -> showResults(state.regions)
             is AreaState.Loading -> showLoading()
         }
@@ -90,7 +93,7 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
             tvFragmentTitle.text = getString(R.string.region_but_sign)
             flSearch.isVisible = true
             progressBar.isVisible = false
-            viewModel.getRegions(countryId)
+            viewModel.getRegions(countryId, countryName)
         }
     }
 
@@ -145,6 +148,6 @@ class SelectRegionFragment : Fragment(R.layout.fragment_select_region) {
     }
 
     companion object {
-        private const val CLICK_DEBOUNCE_DELAY_MILLIS = 100L
+        private const val CLICK_DEBOUNCE_DELAY_MILLIS = 500L
     }
 }
