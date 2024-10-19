@@ -31,11 +31,15 @@ class IndustryViewModel(private val interactor: IndustryInteractor) : ViewModel(
     }
 
     fun getIndustriesWithSelected() {
-        val list = mutableListOf<IndustryForUi>()
-        searchedIndustries.map {
-            list.add(IndustryForUi(it.id, it.name, it.id == selectedId))
+        if (searchedIndustries.isEmpty()) {
+            renderState(FilterIndustryState.InternetError)
+        } else {
+            val list = mutableListOf<IndustryForUi>()
+            searchedIndustries.map {
+                list.add(IndustryForUi(it.id, it.name, it.id == selectedId))
+            }
+            renderState(FilterIndustryState.IndustryFound(list))
         }
-        renderState(FilterIndustryState.IndustryFound(list))
     }
 
     fun searchRequest(search: String) {
