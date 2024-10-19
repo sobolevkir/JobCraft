@@ -15,14 +15,13 @@ class IndustriesAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(model: IndustryForUi) {
-            with(binding.industryItemSelect){
+            with(binding.rbIndustryItemSelect){
                 text = model.name
                 isChecked = model.isSelected
-
-                setOnClickListener{
-                    if (!model.isSelected) {
-                        onItemSelect(model)
-                    }
+            }
+            binding.industryListItem.setOnClickListener {
+                if (!model.isSelected) {
+                    onItemSelect(model)
                 }
             }
         }

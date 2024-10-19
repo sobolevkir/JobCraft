@@ -16,7 +16,6 @@ class IndustryViewModel(private val interactor: IndustryInteractor) : ViewModel(
 
     private val industryState = MutableLiveData<FilterIndustryState>()
     private val converter = IndustryConverter()
-
     private var selectedId = "-1"
     private var searchedIndustries = listOf<IndustryForUi>()
 
