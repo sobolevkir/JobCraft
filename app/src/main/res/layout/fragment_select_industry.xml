@@ -115,7 +115,7 @@
             <TextView
                 style="@style/Medium_22_Style"
                 android:textColor="?attr/jcMainTextColor"
-                android:text="@string/no_regions"
+                android:text="@string/no_industry"
                 android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
