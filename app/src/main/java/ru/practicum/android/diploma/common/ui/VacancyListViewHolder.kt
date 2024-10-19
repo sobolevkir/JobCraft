@@ -10,7 +10,7 @@ import ru.practicum.android.diploma.databinding.VacancyListItemBinding
 class VacancyListViewHolder(private val binding: VacancyListItemBinding) :
     RecyclerView.ViewHolder(binding.root) {
 
-    private val cornerRadius = binding.root.resources.getDimensionPixelSize(R.dimen.radius_icon)
+    private val cornerRadius = binding.root.resources.getDimensionPixelSize(R.dimen.radius_small)
     fun bind(model: VacancyFromList) = with(binding) {
         tvVacancyName.text = model.name
         tvEmployment.text = model.areaName
