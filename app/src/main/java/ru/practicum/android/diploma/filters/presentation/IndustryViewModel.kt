@@ -33,8 +33,7 @@ class IndustryViewModel(private val interactor: IndustryInteractor) : ViewModel(
     fun getIndustriesWithSelected() {
         if (searchedIndustries.isEmpty()) {
             renderState(FilterIndustryState.NoList)
-        }
-        else {
+        } else {
             val list = mutableListOf<IndustryForUi>()
             searchedIndustries.map {
                 list.add(IndustryForUi(it.id, it.name, it.id == selectedId))
