@@ -31,29 +31,21 @@ class IndustryViewModel(private val interactor: IndustryInteractor) : ViewModel(
     }
 
     fun getIndustriesWithSelected() {
-        if (searchedIndustries.isEmpty()) {
-            renderState(FilterIndustryState.NoList)
-        } else {
-            val list = mutableListOf<IndustryForUi>()
-            searchedIndustries.map {
-                list.add(IndustryForUi(it.id, it.name, it.id == selectedId))
-            }
-            renderState(FilterIndustryState.IndustryFound(list))
+        val list = mutableListOf<IndustryForUi>()
+        searchedIndustries.map {
+            list.add(IndustryForUi(it.id, it.name, it.id == selectedId))
         }
+        renderState(FilterIndustryState.IndustryFound(list))
     }
 
     fun searchRequest(search: String) {
-        if (searchedIndustries.isEmpty()) {
-            renderState(FilterIndustryState.NoList)
+        val filteredRegions = searchedIndustries.filter {
+            it.name.contains(search, ignoreCase = true)
+        }
+        if (filteredRegions.isEmpty()) {
+            renderState(FilterIndustryState.NothingFound)
         } else {
-            val filteredRegions = searchedIndustries.filter {
-                it.name.contains(search, ignoreCase = true)
-            }
-            if (filteredRegions.isEmpty()) {
-                renderState(FilterIndustryState.NothingFound)
-            } else {
-                renderState(FilterIndustryState.IndustryFound(filteredRegions))
-            }
+            renderState(FilterIndustryState.IndustryFound(filteredRegions))
         }
     }
 
