@@ -31,7 +31,7 @@ class IndustryViewModel(private val interactor: IndustryInteractor) : ViewModel(
     }
 
     fun getIndustriesWithSelected() {
-        if (searchedIndustries.isEmpty()){
+        if (searchedIndustries.isEmpty()) {
             renderState(FilterIndustryState.NoList)
         }
         else {
@@ -46,8 +46,7 @@ class IndustryViewModel(private val interactor: IndustryInteractor) : ViewModel(
     fun searchRequest(search: String) {
         if (searchedIndustries.isEmpty()) {
             renderState(FilterIndustryState.NoList)
-        }
-        else {
+        } else {
             val filteredRegions = searchedIndustries.filter {
                 it.name.contains(search, ignoreCase = true)
             }
