@@ -31,41 +31,57 @@ class IndustryViewModel(private val interactor: IndustryInteractor) : ViewModel(
     }
 
     fun getIndustriesWithSelected() {
-        val list = mutableListOf<IndustryForUi>()
-        searchedIndustries.map {
-            list.add(IndustryForUi(it.id, it.name, it.id == selectedId))
+        if (searchedIndustries.isEmpty()){
+            renderState(FilterIndustryState.NoList)
         }
-        renderState(FilterIndustryState.IndustryFound(list))
+        else {
+            val list = mutableListOf<IndustryForUi>()
+            searchedIndustries.map {
+                list.add(IndustryForUi(it.id, it.name, it.id == selectedId))
+            }
+            renderState(FilterIndustryState.IndustryFound(list))
+        }
     }
 
     fun searchRequest(search: String) {
-        val filteredRegions = searchedIndustries.filter {
-            it.name.contains(search, ignoreCase = true)
+        if (searchedIndustries.isEmpty()) {
+            renderState(FilterIndustryState.NoList)
         }
-        if (filteredRegions.isEmpty()) {
-            renderState(FilterIndustryState.NothingFound)
-        } else {
-            renderState(FilterIndustryState.IndustryFound(filteredRegions))
+        else {
+            val filteredRegions = searchedIndustries.filter {
+                it.name.contains(search, ignoreCase = true)
+            }
+            if (filteredRegions.isEmpty()) {
+                renderState(FilterIndustryState.NothingFound)
+            } else {
+                renderState(FilterIndustryState.IndustryFound(filteredRegions))
+            }
         }
     }
 
     private fun processingResult(industry: List<Industry>?, errorType: ErrorType?) {
-        if (industry != null) {
-            searchedIndustries = sortIndustries(industry.map { converter.map(it) })
-            getIndustriesWithSelected()
-        } else {
-            when (errorType) {
-                ErrorType.NOTHING_FOUND -> {
-                    renderState(FilterIndustryState.NothingFound)
+        when (errorType) {
+            null -> {
+                if (industry != null) {
+                    if (industry.isEmpty()) {
+                        renderState(FilterIndustryState.NoList)
+                    } else {
+                        searchedIndustries = sortIndustries(industry.map { converter.map(it) })
+                        getIndustriesWithSelected()
+                    }
                 }
+            }
 
-                ErrorType.CONNECTION_PROBLEM, ErrorType.SERVER_ERROR -> {
-                    renderState(FilterIndustryState.InternetError)
-                }
+            ErrorType.NOTHING_FOUND -> {
+                renderState(FilterIndustryState.NothingFound)
+            }
 
-                else -> {
-                    renderState(FilterIndustryState.UnknownError)
-                }
+            ErrorType.CONNECTION_PROBLEM, ErrorType.SERVER_ERROR -> {
+                renderState(FilterIndustryState.InternetError)
+            }
+
+            else -> {
+                renderState(FilterIndustryState.UnknownError)
             }
         }
     }

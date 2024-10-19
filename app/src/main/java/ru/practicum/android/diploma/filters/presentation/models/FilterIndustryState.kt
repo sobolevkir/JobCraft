@@ -7,6 +7,7 @@ sealed interface FilterIndustryState {
     data object UnknownError : FilterIndustryState
     data object InternetError : FilterIndustryState
     data object Loading : FilterIndustryState
+    data object NoList : FilterIndustryState
 
     data class IndustryFound(val industries: List<IndustryForUi>) : FilterIndustryState
 }

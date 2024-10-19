@@ -99,6 +99,11 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
                 getString(R.string.server_error)
             )
 
+            is FilterIndustryState.NoList -> showError(
+                R.drawable.er_failed_to_get_list,
+                getString(R.string.failed_to_get_list)
+            )
+
             is FilterIndustryState.IndustryFound -> showResults(state.industries)
             is FilterIndustryState.Loading -> showLoading()
         }

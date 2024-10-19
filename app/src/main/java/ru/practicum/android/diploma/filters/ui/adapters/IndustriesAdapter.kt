@@ -15,7 +15,7 @@ class IndustriesAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(model: IndustryForUi) {
-            with(binding.rbIndustryItemSelect){
+            with(binding.rbIndustryItemSelect) {
                 text = model.name
                 isChecked = model.isSelected
             }
