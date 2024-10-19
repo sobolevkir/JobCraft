@@ -5,24 +5,17 @@
     android:layout_height="wrap_content"
     android:foreground="?attr/selectableItemBackground">
 
-    <TextView
-        android:id="@+id/tv_industry"
-        style="@style/Regular_16_Style"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_marginEnd="12dp"
-        android:paddingVertical="@dimen/button_padding"
-        android:paddingStart="@dimen/margin_standard"
-        tools:text="IT"/>
-
         <RadioButton
             android:id="@+id/rb_industry_item_select"
             style="@style/RadioButton_Style"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_marginEnd="12dp"
-            android:gravity="center"/>
+            android:layout_marginEnd="@dimen/margin_standard"
+            android:layout_marginStart="@dimen/margin_small"
+            android:gravity="start|center_vertical"
+            android:layoutDirection="rtl"
+            android:paddingVertical="@dimen/button_padding"
+            tools:text="IT"/>
 
 </LinearLayout>

@@ -5,27 +5,24 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.practicum.android.diploma.databinding.IndustryListItemBinding
-import ru.practicum.android.diploma.filters.domain.model.Industry
+import ru.practicum.android.diploma.filters.ui.IndustryForUi
 
 class IndustriesAdapter(
-    private val onItemSelect: (Industry) -> Unit
-) : ListAdapter<Industry, IndustriesAdapter.IndustriesViewHolder>(IndustryItemComparator()) {
-
-    private var selectedPosition = -1
+    private val onItemSelect: (IndustryForUi) -> Unit
+) : ListAdapter<IndustryForUi, IndustriesAdapter.IndustriesViewHolder>(IndustryItemComparator()) {
 
     inner class IndustriesViewHolder(private val binding: IndustryListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(model: Industry, isSelected: Boolean) {
-            with(binding) {
-                tvIndustry.text = model.name
-                rbIndustryItemSelect.isSelected = isSelected
+        fun bind(model: IndustryForUi) {
+            with(binding.industryItemSelect){
+                text = model.name
+                isChecked = model.isSelected
 
-                rbIndustryItemSelect.setOnClickListener {
-                    if (adapterPosition == selectedPosition) {
-                        return@setOnClickListener
+                setOnClickListener{
+                    if (!model.isSelected) {
+                        onItemSelect(model)
                     }
-                    onItemSelect(model)
                 }
             }
         }
@@ -38,14 +35,6 @@ class IndustriesAdapter(
 
     override fun onBindViewHolder(holder: IndustriesViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item, position == selectedPosition)
-    }
-
-    fun setSelectedPosition(position: Int) {
-        val previousPosition = selectedPosition
-        selectedPosition = position
-        notifyItemChanged(previousPosition)
-        notifyItemChanged(selectedPosition)
+        holder.bind(item)
     }
 }
-
