@@ -68,13 +68,13 @@ class SelectCountryFragment : Fragment(R.layout.fragment_select_region) {
         }
     }
 
-    private fun showError(image: Int, text: Int? = null, messageState: Boolean = false) {
+    private fun showError(image: Int, text: Int? = null) {
         with(binding) {
             llError.isVisible = true
             progressBar.isVisible = false
             rvAreaList.isVisible = false
             ivError.setImageResource(image)
-            tvError.isVisible = messageState
+            tvError.isVisible = true
             if (text == null) {
                 tvError.text = ""
             } else {
@@ -124,6 +124,6 @@ class SelectCountryFragment : Fragment(R.layout.fragment_select_region) {
     }
 
     companion object {
-        private const val CLICK_DEBOUNCE_DELAY_MILLIS = 100L
+        private const val CLICK_DEBOUNCE_DELAY_MILLIS = 500L
     }
 }

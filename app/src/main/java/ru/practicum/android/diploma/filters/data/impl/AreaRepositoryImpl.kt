@@ -96,7 +96,7 @@ class AreaRepositoryImpl(
         areaDtoList.forEach { areaDto ->
             areaList.add(Area(parentId ?: OTHERS_PARENT_ID, areaDto.id, areaDto.name))
             areaDto.areas?.let { nestedAreas ->
-                areaList.addAll(getAllNestedAreas(nestedAreas, areaDto.id))
+                areaList.addAll(getAllNestedAreas(nestedAreas, parentId ?: areaDto.id))
             }
         }
 
