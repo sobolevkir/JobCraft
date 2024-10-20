@@ -33,8 +33,8 @@ class SearchViewModel(
     private val stateLiveData = MutableLiveData<SearchState>()
     fun getStateLiveData(): LiveData<SearchState> = stateLiveData
 
-    private var showToastEvent = SingleLiveEvent<String>()
-    fun getToastEvent(): SingleLiveEvent<String> = showToastEvent
+    private var showToastEvent = SingleLiveEvent<ErrorType>()
+    fun getToastEvent(): SingleLiveEvent<ErrorType> = showToastEvent
 
     init {
         stateLiveData.postValue(SearchState.Default)
@@ -149,23 +149,11 @@ class SearchViewModel(
                 else -> renderState(SearchState.ServerError)
             }
         } else {
-            when (errorType) {
-                ErrorType.CONNECTION_PROBLEM -> {
-                    showToastEvent.value = CHECK_INTERNET
-                }
-
-                else -> {
-                    showToastEvent.value = ERROR
-                }
-
-            }
+            showToastEvent.value = errorType
         }
     }
 
     companion object {
         const val SEARCH_DELAY = 500L
-        private const val CHECK_INTERNET = "Проверьте подключение к интернету"
-        private const val ERROR = "Произошла ошибка"
-
     }
 }

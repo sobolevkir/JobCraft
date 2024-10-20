@@ -17,6 +17,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.common.domain.model.ErrorType
 import ru.practicum.android.diploma.common.domain.model.VacancyFromList
 import ru.practicum.android.diploma.common.ext.hideKeyboard
 import ru.practicum.android.diploma.common.ext.viewBinding
@@ -40,8 +41,8 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         filterParametersViewModel.getFiltersAppliedLiveEvent().observe(viewLifecycleOwner) { _ ->
             searchViewModel.applyFilters()
         }
-        searchViewModel.getToastEvent().observe(viewLifecycleOwner) { message ->
-            showToast(message)
+        searchViewModel.getToastEvent().observe(viewLifecycleOwner) { errorType ->
+            showToast(errorType)
         }
         initClickListeners()
         initQueryChangeListener()
@@ -194,7 +195,8 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     }
 
-    private fun showToast(message: String) {
+    private fun showToast(errorType: ErrorType) {
+    var message: String
         with(binding) {
             progressBar.isVisible = false
             clSearchResult.isVisible = true
@@ -203,8 +205,12 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             loadMoreProgressBar.isVisible = false
             tvError.isVisible = false
             ivSearchResult.isVisible = false
-            val toast = Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT)
-            toast.show()
+            if (errorType == ErrorType.CONNECTION_PROBLEM) {
+                message = getString(R.string.chesk_internet)
+            } else {
+                message = getString(R.string.error)
+            }
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         }
     }
 
