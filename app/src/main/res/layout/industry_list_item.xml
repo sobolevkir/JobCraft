@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="60dp"
     android:id="@+id/industry_list_item"
     android:paddingHorizontal="16dp"
     android:foreground="?attr/selectableItemBackground">
@@ -12,6 +12,7 @@
             style="@style/RadioButton_Style"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layoutDirection="rtl"
             tools:text="IT"
             android:clickable="false"/>
