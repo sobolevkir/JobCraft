@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.search.presentation
 
+import ru.practicum.android.diploma.common.domain.model.ErrorType
 import ru.practicum.android.diploma.common.domain.model.VacancyFromList
 
 sealed interface SearchState {
@@ -10,9 +11,14 @@ sealed interface SearchState {
     data object Loading : SearchState
     data object Updating : SearchState
     data object Default : SearchState
+    data object UpdatingError : SearchState
 
     data class SearchResult(
         val vacancies: List<VacancyFromList>,
         val found: Int
     ) : SearchState
+
+//    data class UpdatingError(
+//        val toastMessage: String
+//    ) : SearchState
 }

@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.search.presentation
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,6 +12,8 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.common.domain.model.ErrorType
 import ru.practicum.android.diploma.common.domain.model.VacancyFromList
+import ru.practicum.android.diploma.common.presentation.SingleLiveEvent
+import ru.practicum.android.diploma.common.util.Resource
 import ru.practicum.android.diploma.filters.domain.FiltersLocalInteractor
 import ru.practicum.android.diploma.search.domain.VacanciesInteractor
 
@@ -29,6 +32,8 @@ class SearchViewModel(
 
     private val stateLiveData = MutableLiveData<SearchState>()
     fun getStateLiveData(): LiveData<SearchState> = stateLiveData
+
+    val showToastEvent = SingleLiveEvent<String>()
 
     init {
         stateLiveData.postValue(SearchState.Default)
@@ -91,30 +96,45 @@ class SearchViewModel(
             if (onlyWithSalary == "true") options["only_with_salary"] = onlyWithSalary
             if (isNew) {
                 renderState(SearchState.Loading)
-            } else {
+                Log.d("TEST", "renderState(SearchState.Loading)")
+            }
+            else {
                 renderState(SearchState.Updating)
+                Log.d("TEST", "renderState(SearchState.Updating)")
             }
             /*Log.d("SEARCH!!!", "-> area - ${options["area"].toString()}")
             Log.d("SEARCH!!!", "-> salary - ${options["salary"].toString()}")
             Log.d("SEARCH!!!", "-> onlyWithSalary - ${options["only_with_salary"].toString()}")*/
             vacanciesInteractor.searchVacancies(options)
                 .onEach { (searchResult, errorType) ->
-                    when (errorType) {
-                        null -> {
-                            if (isNew) {
-                                fullList = searchResult!!.items
-                            } else {
-                                fullList += searchResult!!.items
-                            }
-                            renderState(SearchState.SearchResult(fullList, searchResult.found))
-                            maxPage = searchResult.pages
+                    if (errorType == null) {
+                        if (isNew) {
+                            fullList = searchResult!!.items
+                        } else {
+                            fullList += searchResult!!.items
                         }
+                        renderState(SearchState.SearchResult(fullList, searchResult.found))
+                        maxPage = searchResult.pages
+                    } else {
+                        if (isNew) {
+                            when (errorType) {
 
-                        ErrorType.CONNECTION_PROBLEM -> renderState(SearchState.InternetError)
+                                ErrorType.CONNECTION_PROBLEM -> renderState(SearchState.InternetError)
 
-                        ErrorType.NOTHING_FOUND -> renderState(SearchState.NothingFound)
+                                ErrorType.NOTHING_FOUND -> renderState(SearchState.NothingFound)
 
-                        else -> renderState(SearchState.ServerError)
+                                else -> renderState(SearchState.ServerError)
+                            }
+                        } else {
+                            when (errorType) {
+//                                ErrorType.CONNECTION_PROBLEM -> renderState(SearchState.UpdatingError(CHECK_INTERNET))
+//                                else -> renderState(SearchState.UpdatingError(ERROR))
+                                ErrorType.CONNECTION_PROBLEM -> {renderState(SearchState.UpdatingError)
+                                showToastEvent.value = CHECK_INTERNET}
+                                else -> {renderState(SearchState.UpdatingError)
+                                    showToastEvent.value = ERROR}
+                            }
+                        }
                     }
                     isNextPageLoading = false
                 }
@@ -137,5 +157,8 @@ class SearchViewModel(
 
     companion object {
         const val SEARCH_DELAY = 500L
+        private const val CHECK_INTERNET = "Проверьте подключение к интернету"
+        private const val ERROR = "Произошла ошибка"
+
     }
 }
