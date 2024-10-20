@@ -10,6 +10,7 @@ sealed interface SearchState {
     data object Loading : SearchState
     data object Updating : SearchState
     data object Default : SearchState
+    data object  UpdatingError: SearchState
 
     data class SearchResult(
         val vacancies: List<VacancyFromList>,

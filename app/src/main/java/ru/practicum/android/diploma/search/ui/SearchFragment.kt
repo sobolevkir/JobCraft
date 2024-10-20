@@ -71,6 +71,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             is SearchState.Loading -> showLoading()
             is SearchState.Updating -> showUpdating()
             is SearchState.Default -> showDefault()
+            is SearchState.UpdatingError -> showUpdatingError()
             else -> {}
         }
     }
@@ -195,23 +196,26 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     }
 
-    private fun showToast(errorType: ErrorType) {
-    var message: String
+    private fun showUpdatingError() {
         with(binding) {
             progressBar.isVisible = false
-            clSearchResult.isVisible = true
+            clSearchResult.isVisible = false
             rvFoundVacanciesList.isVisible = true
-            tvSearchResultMessage.isVisible = true
+            tvSearchResultMessage.isVisible = false
             loadMoreProgressBar.isVisible = false
             tvError.isVisible = false
             ivSearchResult.isVisible = false
+        }
+    }
+
+    private fun showToast(errorType: ErrorType) {
+        var message: String = ""
             if (errorType == ErrorType.CONNECTION_PROBLEM) {
                 message = getString(R.string.chesk_internet)
             } else {
                 message = getString(R.string.error)
             }
             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-        }
     }
 
     private fun showDefault() {

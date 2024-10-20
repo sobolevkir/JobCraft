@@ -29,6 +29,7 @@ class SearchViewModel(
     private var fullList = listOf<VacancyFromList>()
     private var isSearch = false
     private var isNextPageLoading = false
+    private var isErrorShown = false
 
     private val stateLiveData = MutableLiveData<SearchState>()
     fun getStateLiveData(): LiveData<SearchState> = stateLiveData
@@ -126,6 +127,7 @@ class SearchViewModel(
 
     private fun searchVacancies(searchResult: VacanciesSearchResult?, errorType: ErrorType?, isNew: Boolean) {
         if (errorType == null) {
+            isErrorShown = false
             if (isNew) {
                 fullList = searchResult!!.items
             } else {
@@ -149,9 +151,13 @@ class SearchViewModel(
                 else -> renderState(SearchState.ServerError)
             }
         } else {
+            if (!isErrorShown) {
+            renderState(SearchState.UpdatingError)
             showToastEvent.value = errorType
+            isErrorShown = true
         }
     }
+        }
 
     companion object {
         const val SEARCH_DELAY = 500L
