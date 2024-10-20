@@ -11,8 +11,10 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.common.domain.model.ErrorType
 import ru.practicum.android.diploma.common.domain.model.VacancyFromList
+import ru.practicum.android.diploma.common.presentation.SingleLiveEvent
 import ru.practicum.android.diploma.filters.domain.FiltersLocalInteractor
 import ru.practicum.android.diploma.search.domain.VacanciesInteractor
+import ru.practicum.android.diploma.search.domain.model.VacanciesSearchResult
 
 class SearchViewModel(
     private val vacanciesInteractor: VacanciesInteractor,
@@ -26,9 +28,13 @@ class SearchViewModel(
     private var fullList = listOf<VacancyFromList>()
     private var isSearch = false
     private var isNextPageLoading = false
+    private var isErrorShown = false
 
     private val stateLiveData = MutableLiveData<SearchState>()
     fun getStateLiveData(): LiveData<SearchState> = stateLiveData
+
+    private var showToastEvent = SingleLiveEvent<ErrorType>()
+    fun getToastEvent(): SingleLiveEvent<ErrorType> = showToastEvent
 
     init {
         stateLiveData.postValue(SearchState.Default)
@@ -90,32 +96,12 @@ class SearchViewModel(
                 renderState(SearchState.Loading)
             } else {
                 renderState(SearchState.Updating)
-            }
-            /*Log.d("SEARCH!!!", "-> area - ${options["area"].toString()}")
+            } /*Log.d("SEARCH!!!", "-> area - ${options["area"].toString()}")
             Log.d("SEARCH!!!", "-> salary - ${options["salary"].toString()}")
             Log.d("SEARCH!!!", "-> onlyWithSalary - ${options["only_with_salary"].toString()}")*/
-            vacanciesInteractor.searchVacancies(options)
-                .onEach { (searchResult, errorType) ->
-                    when (errorType) {
-                        null -> {
-                            if (isNew) {
-                                fullList = searchResult!!.items
-                            } else {
-                                fullList += searchResult!!.items
-                            }
-                            renderState(SearchState.SearchResult(fullList, searchResult.found))
-                            maxPage = searchResult.pages
-                        }
-
-                        ErrorType.CONNECTION_PROBLEM -> renderState(SearchState.InternetError)
-
-                        ErrorType.NOTHING_FOUND -> renderState(SearchState.NothingFound)
-
-                        else -> renderState(SearchState.ServerError)
-                    }
-                    isNextPageLoading = false
-                }
-                .launchIn(viewModelScope)
+            vacanciesInteractor.searchVacancies(options).onEach { (searchResult, errorType) ->
+                searchVacancies(searchResult, errorType, isNew)
+            }.launchIn(viewModelScope)
         } else {
             renderState(SearchState.Default)
         }
@@ -129,6 +115,39 @@ class SearchViewModel(
         val request = lastRequest
         if (!request.isNullOrEmpty()) {
             newSearch(request)
+        }
+    }
+
+    private fun searchVacancies(searchResult: VacanciesSearchResult?, errorType: ErrorType?, isNew: Boolean) {
+        if (errorType == null) {
+            isErrorShown = false
+            if (isNew) {
+                fullList = searchResult!!.items
+            } else {
+                fullList += searchResult!!.items
+            }
+            renderState(SearchState.SearchResult(fullList, searchResult.found))
+            maxPage = searchResult.pages
+        } else {
+            handleError(errorType, isNew)
+        }
+        isNextPageLoading = false
+    }
+
+    private fun handleError(errorType: ErrorType, isNew: Boolean) {
+        if (isNew) {
+            when (errorType) {
+                ErrorType.CONNECTION_PROBLEM -> renderState(SearchState.InternetError)
+
+                ErrorType.NOTHING_FOUND -> renderState(SearchState.NothingFound)
+
+                else -> renderState(SearchState.ServerError)
+            }
+        } else {
+            if (!isErrorShown) {
+                showToastEvent.value = errorType
+                isErrorShown = true
+            }
         }
     }
 

@@ -5,6 +5,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -16,6 +17,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.common.domain.model.ErrorType
 import ru.practicum.android.diploma.common.domain.model.VacancyFromList
 import ru.practicum.android.diploma.common.ext.hideKeyboard
 import ru.practicum.android.diploma.common.ext.viewBinding
@@ -38,6 +40,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         super.onViewCreated(view, savedInstanceState)
         filterParametersViewModel.getFiltersAppliedLiveEvent().observe(viewLifecycleOwner) { _ ->
             searchViewModel.applyFilters()
+        }
+        searchViewModel.getToastEvent().observe(viewLifecycleOwner) { errorType ->
+            showToast(errorType)
         }
         initClickListeners()
         initQueryChangeListener()
@@ -66,6 +71,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             is SearchState.Loading -> showLoading()
             is SearchState.Updating -> showUpdating()
             is SearchState.Default -> showDefault()
+            else -> {}
         }
     }
 
@@ -187,6 +193,25 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 tvError.setText(text)
             }
         }
+    }
+
+    private fun showToast(errorType: ErrorType) {
+        with(binding) {
+            progressBar.isVisible = false
+            clSearchResult.isVisible = false
+            rvFoundVacanciesList.isVisible = true
+            tvSearchResultMessage.isVisible = false
+            loadMoreProgressBar.isVisible = false
+            tvError.isVisible = false
+            ivSearchResult.isVisible = false
+        }
+        var message: String = ""
+        if (errorType == ErrorType.CONNECTION_PROBLEM) {
+            message = getString(R.string.chesk_internet)
+        } else {
+            message = getString(R.string.error)
+        }
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     private fun showDefault() {
