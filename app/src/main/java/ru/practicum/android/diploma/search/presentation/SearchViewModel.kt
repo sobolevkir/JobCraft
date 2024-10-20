@@ -67,10 +67,7 @@ class SearchViewModel(
     fun newSearch(request: String) {
         paddingPage = 0
         searchJob?.cancel()
-        searchJob = viewModelScope.launch {
-            delay(SEARCH_DELAY)
-            searchRequest(request, paddingPage, isNew = true)
-        }
+        searchRequest(request, paddingPage, isNew = true)
     }
 
     private fun searchRequest(searchText: String, page: Int, isNew: Boolean) {
@@ -136,6 +133,6 @@ class SearchViewModel(
     }
 
     companion object {
-        const val SEARCH_DELAY = 500L
+        const val SEARCH_DELAY = 2000L
     }
 }
