@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.search.presentation
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -28,7 +29,6 @@ class SearchViewModel(
     private var fullList = listOf<VacancyFromList>()
     private var isSearch = false
     private var isNextPageLoading = false
-    private var isErrorShown = false
 
     private val stateLiveData = MutableLiveData<SearchState>()
     fun getStateLiveData(): LiveData<SearchState> = stateLiveData
@@ -46,6 +46,7 @@ class SearchViewModel(
             paddingPage += 1
             searchRequest(lastRequest!!, paddingPage, isNew = false)
         }
+        Log.d("SEARCH!!!", "onLastItemReached()")
     }
 
     fun search(request: String) {
@@ -68,6 +69,7 @@ class SearchViewModel(
                 isSearch = false
             }
         }
+        Log.d("SEARCH!!!", "search(request: String)")
     }
 
     fun newSearch(request: String) {
@@ -77,6 +79,7 @@ class SearchViewModel(
             delay(SEARCH_DELAY)
             searchRequest(request, paddingPage, isNew = true)
         }
+        Log.d("SEARCH!!!", "newSearch(request: String)")
     }
 
     private fun searchRequest(searchText: String, page: Int, isNew: Boolean) {
@@ -123,7 +126,6 @@ class SearchViewModel(
 
     private fun searchVacancies(searchResult: VacanciesSearchResult?, errorType: ErrorType?, isNew: Boolean) {
         if (errorType == null) {
-            isErrorShown = false
             if (isNew) {
                 fullList = searchResult!!.items
             } else {
@@ -147,18 +149,15 @@ class SearchViewModel(
                 else -> renderState(SearchState.ServerError)
             }
         } else {
-            if (!isErrorShown) {
-                when (errorType) {
-                    ErrorType.CONNECTION_PROBLEM -> {
-                        showToastEvent.value = CHECK_INTERNET
-                        isErrorShown = true
-                    }
-
-                    else -> {
-                        showToastEvent.value = ERROR
-                        isErrorShown = true
-                    }
+            when (errorType) {
+                ErrorType.CONNECTION_PROBLEM -> {
+                    showToastEvent.value = CHECK_INTERNET
                 }
+
+                else -> {
+                    showToastEvent.value = ERROR
+                }
+
             }
         }
     }

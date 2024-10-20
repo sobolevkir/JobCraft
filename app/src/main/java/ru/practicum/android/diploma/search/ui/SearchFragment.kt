@@ -40,9 +40,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         filterParametersViewModel.getFiltersAppliedLiveEvent().observe(viewLifecycleOwner) { _ ->
             searchViewModel.applyFilters()
         }
-        searchViewModel.getToastEvent().observe(viewLifecycleOwner, { message ->
+        searchViewModel.getToastEvent().observe(viewLifecycleOwner) { message ->
             showToast(message)
-        })
+        }
         initClickListeners()
         initQueryChangeListener()
         initScrollListener()
@@ -202,6 +202,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             tvSearchResultMessage.isVisible = true
             loadMoreProgressBar.isVisible = false
             tvError.isVisible = false
+            ivSearchResult.isVisible = false
             val toast = Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT)
             toast.show()
         }
