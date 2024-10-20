@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/jcBackgroundColor"
     tools:context=".filters.ui.FiltersFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
@@ -39,7 +38,7 @@
         style="@style/TextInputLayoutStyle"
         android:paddingTop="@dimen/margin_small"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tl_select_place">
