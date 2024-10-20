@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.search.presentation
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,9 +12,9 @@ import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.common.domain.model.ErrorType
 import ru.practicum.android.diploma.common.domain.model.VacancyFromList
 import ru.practicum.android.diploma.common.presentation.SingleLiveEvent
-import ru.practicum.android.diploma.common.util.Resource
 import ru.practicum.android.diploma.filters.domain.FiltersLocalInteractor
 import ru.practicum.android.diploma.search.domain.VacanciesInteractor
+import ru.practicum.android.diploma.search.domain.model.VacanciesSearchResult
 
 class SearchViewModel(
     private val vacanciesInteractor: VacanciesInteractor,
@@ -29,11 +28,13 @@ class SearchViewModel(
     private var fullList = listOf<VacancyFromList>()
     private var isSearch = false
     private var isNextPageLoading = false
+    private var isErrorShown = false
 
     private val stateLiveData = MutableLiveData<SearchState>()
     fun getStateLiveData(): LiveData<SearchState> = stateLiveData
 
-    val showToastEvent = SingleLiveEvent<String>()
+    private var showToastEvent = SingleLiveEvent<String>()
+    fun getToastEvent(): SingleLiveEvent<String> = showToastEvent
 
     init {
         stateLiveData.postValue(SearchState.Default)
@@ -96,49 +97,14 @@ class SearchViewModel(
             if (onlyWithSalary == "true") options["only_with_salary"] = onlyWithSalary
             if (isNew) {
                 renderState(SearchState.Loading)
-                Log.d("TEST", "renderState(SearchState.Loading)")
-            }
-            else {
+            } else {
                 renderState(SearchState.Updating)
-                Log.d("TEST", "renderState(SearchState.Updating)")
-            }
-            /*Log.d("SEARCH!!!", "-> area - ${options["area"].toString()}")
+            } /*Log.d("SEARCH!!!", "-> area - ${options["area"].toString()}")
             Log.d("SEARCH!!!", "-> salary - ${options["salary"].toString()}")
             Log.d("SEARCH!!!", "-> onlyWithSalary - ${options["only_with_salary"].toString()}")*/
-            vacanciesInteractor.searchVacancies(options)
-                .onEach { (searchResult, errorType) ->
-                    if (errorType == null) {
-                        if (isNew) {
-                            fullList = searchResult!!.items
-                        } else {
-                            fullList += searchResult!!.items
-                        }
-                        renderState(SearchState.SearchResult(fullList, searchResult.found))
-                        maxPage = searchResult.pages
-                    } else {
-                        if (isNew) {
-                            when (errorType) {
-
-                                ErrorType.CONNECTION_PROBLEM -> renderState(SearchState.InternetError)
-
-                                ErrorType.NOTHING_FOUND -> renderState(SearchState.NothingFound)
-
-                                else -> renderState(SearchState.ServerError)
-                            }
-                        } else {
-                            when (errorType) {
-//                                ErrorType.CONNECTION_PROBLEM -> renderState(SearchState.UpdatingError(CHECK_INTERNET))
-//                                else -> renderState(SearchState.UpdatingError(ERROR))
-                                ErrorType.CONNECTION_PROBLEM -> {renderState(SearchState.UpdatingError)
-                                showToastEvent.value = CHECK_INTERNET}
-                                else -> {renderState(SearchState.UpdatingError)
-                                    showToastEvent.value = ERROR}
-                            }
-                        }
-                    }
-                    isNextPageLoading = false
-                }
-                .launchIn(viewModelScope)
+            vacanciesInteractor.searchVacancies(options).onEach { (searchResult, errorType) ->
+                searchVacancies(searchResult, errorType, isNew)
+            }.launchIn(viewModelScope)
         } else {
             renderState(SearchState.Default)
         }
@@ -152,6 +118,48 @@ class SearchViewModel(
         val request = lastRequest
         if (!request.isNullOrEmpty()) {
             newSearch(request)
+        }
+    }
+
+    private fun searchVacancies(searchResult: VacanciesSearchResult?, errorType: ErrorType?, isNew: Boolean) {
+        if (errorType == null) {
+            isErrorShown = false
+            if (isNew) {
+                fullList = searchResult!!.items
+            } else {
+                fullList += searchResult!!.items
+            }
+            renderState(SearchState.SearchResult(fullList, searchResult.found))
+            maxPage = searchResult.pages
+        } else {
+            handleError(errorType, isNew)
+        }
+        isNextPageLoading = false
+    }
+
+    private fun handleError(errorType: ErrorType, isNew: Boolean) {
+        if (isNew) {
+            when (errorType) {
+                ErrorType.CONNECTION_PROBLEM -> renderState(SearchState.InternetError)
+
+                ErrorType.NOTHING_FOUND -> renderState(SearchState.NothingFound)
+
+                else -> renderState(SearchState.ServerError)
+            }
+        } else {
+            if (!isErrorShown) {
+                when (errorType) {
+                    ErrorType.CONNECTION_PROBLEM -> {
+                        showToastEvent.value = CHECK_INTERNET
+                        isErrorShown = true
+                    }
+
+                    else -> {
+                        showToastEvent.value = ERROR
+                        isErrorShown = true
+                    }
+                }
+            }
         }
     }
 

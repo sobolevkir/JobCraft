@@ -1,10 +1,8 @@
 package ru.practicum.android.diploma.search.ui
 
 import android.os.Bundle
-import android.os.Message
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
@@ -19,7 +17,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
-import ru.practicum.android.diploma.common.domain.model.ErrorType
 import ru.practicum.android.diploma.common.domain.model.VacancyFromList
 import ru.practicum.android.diploma.common.ext.hideKeyboard
 import ru.practicum.android.diploma.common.ext.viewBinding
@@ -28,7 +25,6 @@ import ru.practicum.android.diploma.common.ui.VacancyListAdapter
 import ru.practicum.android.diploma.databinding.FragmentSearchBinding
 import ru.practicum.android.diploma.search.presentation.SearchState
 import ru.practicum.android.diploma.search.presentation.SearchViewModel
-import java.lang.Error
 
 class SearchFragment : Fragment(R.layout.fragment_search) {
     private val binding by viewBinding(FragmentSearchBinding::bind)
@@ -44,6 +40,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         filterParametersViewModel.getFiltersAppliedLiveEvent().observe(viewLifecycleOwner) { _ ->
             searchViewModel.applyFilters()
         }
+        searchViewModel.getToastEvent().observe(viewLifecycleOwner, { message ->
+            showToast(message)
+        })
         initClickListeners()
         initQueryChangeListener()
         initScrollListener()
@@ -57,9 +56,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             }
         }
         searchViewModel.getStateLiveData().observe(viewLifecycleOwner) { renderState(it) }
-        searchViewModel.showToastEvent.observe(viewLifecycleOwner, { message ->
-            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-        })
     }
 
     private fun renderState(state: SearchState) {
@@ -74,7 +70,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             is SearchState.Loading -> showLoading()
             is SearchState.Updating -> showUpdating()
             is SearchState.Default -> showDefault()
-            is SearchState.UpdatingError -> showUpdatingError()
             else -> {}
         }
     }
@@ -199,8 +194,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     }
 
-    private fun showUpdatingError() {
-        Log.d("TEST", "private fun showUpdatingError()")
+    private fun showToast(message: String) {
         with(binding) {
             progressBar.isVisible = false
             clSearchResult.isVisible = true
@@ -208,7 +202,8 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             tvSearchResultMessage.isVisible = true
             loadMoreProgressBar.isVisible = false
             tvError.isVisible = false
-//            Toast.makeText(requireContext(), toastMessage, Toast.LENGTH_SHORT).show()
+            val toast = Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT)
+            toast.show()
         }
     }
 
