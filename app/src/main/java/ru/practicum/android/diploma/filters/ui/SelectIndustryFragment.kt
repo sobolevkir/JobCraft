@@ -31,6 +31,7 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
         searchIndustries()
         initListeners()
         binding.recyclerview.adapter = adapter
+        binding.recyclerview.itemAnimator = null
     }
 
     private fun getSavedValue() {
