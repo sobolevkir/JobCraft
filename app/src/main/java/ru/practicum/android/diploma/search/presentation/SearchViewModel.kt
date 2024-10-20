@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.search.presentation
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -47,7 +46,6 @@ class SearchViewModel(
             paddingPage += 1
             searchRequest(lastRequest!!, paddingPage, isNew = false)
         }
-        Log.d("SEARCH!!!", "onLastItemReached()")
     }
 
     fun search(request: String) {
@@ -70,7 +68,6 @@ class SearchViewModel(
                 isSearch = false
             }
         }
-        Log.d("SEARCH!!!", "search(request: String)")
     }
 
     fun newSearch(request: String) {
@@ -80,7 +77,6 @@ class SearchViewModel(
             delay(SEARCH_DELAY)
             searchRequest(request, paddingPage, isNew = true)
         }
-        Log.d("SEARCH!!!", "newSearch(request: String)")
     }
 
     private fun searchRequest(searchText: String, page: Int, isNew: Boolean) {
@@ -152,12 +148,11 @@ class SearchViewModel(
             }
         } else {
             if (!isErrorShown) {
-            renderState(SearchState.UpdatingError)
-            showToastEvent.value = errorType
-            isErrorShown = true
+                showToastEvent.value = errorType
+                isErrorShown = true
+            }
         }
     }
-        }
 
     companion object {
         const val SEARCH_DELAY = 500L
