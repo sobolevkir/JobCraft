@@ -12,10 +12,12 @@ import ru.practicum.android.diploma.filters.domain.model.Industry
 import ru.practicum.android.diploma.filters.presentation.models.FilterIndustryState
 import ru.practicum.android.diploma.filters.ui.IndustryForUi
 
-class IndustryViewModel(private val interactor: IndustryInteractor) : ViewModel() {
+class IndustryViewModel(
+    private val interactor: IndustryInteractor,
+    private val converter: IndustryConverter
+) : ViewModel() {
 
     private val industryState = MutableLiveData<FilterIndustryState>()
-    private val converter = IndustryConverter()
     private var selectedId = "-1"
     private var searchedIndustries = listOf<IndustryForUi>()
 

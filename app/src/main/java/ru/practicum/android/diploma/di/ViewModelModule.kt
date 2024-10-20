@@ -4,6 +4,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import ru.practicum.android.diploma.favorites.presentation.FavoritesViewModel
 import ru.practicum.android.diploma.filters.presentation.CountryViewModel
+import ru.practicum.android.diploma.filters.presentation.IndustryConverter
 import ru.practicum.android.diploma.filters.presentation.IndustryViewModel
 import ru.practicum.android.diploma.filters.presentation.RegionViewModel
 import ru.practicum.android.diploma.search.presentation.SearchViewModel
@@ -24,7 +25,7 @@ val viewModelModule = module {
     }
 
     viewModel {
-        IndustryViewModel(interactor = get())
+        IndustryViewModel(interactor = get(), converter = get())
     }
 
     viewModel {
@@ -35,4 +36,5 @@ val viewModelModule = module {
         CountryViewModel(interactor = get())
     }
 
+    factory { IndustryConverter() }
 }
