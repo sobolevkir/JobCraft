@@ -57,12 +57,12 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
                 }
 
                 override fun onTextChanged(s: CharSequence, p1: Int, p2: Int, p3: Int) {
+                    viewModel.saveSearchText(s.toString())
+                    viewModel.getIndustriesWithSelected()
                     if (s.isEmpty()) {
-                        viewModel.getIndustriesWithSelected()
                         ivSearch.setImageResource(R.drawable.ic_search)
                         ivSearch.isClickable = false
                     } else {
-                        viewModel.searchRequest(s.toString())
                         ivSearch.setImageResource(R.drawable.ic_clear)
                         ivSearch.isClickable = true
                     }
@@ -70,8 +70,9 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
             })
 
             ivSearch.setOnClickListener {
-                etSearch.setText("")
-                viewModel.getIndustries()
+                etSearch.setText(EMPTY_TEXT)
+                viewModel.saveSearchText(EMPTY_TEXT)
+                viewModel.getIndustriesWithSelected()
             }
         }
     }
@@ -105,7 +106,7 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
                 getString(R.string.failed_to_get_list)
             )
 
-            is FilterIndustryState.IndustryFound -> showResults(state.industries)
+            is FilterIndustryState.IndustryFound -> showResults(state.industries, state.isCleared)
             is FilterIndustryState.Loading -> showLoading()
         }
     }
@@ -128,13 +129,16 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
         }
     }
 
-    private fun showResults(list: List<IndustryForUi>) {
+    private fun showResults(list: List<IndustryForUi>, isCleared: Boolean) {
         with(binding) {
             llPlaceholder.isVisible = false
             progressBar.isVisible = false
             recyclerview.isVisible = true
+            adapter.submitList(list)
+            if (isCleared) {
+                recyclerview.scrollToPosition(0)
+            }
         }
-        adapter.submitList(list)
     }
 
     private fun saveSelect(select: IndustryForUi) {
@@ -145,5 +149,9 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
             filterParametersViewModel.setIndustry(Industry(select.id, select.name))
             findNavController().popBackStack()
         }
+    }
+
+    companion object {
+        const val EMPTY_TEXT = ""
     }
 }
