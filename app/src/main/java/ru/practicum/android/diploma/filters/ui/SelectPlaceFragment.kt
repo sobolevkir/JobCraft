@@ -17,8 +17,11 @@ import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.common.ext.viewBinding
 import ru.practicum.android.diploma.common.presentation.FilterParametersViewModel
 import ru.practicum.android.diploma.databinding.FragmentSelectPlaceBinding
+import ru.practicum.android.diploma.filters.domain.model.Area
 
 class SelectPlaceFragment : Fragment(R.layout.fragment_select_place) {
+    private var countryTemp: Area? = null
+    private var regionTemp: Area? = null
     private var isClickAllowed = true
     private val binding by viewBinding(FragmentSelectPlaceBinding::bind)
     private val filterParametersViewModel: FilterParametersViewModel by navGraphViewModels(R.id.root_navigation_graph)
@@ -97,8 +100,10 @@ class SelectPlaceFragment : Fragment(R.layout.fragment_select_place) {
             processingBtnSelect()
         }
         filterParametersViewModel.getPlaceTemporaryLiveData().observe(viewLifecycleOwner) { filterParameters ->
-            binding.tvCountryFilled.text = filterParameters.countryTemp?.name.orEmpty()
-            binding.tvRegionFilled.text = filterParameters.regionTemp?.name.orEmpty()
+            countryTemp = filterParameters.countryTemp
+            regionTemp = filterParameters.regionTemp
+            binding.tvCountryFilled.text = countryTemp?.name.orEmpty()
+            binding.tvRegionFilled.text = regionTemp?.name.orEmpty()
         }
     }
 
@@ -108,8 +113,10 @@ class SelectPlaceFragment : Fragment(R.layout.fragment_select_place) {
     }
 
     private fun visibilityBtnSelect() {
-        binding.btnSelect.isVisible =
-            !(binding.tvCountryFilled.text.isNullOrEmpty() && binding.tvRegionFilled.text.isNullOrEmpty())
+        val filterParametersCurrent = filterParametersViewModel.getFilterParametersLiveData().value
+        val countryCurrent = filterParametersCurrent?.country
+        val regionCurrent = filterParametersCurrent?.region
+        binding.btnSelect.isVisible = countryCurrent != countryTemp || regionCurrent != regionTemp
     }
 
     private fun processingBtnSelect() {
@@ -135,6 +142,7 @@ class SelectPlaceFragment : Fragment(R.layout.fragment_select_place) {
         val action = SelectPlaceFragmentDirections.actionSelectPlaceFragmentToSelectRegionFragment()
         findNavController().navigate(action)
     }
+
 
     private fun clickDebounce(): Boolean {
         val current = isClickAllowed
