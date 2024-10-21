@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.common.ext.hideKeyboard
 import ru.practicum.android.diploma.common.ext.viewBinding
 import ru.practicum.android.diploma.common.presentation.FilterParametersViewModel
 import ru.practicum.android.diploma.databinding.FragmentSelectIndustryBinding
@@ -142,6 +143,7 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
         viewModel.setSelectedID(select.id)
         viewModel.getIndustriesWithSelected()
         binding.selectBtn.isVisible = true
+        activity?.hideKeyboard()
         binding.selectBtn.setOnClickListener {
             filterParametersViewModel.setIndustry(Industry(select.id, select.name))
             findNavController().popBackStack()
