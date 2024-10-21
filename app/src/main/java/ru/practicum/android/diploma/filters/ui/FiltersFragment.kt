@@ -31,10 +31,9 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
         )
         filterParametersViewModel.getFilterParametersLiveData().observe(viewLifecycleOwner) {
             setParameters(it)
-            /*            Log.d("FILTERS!!!", "country - ${it?.country?.id.toString()}")
-                        Log.d("FILTERS!!!", "region - ${it?.region?.id.toString()}")
-                        Log.d("FILTERS!!!", "salary - ${it?.expectedSalary.toString()}")
-                        Log.d("FILTERS!!!", "onlyWithSalary - ${it?.onlyWithSalary.toString()}") */
+        }
+        filterParametersViewModel.getFiltersChangedLiveEvent().observe(viewLifecycleOwner) {
+            binding.btnApply.isVisible = it
         }
         initListeners()
     }

@@ -42,7 +42,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             searchViewModel.applyFilters()
         }
         searchViewModel.getToastEvent().observe(viewLifecycleOwner) { errorType ->
-            showToast(errorType)
+            if (errorType != null) {
+                showToast(errorType)
+            }
         }
         initClickListeners()
         initQueryChangeListener()
@@ -67,11 +69,12 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 showError(R.drawable.er_nothing_found, R.string.no_vacancies, true)
             }
 
-            is SearchState.SearchResult -> showResults(state.vacancies, state.found)
             is SearchState.Loading -> showLoading()
-            is SearchState.Updating -> showUpdating()
             is SearchState.Default -> showDefault()
-            else -> {}
+            is SearchState.NewSearchResult -> showNewResult(state.vacancies, state.found)
+            is SearchState.NextPageLoading -> showNextPageLoading()
+            is SearchState.NextPageSearchResult -> showNextPageResult(state.vacancies, state.found)
+            is SearchState.NextPageError -> showNextPageError()
         }
     }
 
@@ -113,7 +116,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                     binding.ivSearch.isVisible = false
 
                 }
-                searchViewModel.search(s.toString())
+                searchViewModel.onQueryChange(s.toString())
             }
         })
     }
@@ -123,16 +126,16 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 val query = binding.etSearchRequest.text.toString()
                 if (query.isNotEmpty()) {
-                    textview.clearFocus()
                     searchViewModel.newSearch(query)
                 }
+                textview.clearFocus()
             }
             false
         }
         binding.ivClearRequest.setOnClickListener {
-            activity?.hideKeyboard()
-            binding.etSearchRequest.setText("")
-            binding.etSearchRequest.clearFocus()
+            binding.etSearchRequest.apply {
+                setText("")
+            }
         }
         binding.btnFilters.setOnClickListener {
             openFilters()
@@ -146,7 +149,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     }
 
-    private fun showUpdating() {
+    private fun showNextPageLoading() {
         with(binding) {
             progressBar.isVisible = false
             clSearchResult.isVisible = true
@@ -157,7 +160,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     }
 
-    private fun showResults(vacancies: List<VacancyFromList>, foundNumber: Int) {
+    private fun showNextPageResult(vacancies: List<VacancyFromList>, foundNumber: Int) {
         adapter.submitList(vacancies) {
             with(binding) {
                 loadMoreProgressBar.isVisible = false
@@ -174,6 +177,11 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 tvError.isVisible = false
             }
         }
+    }
+
+    private fun showNewResult(vacancies: List<VacancyFromList>, foundNumber: Int) {
+        showNextPageResult(vacancies, foundNumber)
+        binding.rvFoundVacanciesList.scrollToPosition(0)
     }
 
     private fun showError(image: Int, text: Int? = null, messageState: Boolean = false) {
@@ -195,21 +203,23 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     }
 
-    private fun showToast(errorType: ErrorType) {
+    private fun showNextPageError() {
         with(binding) {
             progressBar.isVisible = false
-            clSearchResult.isVisible = false
+            clSearchResult.isVisible = true
             rvFoundVacanciesList.isVisible = true
-            tvSearchResultMessage.isVisible = false
+            tvSearchResultMessage.isVisible = true
             loadMoreProgressBar.isVisible = false
             tvError.isVisible = false
             ivSearchResult.isVisible = false
         }
-        var message: String = ""
-        if (errorType == ErrorType.CONNECTION_PROBLEM) {
-            message = getString(R.string.chesk_internet)
+    }
+
+    private fun showToast(errorType: ErrorType) {
+        val message = if (errorType == ErrorType.CONNECTION_PROBLEM) {
+            getString(R.string.check_internet)
         } else {
-            message = getString(R.string.error)
+            getString(R.string.error)
         }
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }

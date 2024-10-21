@@ -21,6 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_standard"
+        android:foreground="?attr/selectableItemBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar">
@@ -36,21 +37,22 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tl_select_industry"
         style="@style/TextInputLayoutStyle"
-        android:paddingTop="@dimen/margin_small"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:foreground="?attr/selectableItemBackground"
+        android:paddingTop="@dimen/margin_small"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tl_select_place">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_select_industry"
-            android:paddingTop="@dimen/margin_micro"
-            android:paddingBottom="@dimen/margin_small"
             style="@style/TextInputEditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/industry_but_sign" />
+            android:hint="@string/industry_but_sign"
+            android:paddingTop="@dimen/margin_micro"
+            android:paddingBottom="@dimen/margin_small" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -114,6 +116,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/margin_small"
         android:text="@string/apply"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/btn_cancel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
