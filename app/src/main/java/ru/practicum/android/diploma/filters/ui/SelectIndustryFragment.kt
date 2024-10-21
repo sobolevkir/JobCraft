@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -74,6 +75,13 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
                 etSearch.setText(EMPTY_TEXT)
                 viewModel.saveSearchText(EMPTY_TEXT)
                 viewModel.getIndustriesWithSelected()
+            }
+
+            binding.etSearch.setOnEditorActionListener { _, actionId, _ ->
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    activity?.hideKeyboard()
+                }
+                false
             }
         }
     }
