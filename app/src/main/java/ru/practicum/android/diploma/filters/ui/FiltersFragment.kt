@@ -140,11 +140,11 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
         override fun afterTextChanged(s: Editable?) {
             if (s.isNullOrEmpty()) {
                 textInputLayout.setEndIconDrawable(R.drawable.btn_forward)
-                textInputLayout.setEndIconOnClickListener(null)
             } else {
-                textInputLayout.setEndIconDrawable(R.drawable.ic_clear)
+                textInputLayout.setEndIconDrawable(R.drawable.ic_clear_padding_buttom)
                 textInputLayout.setEndIconOnClickListener {
                     textInputLayout.editText?.text?.clear()
+                    textInputLayout.editText?.clearFocus()
                     onClear?.invoke()
                 }
             }

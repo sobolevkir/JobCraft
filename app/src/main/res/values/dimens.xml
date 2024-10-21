@@ -16,7 +16,6 @@
     <dimen name="progress_bar_size">36dp</dimen>
     <dimen name="radius_small">12dp</dimen>
     <dimen name="salary_height">52dp</dimen>
-    <dimen name="clear_padding_buttom">18dp</dimen>
     <dimen name="button_padding">20dp</dimen>
 
 </resources>

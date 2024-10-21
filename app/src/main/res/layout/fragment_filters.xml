@@ -31,7 +31,9 @@
             style="@style/TextInputEditTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/employment" />
+            android:hint="@string/employment"
+            android:paddingTop="@dimen/margin_mini"
+            android:paddingBottom="@dimen/margin_small"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -51,7 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/industry_but_sign"
-            android:paddingTop="@dimen/margin_micro"
+            android:paddingTop="@dimen/margin_mini"
             android:paddingBottom="@dimen/margin_small" />
     </com.google.android.material.textfield.TextInputLayout>
 

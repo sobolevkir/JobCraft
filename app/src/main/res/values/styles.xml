@@ -91,7 +91,7 @@
         <item name="hintTextAppearance">@style/Regular_12_Style</item>
         <item name="placeholderTextAppearance">@style/Regular_16_Style</item>
         <item name="cursorColor">@color/blue</item>
-        <item name="hintTextColor">?attr/jcEditTextColorHint
+        <item name="hintTextColor">@color/blue
         </item> <!-- Цвет подсказки, когда она плавает над полем (при фокусе или вводе текста) -->
         <item name="placeholderTextColor">?attr/jcHintTextColor</item>  <!-- Цвет нижней подсказки -->
         <item name="android:textColorHint">?attr/jcHintTextColor</item>
@@ -107,7 +107,7 @@
         <item name="android:imeOptions">actionDone</item>
         <item name="android:maxLength">50</item>
         <item name="android:textColor">@color/black</item>  <!-- Цвет текста внутри поля -->
-        <item name="android:textColorHint">@color/white
+        <item name="android:textColorHint">@color/black
         </item>  <!-- Цвет подсказки, когда она находится внутри поля (при отсутствии фокуса) -->
     </style>
 </resources>
