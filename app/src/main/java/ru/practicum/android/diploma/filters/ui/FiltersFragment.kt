@@ -1,9 +1,11 @@
 package ru.practicum.android.diploma.filters.ui
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -140,11 +142,11 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
         override fun afterTextChanged(s: Editable?) {
             if (s.isNullOrEmpty()) {
                 textInputLayout.setEndIconDrawable(R.drawable.btn_forward)
-                textInputLayout.setEndIconOnClickListener(null)
             } else {
-                textInputLayout.setEndIconDrawable(R.drawable.ic_clear)
+                textInputLayout.setEndIconDrawable(R.drawable.ic_clear_padding_buttom)
                 textInputLayout.setEndIconOnClickListener {
                     textInputLayout.editText?.text?.clear()
+                    textInputLayout.editText?.clearFocus()
                     onClear?.invoke()
                 }
             }
