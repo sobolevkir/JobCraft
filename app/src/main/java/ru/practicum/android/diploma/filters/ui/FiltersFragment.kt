@@ -127,8 +127,8 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
     }
 
     private fun applyFilters() {
-        findNavController().popBackStack()
         filterParametersViewModel.applyFilters()
+        findNavController().popBackStack()
     }
 
     companion object {
