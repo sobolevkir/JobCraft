@@ -143,7 +143,6 @@ class SelectPlaceFragment : Fragment(R.layout.fragment_select_place) {
         findNavController().navigate(action)
     }
 
-
     private fun clickDebounce(): Boolean {
         val current = isClickAllowed
         if (isClickAllowed) {
