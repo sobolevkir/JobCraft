@@ -18,6 +18,9 @@ class FilterParametersViewModel : ViewModel(), KoinComponent {
     private var filtersAppliedLiveEvent = SingleLiveEvent<Boolean>()
     fun getFiltersAppliedLiveEvent(): SingleLiveEvent<Boolean> = filtersAppliedLiveEvent
 
+    private var filtersChangedLiveEvent = SingleLiveEvent<Boolean>()
+    fun getFiltersChangedLiveEvent(): SingleLiveEvent<Boolean> = filtersChangedLiveEvent
+
     private var filterParametersLiveData = MutableLiveData<FilterParameters>()
     fun getFilterParametersLiveData(): LiveData<FilterParameters> = filterParametersLiveData
 
@@ -40,6 +43,7 @@ class FilterParametersViewModel : ViewModel(), KoinComponent {
 
     private fun saveFiltersToLocalStorage() {
         filtersLocalInteractor.saveFilters(filterParametersLiveData.value ?: emptyFilterParameters)
+        filtersChangedLiveEvent.value = true
     }
 
     // Работа с PlaceTemporaryLiveData

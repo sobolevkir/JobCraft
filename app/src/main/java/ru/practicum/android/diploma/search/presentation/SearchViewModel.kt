@@ -1,6 +1,5 @@
 package ru.practicum.android.diploma.search.presentation
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -43,6 +42,7 @@ class SearchViewModel(
         lastRequest = queryText
         if (queryText.isEmpty()) {
             viewModelScope.coroutineContext[Job]?.cancelChildren()
+            isNextPageLoading = false
             renderState(SearchState.Default)
             return
         }
@@ -98,7 +98,6 @@ class SearchViewModel(
     }
 
     private fun renderState(state: SearchState) {
-        Log.d("SEARCH!!!", "STATE - $state")
         stateLiveData.postValue(state)
     }
 

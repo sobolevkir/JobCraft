@@ -126,9 +126,9 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 val query = binding.etSearchRequest.text.toString()
                 if (query.isNotEmpty()) {
-                    textview.clearFocus()
                     searchViewModel.newSearch(query)
                 }
+                textview.clearFocus()
             }
             false
         }
