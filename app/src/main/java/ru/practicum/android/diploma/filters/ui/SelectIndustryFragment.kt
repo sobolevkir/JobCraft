@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.common.ext.hideKeyboard
 import ru.practicum.android.diploma.common.ext.viewBinding
 import ru.practicum.android.diploma.common.presentation.FilterParametersViewModel
 import ru.practicum.android.diploma.databinding.FragmentSelectIndustryBinding
@@ -57,12 +59,12 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
                 }
 
                 override fun onTextChanged(s: CharSequence, p1: Int, p2: Int, p3: Int) {
+                    viewModel.saveSearchText(s.toString())
+                    viewModel.getIndustriesWithSelected()
                     if (s.isEmpty()) {
-                        viewModel.getIndustriesWithSelected()
                         ivSearch.setImageResource(R.drawable.ic_search)
                         ivSearch.isClickable = false
                     } else {
-                        viewModel.searchRequest(s.toString())
                         ivSearch.setImageResource(R.drawable.ic_clear)
                         ivSearch.isClickable = true
                     }
@@ -70,8 +72,16 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
             })
 
             ivSearch.setOnClickListener {
-                etSearch.setText("")
-                viewModel.getIndustries()
+                etSearch.setText(EMPTY_TEXT)
+                viewModel.saveSearchText(EMPTY_TEXT)
+                viewModel.getIndustriesWithSelected()
+            }
+
+            binding.etSearch.setOnEditorActionListener { _, actionId, _ ->
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    activity?.hideKeyboard()
+                }
+                false
             }
         }
     }
@@ -133,17 +143,22 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
             llPlaceholder.isVisible = false
             progressBar.isVisible = false
             recyclerview.isVisible = true
+            adapter.submitList(list)
         }
-        adapter.submitList(list)
     }
 
     private fun saveSelect(select: IndustryForUi) {
         viewModel.setSelectedID(select.id)
         viewModel.getIndustriesWithSelected()
         binding.selectBtn.isVisible = true
+        activity?.hideKeyboard()
         binding.selectBtn.setOnClickListener {
             filterParametersViewModel.setIndustry(Industry(select.id, select.name))
             findNavController().popBackStack()
         }
+    }
+
+    companion object {
+        const val EMPTY_TEXT = ""
     }
 }

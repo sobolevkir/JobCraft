@@ -19,6 +19,7 @@ class IndustryViewModel(
 
     private val industryState = MutableLiveData<FilterIndustryState>()
     private var selectedId = "-1"
+    private var searchText = ""
     private var searchedIndustries = listOf<IndustryForUi>()
 
     fun getStateLiveData(): LiveData<FilterIndustryState> = industryState
@@ -36,23 +37,26 @@ class IndustryViewModel(
         if (searchedIndustries.isEmpty()) {
             renderState(FilterIndustryState.InternetError)
         } else {
-            val list = mutableListOf<IndustryForUi>()
+            var list = mutableListOf<IndustryForUi>()
+
             searchedIndustries.map {
                 list.add(IndustryForUi(it.id, it.name, it.id == selectedId))
             }
-            renderState(FilterIndustryState.IndustryFound(list))
+
+            list = list.filter {
+                it.name.contains(searchText, ignoreCase = true)
+            }.toMutableList()
+
+            if (list.isEmpty()) {
+                renderState(FilterIndustryState.NothingFound)
+            } else {
+                renderState(FilterIndustryState.IndustryFound(list))
+            }
         }
     }
 
-    fun searchRequest(search: String) {
-        val filteredRegions = searchedIndustries.filter {
-            it.name.contains(search, ignoreCase = true)
-        }
-        if (filteredRegions.isEmpty()) {
-            renderState(FilterIndustryState.NothingFound)
-        } else {
-            renderState(FilterIndustryState.IndustryFound(filteredRegions))
-        }
+    fun saveSearchText(search: String) {
+        searchText = search
     }
 
     private fun processingResult(industry: List<Industry>?, errorType: ErrorType?) {
