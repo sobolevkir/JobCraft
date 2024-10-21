@@ -29,7 +29,11 @@ class VacancyViewModel(
         if (currentVacancy != null) {
             isFavorite = !isFavorite
             isFavoriteLiveData.postValue(isFavorite)
-            if (isFavorite) addToFavorites(currentVacancy!!) else removeFromFavorites(currentVacancy!!.id)
+            if (isFavorite) {
+                addToFavorites(currentVacancy!!)
+            } else {
+                removeFromFavorites(currentVacancy!!.id)
+            }
         }
     }
 
