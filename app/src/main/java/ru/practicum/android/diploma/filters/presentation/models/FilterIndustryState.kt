@@ -10,7 +10,6 @@ sealed interface FilterIndustryState {
     data object NoList : FilterIndustryState
 
     data class IndustryFound(
-        val industries: List<IndustryForUi>,
-        val isCleared: Boolean = false
+        val industries: List<IndustryForUi>
     ) : FilterIndustryState
 }

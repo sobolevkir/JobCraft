@@ -50,7 +50,7 @@ class IndustryViewModel(
             if (list.isEmpty()) {
                 renderState(FilterIndustryState.NothingFound)
             } else {
-                renderState(FilterIndustryState.IndustryFound(list, searchText.isEmpty()))
+                renderState(FilterIndustryState.IndustryFound(list))
             }
         }
     }

@@ -6,8 +6,12 @@ import android.text.TextWatcher
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.common.ext.viewBinding
@@ -23,6 +27,7 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
     private val viewModel by viewModel<IndustryViewModel>()
     private val filterParametersViewModel: FilterParametersViewModel by navGraphViewModels(R.id.root_navigation_graph)
 
+    private var searchJob: Job? = null
     private val adapter = IndustriesAdapter(onItemSelect = { saveSelect(it) })
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -73,6 +78,10 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
                 etSearch.setText(EMPTY_TEXT)
                 viewModel.saveSearchText(EMPTY_TEXT)
                 viewModel.getIndustriesWithSelected()
+                searchJob = lifecycleScope.launch {
+                    delay(500L)
+                    recyclerview.scrollToPosition(0)
+                }
             }
         }
     }
@@ -106,7 +115,7 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
                 getString(R.string.failed_to_get_list)
             )
 
-            is FilterIndustryState.IndustryFound -> showResults(state.industries, state.isCleared)
+            is FilterIndustryState.IndustryFound -> showResults(state.industries)
             is FilterIndustryState.Loading -> showLoading()
         }
     }
@@ -129,15 +138,12 @@ class SelectIndustryFragment : Fragment(R.layout.fragment_select_industry) {
         }
     }
 
-    private fun showResults(list: List<IndustryForUi>, isCleared: Boolean) {
+    private fun showResults(list: List<IndustryForUi>) {
         with(binding) {
             llPlaceholder.isVisible = false
             progressBar.isVisible = false
             recyclerview.isVisible = true
             adapter.submitList(list)
-            if (isCleared) {
-                recyclerview.scrollToPosition(0)
-            }
         }
     }
 
