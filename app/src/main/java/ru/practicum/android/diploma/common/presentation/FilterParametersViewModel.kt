@@ -1,5 +1,6 @@
 package ru.practicum.android.diploma.common.presentation
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,8 +19,8 @@ class FilterParametersViewModel : ViewModel(), KoinComponent {
     private var filtersAppliedLiveEvent = SingleLiveEvent<Boolean>()
     fun getFiltersAppliedLiveEvent(): SingleLiveEvent<Boolean> = filtersAppliedLiveEvent
 
-    private var filtersChangedLiveEvent = SingleLiveEvent<Boolean>()
-    fun getFiltersChangedLiveEvent(): SingleLiveEvent<Boolean> = filtersChangedLiveEvent
+    private var filtersChangedLiveData = MutableLiveData<Boolean>()
+    fun getFiltersChangedLiveData(): LiveData<Boolean> = filtersChangedLiveData
 
     private var filterParametersLiveData = MutableLiveData<FilterParameters>()
     fun getFilterParametersLiveData(): LiveData<FilterParameters> = filterParametersLiveData
@@ -42,8 +43,12 @@ class FilterParametersViewModel : ViewModel(), KoinComponent {
     }
 
     private fun saveFiltersToLocalStorage() {
-        filtersLocalInteractor.saveFilters(filterParametersLiveData.value ?: emptyFilterParameters)
-        filtersChangedLiveEvent.value = true
+        val localFilterParameters = filtersLocalInteractor.getFilters()
+        if(localFilterParameters != filterParametersLiveData.value) {
+            Log.d("FILTERS!!!", "saveFiltersToLocalStorage()")
+            filtersLocalInteractor.saveFilters(filterParametersLiveData.value ?: emptyFilterParameters)
+            filtersChangedLiveData.value = true
+        }
     }
 
     // Работа с PlaceTemporaryLiveData
@@ -96,12 +101,15 @@ class FilterParametersViewModel : ViewModel(), KoinComponent {
     }
 
     fun clearFilters() {
+        placeTemporaryLiveData.value = PlaceParameters(null, null)
         filterParametersLiveData.value = emptyFilterParameters
         saveFiltersToLocalStorage()
     }
 
     fun applyFilters() {
+        saveFiltersToLocalStorage()
         filtersAppliedLiveEvent.value = true
+        filtersChangedLiveData.value = false
     }
 
     fun filtersAreEmpty(): Boolean {

@@ -32,7 +32,7 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
         filterParametersViewModel.getFilterParametersLiveData().observe(viewLifecycleOwner) {
             setParameters(it)
         }
-        filterParametersViewModel.getFiltersChangedLiveEvent().observe(viewLifecycleOwner) {
+        filterParametersViewModel.getFiltersChangedLiveData().observe(viewLifecycleOwner) {
             binding.btnApply.isVisible = it
         }
         initListeners()
@@ -127,8 +127,8 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
     }
 
     private fun applyFilters() {
-        filterParametersViewModel.applyFilters()
         findNavController().popBackStack()
+        filterParametersViewModel.applyFilters()
     }
 
     companion object {
