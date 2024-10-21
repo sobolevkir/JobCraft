@@ -55,7 +55,7 @@ class IndustryViewModel(
         }
     }
 
-    fun saveSearchText(search: String){
+    fun saveSearchText(search: String) {
         searchText = search
     }
 
