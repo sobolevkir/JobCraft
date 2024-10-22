@@ -44,7 +44,7 @@ class FilterParametersViewModel : ViewModel(), KoinComponent {
 
     private fun saveFiltersToLocalStorage() {
         val localFilterParameters = filtersLocalInteractor.getFilters()
-        if(localFilterParameters != filterParametersLiveData.value) {
+        if (localFilterParameters != filterParametersLiveData.value) {
             Log.d("FILTERS!!!", "saveFiltersToLocalStorage()")
             filtersLocalInteractor.saveFilters(filterParametersLiveData.value ?: emptyFilterParameters)
             filtersChangedLiveData.value = true
