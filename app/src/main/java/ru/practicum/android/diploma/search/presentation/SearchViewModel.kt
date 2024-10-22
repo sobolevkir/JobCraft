@@ -11,11 +11,13 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.common.domain.model.ErrorType
 import ru.practicum.android.diploma.common.domain.model.VacancyFromList
+import ru.practicum.android.diploma.filters.domain.FiltersLocalInteractor
 import ru.practicum.android.diploma.search.domain.VacanciesInteractor
 
-class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel() {
-
-    private val stateLiveData = MutableLiveData<SearchState>()
+class SearchViewModel(
+    private val vacanciesInteractor: VacanciesInteractor,
+    private val filtersLocalInteractor: FiltersLocalInteractor
+) : ViewModel() {
 
     private var lastRequest: String? = null
     private var searchJob: Job? = null
@@ -25,7 +27,12 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
     private var isSearch = false
     private var isNextPageLoading = false
 
+    private val stateLiveData = MutableLiveData<SearchState>()
     fun getStateLiveData(): LiveData<SearchState> = stateLiveData
+
+    init {
+        stateLiveData.postValue(SearchState.Default)
+    }
 
     fun onLastItemReached() {
         if (!isNextPageLoading && paddingPage != maxPage - 1) {
@@ -38,6 +45,9 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
     fun search(request: String) {
         if (request == lastRequest) {
             return
+        }
+        if (request.isEmpty()) {
+            renderState(SearchState.Default)
         }
         isSearch = request.isNotEmpty()
         lastRequest = request
@@ -54,7 +64,7 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
         }
     }
 
-    fun searchOnEditorAction(request: String) {
+    fun newSearch(request: String) {
         paddingPage = 0
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
@@ -65,23 +75,37 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
 
     private fun searchRequest(searchText: String, page: Int, isNew: Boolean) {
         if (searchText.isNotEmpty()) {
-            val options = mapOf(
+            val filters = filtersLocalInteractor.getFilters()
+            val areaId = (filters?.region?.id ?: filters?.country?.id).orEmpty()
+            val industry = filters?.industry?.id.orEmpty()
+            val salary = filters?.expectedSalary?.toString().orEmpty()
+            val onlyWithSalary = if (filters?.onlyWithSalary == true) "true" else "false"
+            val options = mutableMapOf(
                 "text" to searchText,
                 "page" to page.toString(),
                 "per_page" to "20"
             )
-
+            if (areaId.isNotEmpty()) options["area"] = areaId
+            if (industry.isNotEmpty()) options["industry"] = industry
+            if (salary.isNotEmpty()) options["salary"] = salary
+            if (onlyWithSalary == "true") options["only_with_salary"] = onlyWithSalary
             if (isNew) {
                 renderState(SearchState.Loading)
             } else {
                 renderState(SearchState.Updating)
             }
-
-            interactor.searchVacancies(options)
+            /*Log.d("SEARCH!!!", "-> area - ${options["area"].toString()}")
+            Log.d("SEARCH!!!", "-> salary - ${options["salary"].toString()}")
+            Log.d("SEARCH!!!", "-> onlyWithSalary - ${options["only_with_salary"].toString()}")*/
+            vacanciesInteractor.searchVacancies(options)
                 .onEach { (searchResult, errorType) ->
                     when (errorType) {
                         null -> {
-                            fullList += searchResult!!.items
+                            if (isNew) {
+                                fullList = searchResult!!.items
+                            } else {
+                                fullList += searchResult!!.items
+                            }
                             renderState(SearchState.SearchResult(fullList, searchResult.found))
                             maxPage = searchResult.pages
                         }
@@ -95,11 +119,20 @@ class SearchViewModel(private val interactor: VacanciesInteractor) : ViewModel()
                     isNextPageLoading = false
                 }
                 .launchIn(viewModelScope)
+        } else {
+            renderState(SearchState.Default)
         }
     }
 
     private fun renderState(state: SearchState) {
         stateLiveData.postValue(state)
+    }
+
+    fun applyFilters() {
+        val request = lastRequest
+        if (!request.isNullOrEmpty()) {
+            newSearch(request)
+        }
     }
 
     companion object {

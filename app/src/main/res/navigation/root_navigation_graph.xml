@@ -87,15 +87,26 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_selectPlaceFragment_to_selectCountryFragment"
+            app:destination="@id/selectCountryFragment" />
     </fragment>
     <fragment
         android:id="@+id/selectRegionFragment"
         android:name="ru.practicum.android.diploma.filters.ui.SelectRegionFragment"
         android:label="fragment_select_region"
-        tools:layout="@layout/fragment_select_region" />
+        tools:layout="@layout/fragment_select_region" >
+        <action
+            android:id="@+id/action_selectRegionFragment_to_selectPlaceFragment"
+            app:destination="@id/selectPlaceFragment" />
+    </fragment>
     <fragment
         android:id="@+id/selectIndustryFragment"
         android:name="ru.practicum.android.diploma.filters.ui.SelectIndustryFragment"
         android:label="fragment_select_industry"
         tools:layout="@layout/fragment_select_industry" />
+    <fragment
+        android:id="@+id/selectCountryFragment"
+        android:name="ru.practicum.android.diploma.filters.ui.SelectCountryFragment"
+        android:label="SelectCountryFragment" />
 </navigation>
