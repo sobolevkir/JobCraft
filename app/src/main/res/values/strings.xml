@@ -53,6 +53,9 @@
     <string name="enter_region">Введите регион</string>
     <string name="select_industry">Выбор отрасли</string>
     <string name="no_regions">Такого региона нет</string>
+    <string name="no_industry">Такой отрасли нет</string>
+    <string name="check_internet">Проверьте подключение к интернету</string>
+    <string name="error">Произошла ошибка</string>
 
     <!-- Указание зарплаты -->
     <string name="salary_range">от %1$s до %2$s %3$s</string>

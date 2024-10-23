@@ -5,6 +5,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -16,6 +17,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.practicum.android.diploma.R
+import ru.practicum.android.diploma.common.domain.model.ErrorType
 import ru.practicum.android.diploma.common.domain.model.VacancyFromList
 import ru.practicum.android.diploma.common.ext.hideKeyboard
 import ru.practicum.android.diploma.common.ext.viewBinding
@@ -39,13 +41,24 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         filterParametersViewModel.getFiltersAppliedLiveEvent().observe(viewLifecycleOwner) { _ ->
             searchViewModel.applyFilters()
         }
+        searchViewModel.getToastEvent().observe(viewLifecycleOwner) { errorType ->
+            if (errorType != null) {
+                showToast(errorType)
+            }
+        }
         initClickListeners()
         initQueryChangeListener()
         initScrollListener()
-        binding.rvFoundVacanciesList.adapter = adapter
-        binding.rvFoundVacanciesList.itemAnimator = null
+        with(binding) {
+            rvFoundVacanciesList.adapter = adapter
+            rvFoundVacanciesList.itemAnimator = null
+            if (filterParametersViewModel.filtersAreEmpty()) {
+                btnFilters.setImageResource(R.drawable.ic_filters_off)
+            } else {
+                btnFilters.setImageResource(R.drawable.ic_filters_on)
+            }
+        }
         searchViewModel.getStateLiveData().observe(viewLifecycleOwner) { renderState(it) }
-
     }
 
     private fun renderState(state: SearchState) {
@@ -56,10 +69,12 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 showError(R.drawable.er_nothing_found, R.string.no_vacancies, true)
             }
 
-            is SearchState.SearchResult -> showResults(state.vacancies, state.found)
             is SearchState.Loading -> showLoading()
-            is SearchState.Updating -> showUpdating()
             is SearchState.Default -> showDefault()
+            is SearchState.NewSearchResult -> showNewResult(state.vacancies, state.found)
+            is SearchState.NextPageLoading -> showNextPageLoading()
+            is SearchState.NextPageSearchResult -> showNextPageResult(state.vacancies, state.found)
+            is SearchState.NextPageError -> showNextPageError()
         }
     }
 
@@ -101,7 +116,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                     binding.ivSearch.isVisible = false
 
                 }
-                searchViewModel.search(s.toString())
+                searchViewModel.onQueryChange(s.toString())
             }
         })
     }
@@ -111,16 +126,16 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 val query = binding.etSearchRequest.text.toString()
                 if (query.isNotEmpty()) {
-                    textview.clearFocus()
                     searchViewModel.newSearch(query)
                 }
+                textview.clearFocus()
             }
             false
         }
         binding.ivClearRequest.setOnClickListener {
-            activity?.hideKeyboard()
-            binding.etSearchRequest.setText("")
-            binding.etSearchRequest.clearFocus()
+            binding.etSearchRequest.apply {
+                setText("")
+            }
         }
         binding.btnFilters.setOnClickListener {
             openFilters()
@@ -134,7 +149,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     }
 
-    private fun showUpdating() {
+    private fun showNextPageLoading() {
         with(binding) {
             progressBar.isVisible = false
             clSearchResult.isVisible = true
@@ -145,7 +160,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
         }
     }
 
-    private fun showResults(vacancies: List<VacancyFromList>, foundNumber: Int) {
+    private fun showNextPageResult(vacancies: List<VacancyFromList>, foundNumber: Int) {
         adapter.submitList(vacancies) {
             with(binding) {
                 loadMoreProgressBar.isVisible = false
@@ -162,6 +177,11 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 tvError.isVisible = false
             }
         }
+    }
+
+    private fun showNewResult(vacancies: List<VacancyFromList>, foundNumber: Int) {
+        showNextPageResult(vacancies, foundNumber)
+        binding.rvFoundVacanciesList.scrollToPosition(0)
     }
 
     private fun showError(image: Int, text: Int? = null, messageState: Boolean = false) {
@@ -181,6 +201,27 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                 tvError.setText(text)
             }
         }
+    }
+
+    private fun showNextPageError() {
+        with(binding) {
+            progressBar.isVisible = false
+            clSearchResult.isVisible = true
+            rvFoundVacanciesList.isVisible = true
+            tvSearchResultMessage.isVisible = true
+            loadMoreProgressBar.isVisible = false
+            tvError.isVisible = false
+            ivSearchResult.isVisible = false
+        }
+    }
+
+    private fun showToast(errorType: ErrorType) {
+        val message = if (errorType == ErrorType.CONNECTION_PROBLEM) {
+            getString(R.string.check_internet)
+        } else {
+            getString(R.string.error)
+        }
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     private fun showDefault() {

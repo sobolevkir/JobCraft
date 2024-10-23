@@ -15,9 +15,11 @@ class VacancyListViewHolder(private val binding: VacancyListItemBinding) :
         tvVacancyName.text = model.name
         tvEmployment.text = model.areaName
         tvSalary.text = model.salary
-        Glide.with(itemView).load(model.employerLogoUrl240).centerCrop()
-            .transform(RoundedCorners(cornerRadius)).placeholder(
-                R.drawable.ic_cover_placeholder
-            ).into(ivVacancyCover)
+        Glide.with(itemView)
+            .load(model.employerLogoUrl240)
+            .centerCrop()
+            .transform(RoundedCorners(cornerRadius))
+            .placeholder(R.drawable.ic_cover_placeholder)
+            .into(ivVacancyCover)
     }
 }

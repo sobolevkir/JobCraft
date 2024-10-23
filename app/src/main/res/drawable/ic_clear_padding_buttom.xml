@@ -1,6 +1,6 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:bottom="@dimen/clear_padding_buttom">
-        <vector xmlns:android="http://schemas.android.com/apk/res/android"
+    <item android:bottom="@dimen/button_padding">
+        <vector
             android:width="@dimen/small_icon_size"
             android:height="@dimen/small_icon_size"
             android:viewportWidth="24"

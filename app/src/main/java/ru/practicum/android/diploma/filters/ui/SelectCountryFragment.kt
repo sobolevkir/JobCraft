@@ -15,8 +15,9 @@ import ru.practicum.android.diploma.common.ext.viewBinding
 import ru.practicum.android.diploma.common.presentation.FilterParametersViewModel
 import ru.practicum.android.diploma.databinding.FragmentSelectRegionBinding
 import ru.practicum.android.diploma.filters.domain.model.Area
-import ru.practicum.android.diploma.filters.presentation.AreaState
-import ru.practicum.android.diploma.filters.presentation.AreaViewModel
+import ru.practicum.android.diploma.filters.presentation.CountryViewModel
+import ru.practicum.android.diploma.filters.presentation.models.AreaState
+import ru.practicum.android.diploma.filters.ui.adapters.RegionListAdapter
 
 class SelectCountryFragment : Fragment(R.layout.fragment_select_region) {
     private val binding by viewBinding(FragmentSelectRegionBinding::bind)
@@ -26,7 +27,7 @@ class SelectCountryFragment : Fragment(R.layout.fragment_select_region) {
     }
     private var countryId: String? = null
 
-    private val viewModel: AreaViewModel by viewModel()
+    private val viewModel: CountryViewModel by viewModel()
     private val filterParametersViewModel: FilterParametersViewModel by navGraphViewModels(R.id.root_navigation_graph)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -67,13 +68,13 @@ class SelectCountryFragment : Fragment(R.layout.fragment_select_region) {
         }
     }
 
-    private fun showError(image: Int, text: Int? = null, messageState: Boolean = false) {
+    private fun showError(image: Int, text: Int? = null) {
         with(binding) {
             llError.isVisible = true
             progressBar.isVisible = false
             rvAreaList.isVisible = false
             ivError.setImageResource(image)
-            tvError.isVisible = messageState
+            tvError.isVisible = true
             if (text == null) {
                 tvError.text = ""
             } else {
@@ -102,7 +103,11 @@ class SelectCountryFragment : Fragment(R.layout.fragment_select_region) {
     }
 
     private fun applyChanges(country: Area) {
-        filterParametersViewModel.setCountry(country)
+        filterParametersViewModel.setCountryTemporary(country)
+        val savedRegion = filterParametersViewModel.getPlaceTemporaryLiveData().value?.regionTemp
+        if (savedRegion == null || savedRegion.parentId != country.id) {
+            filterParametersViewModel.setRegionTemporary(null)
+        }
         findNavController().popBackStack()
     }
 
@@ -119,6 +124,6 @@ class SelectCountryFragment : Fragment(R.layout.fragment_select_region) {
     }
 
     companion object {
-        private const val CLICK_DEBOUNCE_DELAY_MILLIS = 100L
+        private const val CLICK_DEBOUNCE_DELAY_MILLIS = 500L
     }
 }

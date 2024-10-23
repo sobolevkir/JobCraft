@@ -2,28 +2,19 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="60dp"
+    android:id="@+id/industry_list_item"
+    android:paddingHorizontal="16dp"
+    android:foreground="?attr/selectableItemBackground">
 
-    <TextView
-        android:id="@+id/tv_industry"
-        style="@style/Regular_16_Style"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingVertical="@dimen/button_padding"
-        android:paddingHorizontal="@dimen/margin_standard"
-        tools:text="IT"/>
-
-    <RadioGroup
-        android:layout_width="@dimen/margin_large"
-        android:layout_height="@dimen/margin_large"
-        android:layout_gravity="end|center_vertical"
-        android:layout_margin="@dimen/margin_small"
-        android:gravity="center"
-        android:id="@+id/industry_item_select">
         <RadioButton
-            android:layout_width="@dimen/margin_large"
-            android:layout_height="@dimen/margin_large"
-            android:layout_margin="@dimen/margin_small"/>
-    </RadioGroup>
+            android:id="@+id/rb_industry_item_select"
+            style="@style/RadioButton_Style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layoutDirection="rtl"
+            tools:text="IT"
+            android:clickable="false"/>
 
 </FrameLayout>

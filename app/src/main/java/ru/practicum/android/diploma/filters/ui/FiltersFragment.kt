@@ -16,9 +16,9 @@ import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.R
 import ru.practicum.android.diploma.common.ext.viewBinding
 import ru.practicum.android.diploma.common.presentation.FilterParametersViewModel
+import ru.practicum.android.diploma.common.presentation.model.FilterParameters
 import ru.practicum.android.diploma.databinding.FragmentFiltersBinding
 import ru.practicum.android.diploma.filters.domain.model.Area
-import ru.practicum.android.diploma.filters.domain.model.FilterParameters
 
 class FiltersFragment : Fragment(R.layout.fragment_filters) {
     private val binding by viewBinding(FragmentFiltersBinding::bind)
@@ -31,10 +31,9 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
         )
         filterParametersViewModel.getFilterParametersLiveData().observe(viewLifecycleOwner) {
             setParameters(it)
-            /*            Log.d("FILTERS!!!", "country - ${it?.country?.id.toString()}")
-                        Log.d("FILTERS!!!", "region - ${it?.region?.id.toString()}")
-                        Log.d("FILTERS!!!", "salary - ${it?.expectedSalary.toString()}")
-                        Log.d("FILTERS!!!", "onlyWithSalary - ${it?.onlyWithSalary.toString()}") */
+        }
+        filterParametersViewModel.getFiltersChangedLiveData().observe(viewLifecycleOwner) {
+            binding.btnApply.isVisible = it
         }
         initListeners()
     }
@@ -141,11 +140,11 @@ class FiltersFragment : Fragment(R.layout.fragment_filters) {
         override fun afterTextChanged(s: Editable?) {
             if (s.isNullOrEmpty()) {
                 textInputLayout.setEndIconDrawable(R.drawable.btn_forward)
-                textInputLayout.setEndIconOnClickListener(null)
             } else {
-                textInputLayout.setEndIconDrawable(R.drawable.ic_clear)
+                textInputLayout.setEndIconDrawable(R.drawable.ic_clear_padding_buttom)
                 textInputLayout.setEndIconOnClickListener {
                     textInputLayout.editText?.text?.clear()
+                    textInputLayout.editText?.clearFocus()
                     onClear?.invoke()
                 }
             }

@@ -1,4 +1,7 @@
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:bottom="@dimen/margin_mini">
+        <vector xmlns:android="http://schemas.android.com/apk/res/android"
+
     android:width="8dp"
     android:height="14dp"
     android:viewportWidth="8"
@@ -6,4 +9,6 @@
   <path
       android:pathData="M0,12.748L1.213,14L8,7L1.213,0L0,1.252L5.573,7L0,12.748Z"
       android:fillColor="?attr/jcMainTextColor"/>
-</vector>
+        </vector>
+    </item>
+</layer-list>

@@ -3,8 +3,8 @@ package ru.practicum.android.diploma.filters.data.impl
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import ru.practicum.android.diploma.common.presentation.model.FilterParameters
 import ru.practicum.android.diploma.filters.domain.FiltersLocalRepository
-import ru.practicum.android.diploma.filters.domain.model.FilterParameters
 
 class FiltersLocalRepositoryImpl(
     private val gson: Gson,

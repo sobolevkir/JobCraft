@@ -5,12 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import ru.practicum.android.diploma.common.domain.model.ErrorType
 import ru.practicum.android.diploma.common.domain.model.VacancyFromList
+import ru.practicum.android.diploma.common.presentation.SingleLiveEvent
 import ru.practicum.android.diploma.filters.domain.FiltersLocalInteractor
 import ru.practicum.android.diploma.search.domain.VacanciesInteractor
 
@@ -24,103 +26,74 @@ class SearchViewModel(
     private var paddingPage = 0
     private var maxPage = 0
     private var fullList = listOf<VacancyFromList>()
-    private var isSearch = false
     private var isNextPageLoading = false
 
-    private val stateLiveData = MutableLiveData<SearchState>()
+    private val stateLiveData = MutableLiveData<SearchState>(SearchState.Default)
     fun getStateLiveData(): LiveData<SearchState> = stateLiveData
 
-    init {
-        stateLiveData.postValue(SearchState.Default)
+    private var showToastEvent = SingleLiveEvent<ErrorType?>()
+    fun getToastEvent(): SingleLiveEvent<ErrorType?> = showToastEvent
+
+    fun onQueryChange(queryText: String) {
+        searchJob?.cancel()
+        if (queryText == lastRequest) {
+            return
+        }
+        lastRequest = queryText
+        if (queryText.isEmpty()) {
+            viewModelScope.coroutineContext[Job]?.cancelChildren()
+            isNextPageLoading = false
+            renderState(SearchState.Default)
+            return
+        }
+        searchJob = viewModelScope.launch {
+            delay(SEARCH_DELAY_MILLIS)
+            newSearch(queryText)
+        }
+    }
+
+    fun newSearch(queryText: String) {
+        searchJob?.cancel()
+        if (queryText.isNotEmpty()) {
+            paddingPage = 0
+            val options = getSearchOptions(queryText, paddingPage)
+            renderState(SearchState.Loading)
+            vacanciesInteractor.searchVacancies(options).onEach { (searchResult, errorType) ->
+                if (errorType == null) {
+                    fullList = searchResult?.items ?: emptyList()
+                    maxPage = searchResult?.pages ?: 0
+                    renderState(SearchState.NewSearchResult(fullList, searchResult?.found ?: 0))
+                } else {
+                    handleError(errorType)
+                }
+            }.launchIn(viewModelScope)
+        } else {
+            renderState(SearchState.Default)
+        }
     }
 
     fun onLastItemReached() {
-        if (!isNextPageLoading && paddingPage != maxPage - 1) {
-            isNextPageLoading = true
-            paddingPage += 1
-            searchRequest(lastRequest!!, paddingPage, isNew = false)
-        }
-    }
-
-    fun search(request: String) {
-        if (request == lastRequest) {
+        searchJob?.cancel()
+        if (isNextPageLoading || paddingPage == maxPage - 1 || lastRequest.isNullOrEmpty()) {
             return
         }
-        if (request.isEmpty()) {
-            renderState(SearchState.Default)
-        }
-        isSearch = request.isNotEmpty()
-        lastRequest = request
-        fullList = listOf()
-        paddingPage = 0
-        maxPage = 0
-        searchJob?.cancel()
         searchJob = viewModelScope.launch {
-            delay(SEARCH_DELAY)
-            if (isSearch) {
-                searchRequest(request, paddingPage, isNew = true)
-                isSearch = false
-            }
-        }
-    }
-
-    fun newSearch(request: String) {
-        paddingPage = 0
-        searchJob?.cancel()
-        searchJob = viewModelScope.launch {
-            delay(SEARCH_DELAY)
-            searchRequest(request, paddingPage, isNew = true)
-        }
-    }
-
-    private fun searchRequest(searchText: String, page: Int, isNew: Boolean) {
-        if (searchText.isNotEmpty()) {
-            val filters = filtersLocalInteractor.getFilters()
-            val areaId = (filters?.region?.id ?: filters?.country?.id).orEmpty()
-            val industry = filters?.industry?.id.orEmpty()
-            val salary = filters?.expectedSalary?.toString().orEmpty()
-            val onlyWithSalary = if (filters?.onlyWithSalary == true) "true" else "false"
-            val options = mutableMapOf(
-                "text" to searchText,
-                "page" to page.toString(),
-                "per_page" to "20"
-            )
-            if (areaId.isNotEmpty()) options["area"] = areaId
-            if (industry.isNotEmpty()) options["industry"] = industry
-            if (salary.isNotEmpty()) options["salary"] = salary
-            if (onlyWithSalary == "true") options["only_with_salary"] = onlyWithSalary
-            if (isNew) {
-                renderState(SearchState.Loading)
-            } else {
-                renderState(SearchState.Updating)
-            }
-            /*Log.d("SEARCH!!!", "-> area - ${options["area"].toString()}")
-            Log.d("SEARCH!!!", "-> salary - ${options["salary"].toString()}")
-            Log.d("SEARCH!!!", "-> onlyWithSalary - ${options["only_with_salary"].toString()}")*/
-            vacanciesInteractor.searchVacancies(options)
-                .onEach { (searchResult, errorType) ->
-                    when (errorType) {
-                        null -> {
-                            if (isNew) {
-                                fullList = searchResult!!.items
-                            } else {
-                                fullList += searchResult!!.items
-                            }
-                            renderState(SearchState.SearchResult(fullList, searchResult.found))
-                            maxPage = searchResult.pages
-                        }
-
-                        ErrorType.CONNECTION_PROBLEM -> renderState(SearchState.InternetError)
-
-                        ErrorType.NOTHING_FOUND -> renderState(SearchState.NothingFound)
-
-                        else -> renderState(SearchState.ServerError)
-                    }
-                    isNextPageLoading = false
+            delay(NEXT_PAGE_DELAY_MILLIS)
+            isNextPageLoading = true
+            paddingPage += 1
+            renderState(SearchState.NextPageLoading)
+            val options = getSearchOptions(lastRequest!!, paddingPage)
+            vacanciesInteractor.searchVacancies(options).onEach { (searchResult, errorType) ->
+                if (errorType == null) {
+                    fullList += searchResult?.items ?: emptyList()
+                    maxPage = searchResult?.pages ?: 0
+                    renderState(SearchState.NextPageSearchResult(fullList, searchResult?.found ?: 0))
+                } else {
+                    renderState(SearchState.NextPageError)
+                    showToastEvent.postValue(errorType)
                 }
-                .launchIn(viewModelScope)
-        } else {
-            renderState(SearchState.Default)
+                isNextPageLoading = false
+            }.launchIn(viewModelScope)
         }
     }
 
@@ -135,7 +108,51 @@ class SearchViewModel(
         }
     }
 
+    private fun handleError(errorType: ErrorType) {
+        when (errorType) {
+            ErrorType.CONNECTION_PROBLEM -> renderState(SearchState.InternetError)
+            ErrorType.NOTHING_FOUND -> renderState(SearchState.NothingFound)
+            else -> renderState(SearchState.ServerError)
+        }
+    }
+
+    private fun getSearchOptions(
+        queryText: String,
+        page: Int
+    ): MutableMap<String, String> {
+        val filters = filtersLocalInteractor.getFilters()
+        val areaId = (filters?.region?.id ?: filters?.country?.id).orEmpty()
+        val industry = filters?.industry?.id.orEmpty()
+        val expectedSalary = filters?.expectedSalary?.toString().orEmpty()
+        val onlyWithSalary = if (filters?.onlyWithSalary == true) {
+            ONLY_WITH_SALARY_TRUE
+        } else {
+            ONLY_WITH_SALARY_FALSE
+        }
+        val options = mutableMapOf(
+            OPTION_QUERY_TEXT to queryText,
+            OPTION_CURRENT_PAGE to page.toString(),
+            OPTION_PER_PAGE to VACANCIES_PER_PAGE_20
+        )
+        if (areaId.isNotEmpty()) options[OPTION_AREA] = areaId
+        if (industry.isNotEmpty()) options[OPTION_INDUSTRY] = industry
+        if (expectedSalary.isNotEmpty()) options[OPTION_EXPECTED_SALARY] = expectedSalary
+        if (onlyWithSalary == "true") options[OPTION_ONLY_WITH_SALARY] = onlyWithSalary
+        return options
+    }
+
     companion object {
-        const val SEARCH_DELAY = 500L
+        const val SEARCH_DELAY_MILLIS = 1000L
+        const val NEXT_PAGE_DELAY_MILLIS = 200L
+        const val OPTION_QUERY_TEXT = "text"
+        const val OPTION_CURRENT_PAGE = "page"
+        const val OPTION_PER_PAGE = "per_page"
+        const val OPTION_AREA = "area"
+        const val OPTION_INDUSTRY = "industry"
+        const val OPTION_EXPECTED_SALARY = "salary"
+        const val OPTION_ONLY_WITH_SALARY = "only_with_salary"
+        const val ONLY_WITH_SALARY_TRUE = "true"
+        const val ONLY_WITH_SALARY_FALSE = "false"
+        const val VACANCIES_PER_PAGE_20 = "20"
     }
 }

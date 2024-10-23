@@ -3,10 +3,10 @@ package ru.practicum.android.diploma.di
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import ru.practicum.android.diploma.favorites.presentation.FavoritesViewModel
-import ru.practicum.android.diploma.filters.presentation.AreaViewModel
-import ru.practicum.android.diploma.filters.presentation.FiltersViewModel
+import ru.practicum.android.diploma.filters.presentation.CountryViewModel
+import ru.practicum.android.diploma.filters.presentation.IndustryConverter
 import ru.practicum.android.diploma.filters.presentation.IndustryViewModel
-import ru.practicum.android.diploma.filters.presentation.PlaceViewModel
+import ru.practicum.android.diploma.filters.presentation.RegionViewModel
 import ru.practicum.android.diploma.search.presentation.SearchViewModel
 import ru.practicum.android.diploma.vacancy.presentation.VacancyViewModel
 
@@ -25,19 +25,16 @@ val viewModelModule = module {
     }
 
     viewModel {
-        IndustryViewModel(interactor = get())
+        IndustryViewModel(interactor = get(), converter = get())
     }
 
     viewModel {
-        AreaViewModel(interactor = get())
+        RegionViewModel(interactor = get())
     }
 
     viewModel {
-        PlaceViewModel()
+        CountryViewModel(interactor = get())
     }
 
-    viewModel {
-        FiltersViewModel(interactor = get())
-    }
-
+    factory { IndustryConverter() }
 }
